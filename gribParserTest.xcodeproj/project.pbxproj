@@ -11,6 +11,8 @@
 		134D346F21D67DF500373B74 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D346E21D67DF500373B74 /* ViewController.swift */; };
 		134D347121D67DF500373B74 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 134D347021D67DF500373B74 /* Assets.xcassets */; };
 		134D347421D67DF500373B74 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 134D347221D67DF500373B74 /* Main.storyboard */; };
+		134D348421D680D900373B74 /* grib_api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 134D348321D680D900373B74 /* grib_api.dylib */; };
+		134D348621D6817C00373B74 /* Parse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D348521D6817C00373B74 /* Parse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +23,13 @@
 		134D347321D67DF500373B74 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		134D347521D67DF500373B74 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		134D347621D67DF500373B74 /* gribParserTest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = gribParserTest.entitlements; sourceTree = "<group>"; };
+		134D347D21D67E4E00373B74 /* libgrib_api.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libgrib_api.dylib; path = ../../../../../usr/local/lib/libgrib_api.dylib; sourceTree = "<group>"; };
+		134D347F21D67E9300373B74 /* grib_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grib_api.h; sourceTree = "<group>"; };
+		134D348021D67EBC00373B74 /* gribParserTest-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "gribParserTest-Bridging-Header.h"; sourceTree = "<group>"; };
+		134D348121D6800D00373B74 /* grib_api_windef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grib_api_windef.h; sourceTree = "<group>"; };
+		134D348221D6802F00373B74 /* grib_api_version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grib_api_version.h; sourceTree = "<group>"; };
+		134D348321D680D900373B74 /* grib_api.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = grib_api.dylib; sourceTree = "<group>"; };
+		134D348521D6817C00373B74 /* Parse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -28,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				134D348421D680D900373B74 /* grib_api.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -39,6 +49,7 @@
 			children = (
 				134D346B21D67DF500373B74 /* gribParserTest */,
 				134D346A21D67DF500373B74 /* Products */,
+				134D347C21D67E4E00373B74 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -53,6 +64,12 @@
 		134D346B21D67DF500373B74 /* gribParserTest */ = {
 			isa = PBXGroup;
 			children = (
+				134D348321D680D900373B74 /* grib_api.dylib */,
+				134D348221D6802F00373B74 /* grib_api_version.h */,
+				134D348121D6800D00373B74 /* grib_api_windef.h */,
+				134D347F21D67E9300373B74 /* grib_api.h */,
+				134D348521D6817C00373B74 /* Parse.swift */,
+				134D348021D67EBC00373B74 /* gribParserTest-Bridging-Header.h */,
 				134D346C21D67DF500373B74 /* AppDelegate.swift */,
 				134D346E21D67DF500373B74 /* ViewController.swift */,
 				134D347021D67DF500373B74 /* Assets.xcassets */,
@@ -61,6 +78,14 @@
 				134D347621D67DF500373B74 /* gribParserTest.entitlements */,
 			);
 			path = gribParserTest;
+			sourceTree = "<group>";
+		};
+		134D347C21D67E4E00373B74 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				134D347D21D67E4E00373B74 /* libgrib_api.dylib */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -95,6 +120,11 @@
 				TargetAttributes = {
 					134D346821D67DF500373B74 = {
 						CreatedOnToolsVersion = 10.1;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -134,6 +164,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				134D346F21D67DF500373B74 /* ViewController.swift in Sources */,
+				134D348621D6817C00373B74 /* Parse.swift in Sources */,
 				134D346D21D67DF500373B74 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -271,7 +302,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = gribParserTest/gribParserTest.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = GS9HMMYWL7;
@@ -280,8 +310,13 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/gribParserTest",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.balticnest.gribParserTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "gribParserTest/gribParserTest-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
@@ -290,7 +325,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = gribParserTest/gribParserTest.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = GS9HMMYWL7;
@@ -299,8 +333,13 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/gribParserTest",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.balticnest.gribParserTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "gribParserTest/gribParserTest-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 			};
 			name = Release;

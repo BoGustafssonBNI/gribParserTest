@@ -9,17 +9,11 @@
 import Cocoa
 
 class ViewController: NSViewController {
-
+let parse = Parse()
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-    }
-
-    override var representedObject: Any? {
-        didSet {
-        // Update the view, if already loaded.
-        }
+        parse.getKeys(file: NSHomeDirectory() + "/MESAN_201412022300+000H00M")
     }
 
 
