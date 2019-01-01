@@ -13,6 +13,11 @@
 		134D347421D67DF500373B74 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 134D347221D67DF500373B74 /* Main.storyboard */; };
 		134D348421D680D900373B74 /* grib_api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 134D348321D680D900373B74 /* grib_api.dylib */; };
 		134D348621D6817C00373B74 /* Parse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D348521D6817C00373B74 /* Parse.swift */; };
+		134D348821D91FEE00373B74 /* RotationMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D348721D91FEE00373B74 /* RotationMatrix.swift */; };
+		134D348A21D9294D00373B74 /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D348921D9294D00373B74 /* Coordinate.swift */; };
+		138011E521DB64F400FA65AE /* TecplotExports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138011E421DB64F400FA65AE /* TecplotExports.swift */; };
+		138011E921DBA19200FA65AE /* tecio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 138011E821DBA19200FA65AE /* tecio.a */; };
+		138011EB21DBA3AC00FA65AE /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 138011EA21DBA3AB00FA65AE /* libc++.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +35,14 @@
 		134D348221D6802F00373B74 /* grib_api_version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grib_api_version.h; sourceTree = "<group>"; };
 		134D348321D680D900373B74 /* grib_api.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = grib_api.dylib; sourceTree = "<group>"; };
 		134D348521D6817C00373B74 /* Parse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parse.swift; sourceTree = "<group>"; };
+		134D348721D91FEE00373B74 /* RotationMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationMatrix.swift; sourceTree = "<group>"; };
+		134D348921D9294D00373B74 /* Coordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
+		138011E121DB63D900FA65AE /* TECIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TECIO.h; sourceTree = "<group>"; };
+		138011E221DB642D00FA65AE /* StandardIntegralTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StandardIntegralTypes.h; sourceTree = "<group>"; };
+		138011E321DB644A00FA65AE /* tecio_Exports.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tecio_Exports.h; sourceTree = "<group>"; };
+		138011E421DB64F400FA65AE /* TecplotExports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TecplotExports.swift; sourceTree = "<group>"; };
+		138011E821DBA19200FA65AE /* tecio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = tecio.a; sourceTree = "<group>"; };
+		138011EA21DBA3AB00FA65AE /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,6 +50,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				138011EB21DBA3AC00FA65AE /* libc++.tbd in Frameworks */,
+				138011E921DBA19200FA65AE /* tecio.a in Frameworks */,
 				134D348421D680D900373B74 /* grib_api.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -65,10 +80,17 @@
 			isa = PBXGroup;
 			children = (
 				134D348321D680D900373B74 /* grib_api.dylib */,
+				138011E821DBA19200FA65AE /* tecio.a */,
+				138011E321DB644A00FA65AE /* tecio_Exports.h */,
+				138011E221DB642D00FA65AE /* StandardIntegralTypes.h */,
+				138011E121DB63D900FA65AE /* TECIO.h */,
 				134D348221D6802F00373B74 /* grib_api_version.h */,
 				134D348121D6800D00373B74 /* grib_api_windef.h */,
 				134D347F21D67E9300373B74 /* grib_api.h */,
 				134D348521D6817C00373B74 /* Parse.swift */,
+				138011E421DB64F400FA65AE /* TecplotExports.swift */,
+				134D348921D9294D00373B74 /* Coordinate.swift */,
+				134D348721D91FEE00373B74 /* RotationMatrix.swift */,
 				134D348021D67EBC00373B74 /* gribParserTest-Bridging-Header.h */,
 				134D346C21D67DF500373B74 /* AppDelegate.swift */,
 				134D346E21D67DF500373B74 /* ViewController.swift */,
@@ -83,6 +105,7 @@
 		134D347C21D67E4E00373B74 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				138011EA21DBA3AB00FA65AE /* libc++.tbd */,
 				134D347D21D67E4E00373B74 /* libgrib_api.dylib */,
 			);
 			name = Frameworks;
@@ -163,9 +186,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				134D348821D91FEE00373B74 /* RotationMatrix.swift in Sources */,
 				134D346F21D67DF500373B74 /* ViewController.swift in Sources */,
 				134D348621D6817C00373B74 /* Parse.swift in Sources */,
+				138011E521DB64F400FA65AE /* TecplotExports.swift in Sources */,
 				134D346D21D67DF500373B74 /* AppDelegate.swift in Sources */,
+				134D348A21D9294D00373B74 /* Coordinate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
