@@ -1,5 +1,5 @@
 //
-//  Parse.swift
+//  GribParser.swift
 //  gribParserTest
 //
 //  Created by Bo Gustafsson on 2018-12-28.
@@ -50,7 +50,7 @@ enum GribErrors: Error {
     case CouldNotCreateKeysIterator
 }
 
-class Parse {
+class GribParser {
     var parameterList = [GribParameterData]()
     var geographyData = GribGeographyData()
     var gridData = GribGridData()
@@ -241,8 +241,8 @@ class Parse {
         var i = 0
         var j = 0
         while grib_iterator_next(iterator, &y, &x, &value) == 1 {
-            let coord = Coordinate(i: i, j: j, lon: x, lat: y, longitudeOfFirstGridPointInDegrees: geographyData.longitudeOfFirstGridPointInDegrees, latitudeOfFirstGridPointInDegrees: geographyData.latitudeOfFirstGridPointInDegrees, iDirectionIncrementInDegrees: geographyData.iDirectionIncrementInDegrees, jDirectionIncrementInDegrees: geographyData.jDirectionIncrementInDegrees)
-            let rotationMatrix = RotationMatrix(coordinate: coord, geography: geographyData)
+            let coord = GribCoordinate(i: i, j: j, lon: x, lat: y, longitudeOfFirstGridPointInDegrees: geographyData.longitudeOfFirstGridPointInDegrees, latitudeOfFirstGridPointInDegrees: geographyData.latitudeOfFirstGridPointInDegrees, iDirectionIncrementInDegrees: geographyData.iDirectionIncrementInDegrees, jDirectionIncrementInDegrees: geographyData.jDirectionIncrementInDegrees)
+            let rotationMatrix = GribRotationMatrix(coordinate: coord, geography: geographyData)
             gridData.coordinates.append(coord)
             gridData.rotationMatrices.append(rotationMatrix)
             if i == nI - 1 {
@@ -403,18 +403,18 @@ class Parse {
 //        return result
 //    }
 
-    func getCoordinates(lons: [Double], lats: [Double]) -> [Coordinate]? {
+    func getCoordinates(lons: [Double], lats: [Double]) -> [GribCoordinate]? {
         let numberOfPositions = lons.count
         guard numberOfPositions == lats.count else {return nil}
-        var result = [Coordinate]()
+        var result = [GribCoordinate]()
         for n in 0..<numberOfPositions {
-            let coordinate = Coordinate(lon: lons[n], lat: lats[n], geography: self.geographyData)
+            let coordinate = GribCoordinate(lon: lons[n], lat: lats[n], geography: self.geographyData)
             result.append(coordinate)
         }
         return result
     }
     
-    func getIndices(from coordinates: [Coordinate]) -> [Int] {
+    func getIndices(from coordinates: [GribCoordinate]) -> [Int] {
         var result = [Int]()
         for coordinate in coordinates {
             result.append(getIndex(from: coordinate))
@@ -422,7 +422,7 @@ class Parse {
         return result
     }
     
-    func getIndex(from coordinate: Coordinate) -> Int {
+    func getIndex(from coordinate: GribCoordinate) -> Int {
         return coordinate.i + self.gridData.nI * coordinate.j
     }
     

@@ -8,9 +8,9 @@
 
 import Foundation
 struct GribGridData {
-    var coordinates = [Coordinate]()
+    var coordinates = [GribCoordinate]()
     var nI = 0
     var nJ = 0
-    var rotationMatrices = [RotationMatrix]()
+    var rotationMatrices = [GribRotationMatrix]()
 }
 

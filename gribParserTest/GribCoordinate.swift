@@ -1,5 +1,5 @@
 //
-//  Coordinate.swift
+//  GribCoordinate.swift
 //  gribParserTest
 //
 //  Created by Bo Gustafsson on 2018-12-30.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Coordinate {
+struct GribCoordinate {
     var lat = 0.0
     var lon = 0.0
     var latRot = 0.0
@@ -59,8 +59,8 @@ struct Coordinate {
     }
 }
 
-extension Coordinate: Comparable, Equatable {
-    static func < (lhs: Coordinate, rhs: Coordinate) -> Bool {
+extension GribCoordinate: Comparable, Equatable {
+    static func < (lhs: GribCoordinate, rhs: GribCoordinate) -> Bool {
         if lhs.j < rhs.j {return true}
         if lhs.j == rhs.j && lhs.i < rhs.i {return true}
         return false

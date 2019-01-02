@@ -1,5 +1,5 @@
 //
-//  RotationMatrix.swift
+//  GribRotationMatrix.swift
 //  gribParserTest
 //
 //  Created by Bo Gustafsson on 2018-12-30.
@@ -7,20 +7,20 @@
 //
 
 import Foundation
-struct RotationMatrix {
+struct GribRotationMatrix {
     var a = 1.0
     var b = 0.0
     var c = 0.0
     var d = 1.0
     init() {}
-    init(coordinate: Coordinate, geography: GribGeographyData) {
+    init(coordinate: GribCoordinate, geography: GribGeographyData) {
         if geography.rotated {
             self.init(longitudeOfSouthernPoleInDegrees: geography.longitudeOfSouthernPoleInDegrees, latitudeOfSouthernPoleInDegrees: geography.latitudeOfSouthernPoleInDegrees, coordinate: coordinate)
         } else {
             self.init()
         }
     }
-    private init(longitudeOfSouthernPoleInDegrees: Double, latitudeOfSouthernPoleInDegrees: Double, coordinate: Coordinate) {
+    private init(longitudeOfSouthernPoleInDegrees: Double, latitudeOfSouthernPoleInDegrees: Double, coordinate: GribCoordinate) {
         self.init(longitudeOfSouthernPoleInDegrees: longitudeOfSouthernPoleInDegrees, latitudeOfSouthernPoleInDegrees: latitudeOfSouthernPoleInDegrees, lon: coordinate.lon, lat: coordinate.lat, lonRot: coordinate.lonRot, latRot: coordinate.latRot)
     }
     private init(longitudeOfSouthernPoleInDegrees: Double, latitudeOfSouthernPoleInDegrees: Double, lon: Double, lat: Double, lonRot: Double, latRot: Double) {
