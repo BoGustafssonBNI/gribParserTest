@@ -99,8 +99,8 @@ class TecplotExports {
             for n in 4..<nvar {
                 var d = data[n]
                 let io = tecdat112(&numPoints, &d, &isDouble)
-                if io == 0 {
-                    print("io = 0")
+                if io != 0 {
+                    print("io = \(io)")
                 }
             }
         }

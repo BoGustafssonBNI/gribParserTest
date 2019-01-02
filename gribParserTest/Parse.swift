@@ -23,15 +23,6 @@ enum GribParameter : String {
     case name = "name"
     case shortName = "shortName"
 }
-struct GribParameterData {
-    var centre : String?
-    var paramId = 0
-    var units = ""
-    var name = ""
-    var shortName = ""
-}
-extension GribParameterData: Hashable {}
-
 enum GribGeography: String {
     case bitmapPresent = "bitmapPresent"
     case latitudeOfFirstGridPointInDegrees = "latitudeOfFirstGridPointInDegrees"
@@ -48,31 +39,8 @@ enum GribGeography: String {
     case angleOfRotationInDegrees = "angleOfRotationInDegrees"
     case gridType = "gridType"
 }
-struct GribGeographyData {
-    var bitmapPresent = false
-    var latitudeOfFirstGridPointInDegrees = 0.0
-    var longitudeOfFirstGridPointInDegrees = 0.0
-    var latitudeOfLastGridPointInDegrees = 0.0
-    var longitudeOfLastGridPointInDegrees = 0.0
-    var iScansNegatively = false
-    var jScansPositively = true
-    var jPointsAreConsecutive = false
-    var jDirectionIncrementInDegrees = 0.0
-    var iDirectionIncrementInDegrees = 0.0
-    var latitudeOfSouthernPoleInDegrees = 0.0
-    var longitudeOfSouthernPoleInDegrees = 0.0
-    var angleOfRotationInDegrees = 0.0
-    var gridType = ""
-}
 
-struct GribGridData {
-    var coordinates = [Coordinate]()
-    var nI = 0
-    var nJ = 0
-    var rotationMatrices = [RotationMatrix]()
-}
 
-typealias GribValueData = [GribParameterData: [Double]]
 
 typealias FilePointer = UnsafeMutablePointer<FILE>?
 
@@ -185,6 +153,7 @@ class Parse {
             bzero(&value, vlen)
             grib_get_string(h,name,&value,&vlen)
             if let string = String(validatingUTF8: name!), let svalue = String(validatingUTF8: &value) {
+                print("\(string): \(svalue)")
                 switch string {
                 case GribGeography.bitmapPresent.rawValue:
                     if let i = Int(svalue) {
@@ -273,7 +242,7 @@ class Parse {
         var j = 0
         while grib_iterator_next(iterator, &y, &x, &value) == 1 {
             let coord = Coordinate(i: i, j: j, lon: x, lat: y, longitudeOfFirstGridPointInDegrees: geographyData.longitudeOfFirstGridPointInDegrees, latitudeOfFirstGridPointInDegrees: geographyData.latitudeOfFirstGridPointInDegrees, iDirectionIncrementInDegrees: geographyData.iDirectionIncrementInDegrees, jDirectionIncrementInDegrees: geographyData.jDirectionIncrementInDegrees)
-            let rotationMatrix = RotationMatrix(longitudeOfSouthernPoleInDegrees: geographyData.longitudeOfSouthernPoleInDegrees, latitudeOfSouthernPoleInDegrees: geographyData.latitudeOfSouthernPoleInDegrees, coordinate: coord)
+            let rotationMatrix = RotationMatrix(coordinate: coord, geography: geographyData)
             gridData.coordinates.append(coord)
             gridData.rotationMatrices.append(rotationMatrix)
             if i == nI - 1 {
@@ -350,4 +319,112 @@ class Parse {
         }
         return result
     }
+    
+    func getValues(lons: [Double], lats: [Double], for parameters: [GribParameterData]) -> GribValueData? {
+        guard let coordinates = getCoordinates(lons: lons, lats: lats) else {return nil}
+        let indices = getIndices(from: coordinates)
+        return getValues(at: indices, for: parameters)
+    }
+    
+    func getValues(at indices: [Int], for parameters: [GribParameterData]) -> GribValueData? {
+        let MAX_VAL_LEN = 1024
+        var err: Int32  = 0
+        var value = [CChar]()
+        value.reserveCapacity(MAX_VAL_LEN)
+        guard let f = filePointer else {return nil}
+        rewind(f)
+        let p : OpaquePointer? = nil
+        var h = grib_handle_new_from_file(p,f,&err)
+        var names = [String]()
+        for parameter in parameters {
+            names.append(parameter.name)
+        }
+        var result : GribValueData = [:]
+        while (h != nil)
+        {
+            var vlen = MAX_VAL_LEN
+            bzero(&value, vlen)
+            grib_get_string(h, GribParameter.name.rawValue, &value, &vlen)
+            if let svalue = String(validatingUTF8: &value) {
+                if let index = names.firstIndex(of: svalue) {
+                    var size = 0
+                    grib_get_size(h, "values", &size)
+                    var data = [Double](repeating: 0.0, count: size)
+                    grib_get_double_array(h, "values", &data, &size)
+                    var tempArray = [Double]()
+                    for index in indices {
+                        tempArray.append(data[index])
+                    }
+                    result[parameters[index]] = tempArray
+                }
+            }
+            grib_handle_delete(h)
+            h = grib_handle_new_from_file(p,f,&err)
+        }
+        return result
+    }
+//    //    MARK: - This does not work on rotated grids :-(
+//    func getValues(lons: [Double], lats: [Double], for parameters: [GribParameterData]) -> GribValueData? {
+//        let MAX_VAL_LEN = 1024
+//        var err: Int32  = 0
+//        var value = [CChar]()
+//        value.reserveCapacity(MAX_VAL_LEN)
+//        guard let f = filePointer else {return nil}
+//        rewind(f)
+//        let p : OpaquePointer? = nil
+//        var h = grib_handle_new_from_file(p,f,&err)
+//        var names = [String]()
+//        for parameter in parameters {
+//            names.append(parameter.name)
+//        }
+//        var result : GribValueData = [:]
+//        while (h != nil)
+//        {
+//            var vlen = MAX_VAL_LEN
+//            bzero(&value, vlen)
+//            grib_get_string(h, GribParameter.name.rawValue, &value, &vlen)
+//            if let svalue = String(validatingUTF8: &value) {
+//                if let index = names.firstIndex(of: svalue) {
+//                    let size = lons.count
+//                    var x = lons
+//                    var y = lats
+//                    var outLats = [Double].init(repeating: 0.0, count: size)
+//                    var outLons = [Double].init(repeating: 0.0, count: size)
+//                    var values = [Double].init(repeating: 0.0, count: size)
+//                    var distances = [Double].init(repeating: 0.0, count: size)
+//                    var indexes = [Int32].init(repeating: 0, count: lons.count)
+//                    grib_nearest_find_multiple(h, 0, &y, &x, size, &outLats, &outLons, &values, &distances, &indexes)
+//                    result[parameters[index]] = values
+//                }
+//            }
+//            grib_handle_delete(h)
+//            h = grib_handle_new_from_file(p,f,&err)
+//        }
+//        return result
+//    }
+
+    func getCoordinates(lons: [Double], lats: [Double]) -> [Coordinate]? {
+        let numberOfPositions = lons.count
+        guard numberOfPositions == lats.count else {return nil}
+        var result = [Coordinate]()
+        for n in 0..<numberOfPositions {
+            let coordinate = Coordinate(lon: lons[n], lat: lats[n], geography: self.geographyData)
+            result.append(coordinate)
+        }
+        return result
+    }
+    
+    func getIndices(from coordinates: [Coordinate]) -> [Int] {
+        var result = [Int]()
+        for coordinate in coordinates {
+            result.append(getIndex(from: coordinate))
+        }
+        return result
+    }
+    
+    func getIndex(from coordinate: Coordinate) -> Int {
+        return coordinate.i + self.gridData.nI * coordinate.j
+    }
+    
+    
 }

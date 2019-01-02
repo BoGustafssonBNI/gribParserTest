@@ -14,10 +14,15 @@ class ViewController: NSViewController {
 
         do {
 //            let parse = try Parse(file: NSHomeDirectory() + "/MESAN_199712102100+000H00M")
-            let parse = try Parse(file: NSHomeDirectory() + "/MESAN_201812260000+000H00M")
+//           let parse = try Parse(file: NSHomeDirectory() + "/MESAN_201812260000+000H00M")
+            let parse = try Parse(file: NSHomeDirectory() + "/Temp/MesanTemp/RCA_196101010000+000H00M")
 
-            if let oneDataseries = parse.getValues(for: parse.parameterList[2]) {
-                print(oneDataseries[0])
+            let lons = [16.588376, 20.0]
+            let lats = [58.783734, 62.0]
+            if let oneDataseries = parse.getValues(lons: lons, lats: lats, for: [parse.parameterList[0]]) {
+                print(oneDataseries.first!)
+                print(Coordinate.init(lon: 6.032269, lat: 52.81264, geography: parse.geographyData))
+                
             }
             if let collection = parse.getValues(for: parse.parameterList) {
                 print(collection.count)

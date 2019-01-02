@@ -18,6 +18,10 @@
 		138011E521DB64F400FA65AE /* TecplotExports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138011E421DB64F400FA65AE /* TecplotExports.swift */; };
 		138011E921DBA19200FA65AE /* tecio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 138011E821DBA19200FA65AE /* tecio.a */; };
 		138011EB21DBA3AC00FA65AE /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 138011EA21DBA3AB00FA65AE /* libc++.tbd */; };
+		138011ED21DBD13400FA65AE /* GribGridData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138011EC21DBD13400FA65AE /* GribGridData.swift */; };
+		138011EF21DBD19600FA65AE /* GribGeographyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138011EE21DBD19600FA65AE /* GribGeographyData.swift */; };
+		138011F121DBD1BF00FA65AE /* GribParameterData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138011F021DBD1BF00FA65AE /* GribParameterData.swift */; };
+		138011F321DBD1F500FA65AE /* GribValueData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138011F221DBD1F400FA65AE /* GribValueData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +47,10 @@
 		138011E421DB64F400FA65AE /* TecplotExports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TecplotExports.swift; sourceTree = "<group>"; };
 		138011E821DBA19200FA65AE /* tecio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = tecio.a; sourceTree = "<group>"; };
 		138011EA21DBA3AB00FA65AE /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		138011EC21DBD13400FA65AE /* GribGridData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribGridData.swift; sourceTree = "<group>"; };
+		138011EE21DBD19600FA65AE /* GribGeographyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribGeographyData.swift; sourceTree = "<group>"; };
+		138011F021DBD1BF00FA65AE /* GribParameterData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribParameterData.swift; sourceTree = "<group>"; };
+		138011F221DBD1F400FA65AE /* GribValueData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribValueData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +96,10 @@
 				134D348121D6800D00373B74 /* grib_api_windef.h */,
 				134D347F21D67E9300373B74 /* grib_api.h */,
 				134D348521D6817C00373B74 /* Parse.swift */,
+				138011F221DBD1F400FA65AE /* GribValueData.swift */,
+				138011F021DBD1BF00FA65AE /* GribParameterData.swift */,
+				138011EE21DBD19600FA65AE /* GribGeographyData.swift */,
+				138011EC21DBD13400FA65AE /* GribGridData.swift */,
 				138011E421DB64F400FA65AE /* TecplotExports.swift */,
 				134D348921D9294D00373B74 /* Coordinate.swift */,
 				134D348721D91FEE00373B74 /* RotationMatrix.swift */,
@@ -187,10 +199,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				134D348821D91FEE00373B74 /* RotationMatrix.swift in Sources */,
+				138011F321DBD1F500FA65AE /* GribValueData.swift in Sources */,
 				134D346F21D67DF500373B74 /* ViewController.swift in Sources */,
+				138011F121DBD1BF00FA65AE /* GribParameterData.swift in Sources */,
 				134D348621D6817C00373B74 /* Parse.swift in Sources */,
 				138011E521DB64F400FA65AE /* TecplotExports.swift in Sources */,
+				138011ED21DBD13400FA65AE /* GribGridData.swift in Sources */,
 				134D346D21D67DF500373B74 /* AppDelegate.swift in Sources */,
+				138011EF21DBD19600FA65AE /* GribGeographyData.swift in Sources */,
 				134D348A21D9294D00373B74 /* Coordinate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

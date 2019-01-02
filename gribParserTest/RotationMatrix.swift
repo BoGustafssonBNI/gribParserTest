@@ -8,14 +8,22 @@
 
 import Foundation
 struct RotationMatrix {
-    var a = 0.0
+    var a = 1.0
     var b = 0.0
     var c = 0.0
-    var d = 0.0
-    init(longitudeOfSouthernPoleInDegrees: Double, latitudeOfSouthernPoleInDegrees: Double, coordinate: Coordinate) {
+    var d = 1.0
+    init() {}
+    init(coordinate: Coordinate, geography: GribGeographyData) {
+        if geography.rotated {
+            self.init(longitudeOfSouthernPoleInDegrees: geography.longitudeOfSouthernPoleInDegrees, latitudeOfSouthernPoleInDegrees: geography.latitudeOfSouthernPoleInDegrees, coordinate: coordinate)
+        } else {
+            self.init()
+        }
+    }
+    private init(longitudeOfSouthernPoleInDegrees: Double, latitudeOfSouthernPoleInDegrees: Double, coordinate: Coordinate) {
         self.init(longitudeOfSouthernPoleInDegrees: longitudeOfSouthernPoleInDegrees, latitudeOfSouthernPoleInDegrees: latitudeOfSouthernPoleInDegrees, lon: coordinate.lon, lat: coordinate.lat, lonRot: coordinate.lonRot, latRot: coordinate.latRot)
     }
-    init(longitudeOfSouthernPoleInDegrees: Double, latitudeOfSouthernPoleInDegrees: Double, lon: Double, lat: Double, lonRot: Double, latRot: Double) {
+    private init(longitudeOfSouthernPoleInDegrees: Double, latitudeOfSouthernPoleInDegrees: Double, lon: Double, lat: Double, lonRot: Double, latRot: Double) {
         let zrad = Double.pi / 180.0
         let zsyc = sin((latitudeOfSouthernPoleInDegrees+90.0)*zrad)
         let zcyc = cos((latitudeOfSouthernPoleInDegrees+90.0)*zrad)
