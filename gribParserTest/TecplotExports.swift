@@ -10,7 +10,7 @@ import Foundation
 
 
 class TecplotExports {
-    func exportField(gridData : GribGridData, data: GribValueData) {
+    func exportField(gridDimensions: GribGridDimensions, gridData : GribGridData, data: GribValueData) {
         let params = [GribParameterData](data.keys)
         var variables = "X Y Lon Lat"
         for p in params {
@@ -39,7 +39,7 @@ class TecplotExports {
             }
         }
         openTecFile(title: title, fileName: fileName, variables: variables)
-        write_2d_zone(zoneTitle: "First", solutionTime: 0.0, strandID: 0, imax: gridData.nI, jmax: gridData.nJ, nvar: 4 + params.count, data: tecData, first: true)
+        write_2d_zone(zoneTitle: "First", solutionTime: 0.0, strandID: 0, imax: gridDimensions.nI, jmax: gridDimensions.nJ, nvar: 4 + params.count, data: tecData, first: true)
         closeTecFile()
     }
     private func openTecFile(title: String, fileName: String, variables: String) {

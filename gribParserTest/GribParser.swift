@@ -53,17 +53,19 @@ enum GribErrors: Error {
 class GribParser {
     var parameterList = [GribParameterData]()
     var geographyData = GribGeographyData()
+    var gridDimensions = GribGridDimensions()
     var gridData = GribGridData()
     private var filePointer : FilePointer?
     required init(file: String) throws {
         filePointer = fopen(file, "r")
-        if filePointer == nil {
+        if let fp = filePointer, fp == nil {
             throw GribErrors.CouldNotOpenFile
         }
         do {
             geographyData = try getGeography()
             parameterList = try getParameterList()
-            gridData = try getGridData()
+            gridDimensions = try getGridDimensions()
+//            gridData = try getGridData()
         } catch let error {
             throw error
         }
@@ -79,7 +81,7 @@ class GribParser {
         value.reserveCapacity(MAX_VAL_LEN)
         var result = [GribParameterData]()
         let p : OpaquePointer? = nil
-        guard let fp = filePointer else {
+        guard let fp = filePointer, fp != nil else {
             throw GribErrors.CouldNotGetFileHandle
         }
         rewind(fp)
@@ -135,7 +137,7 @@ class GribParser {
         var value = [CChar]()
         value.reserveCapacity(MAX_VAL_LEN)
         let p : OpaquePointer? = nil
-        guard let fp = filePointer else {
+        guard let fp = filePointer, fp != nil else {
             throw GribErrors.CouldNotGetFileHandle
         }
         rewind(fp)
@@ -218,11 +220,11 @@ class GribParser {
         grib_handle_delete(h)
         return geography
     }
-    private func getGridData() throws -> GribGridData {
-        var gridData = GribGridData()
+    private func getGridDimensions() throws -> GribGridDimensions {
+        var dimensions = GribGridDimensions()
         let p : OpaquePointer? = nil
         var err : Int32 = 0
-        guard let fp = filePointer else {
+        guard let fp = filePointer, fp != nil else {
             throw GribErrors.CouldNotGetFileHandle
         }
         rewind(fp)
@@ -232,8 +234,25 @@ class GribParser {
         var nJ = 0
         grib_get_long(h, "Ni", &nI)
         grib_get_long(h, "Nj", &nJ)
-        gridData.nI = nI
-        gridData.nJ = nJ
+        dimensions.nI = nI
+        dimensions.nJ = nJ
+        grib_handle_delete(h)
+        return dimensions
+    }
+    private func getGridData() throws -> GribGridData {
+        var gridData = GribGridData()
+        let p : OpaquePointer? = nil
+        var err : Int32 = 0
+        guard let fp = filePointer, fp != nil else {
+            throw GribErrors.CouldNotGetFileHandle
+        }
+        rewind(fp)
+        let h = grib_handle_new_from_file(p,fp,&err)
+        guard h != nil else {throw GribErrors.CouldNotGetFileHandle}
+        var nI = 0
+        var nJ = 0
+        grib_get_long(h, "Ni", &nI)
+        grib_get_long(h, "Nj", &nJ)
         var x = 0.0
         var y = 0.0
         var value = 0.0
@@ -262,7 +281,7 @@ class GribParser {
         var err: Int32  = 0
         var value = [CChar]()
         value.reserveCapacity(MAX_VAL_LEN)
-        guard let f = filePointer else {return nil}
+        guard let f = filePointer, f != nil else {return nil}
         rewind(f)
         let p : OpaquePointer? = nil
         var h = grib_handle_new_from_file(p,f,&err)
@@ -291,7 +310,7 @@ class GribParser {
         var err: Int32  = 0
         var value = [CChar]()
         value.reserveCapacity(MAX_VAL_LEN)
-        guard let f = filePointer else {return nil}
+        guard let f = filePointer, f != nil else {return nil}
         rewind(f)
         let p : OpaquePointer? = nil
         var h = grib_handle_new_from_file(p,f,&err)
@@ -331,7 +350,7 @@ class GribParser {
         var err: Int32  = 0
         var value = [CChar]()
         value.reserveCapacity(MAX_VAL_LEN)
-        guard let f = filePointer else {return nil}
+        guard let f = filePointer, f != nil else {return nil}
         rewind(f)
         let p : OpaquePointer? = nil
         var h = grib_handle_new_from_file(p,f,&err)
@@ -423,7 +442,7 @@ class GribParser {
     }
     
     func getIndex(from coordinate: GribCoordinate) -> Int {
-        return coordinate.i + self.gridData.nI * coordinate.j
+        return coordinate.i + self.gridDimensions.nI * coordinate.j
     }
     
     

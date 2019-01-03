@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		134D346D21D67DF500373B74 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D346C21D67DF500373B74 /* AppDelegate.swift */; };
-		134D346F21D67DF500373B74 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D346E21D67DF500373B74 /* ViewController.swift */; };
+		134D346F21D67DF500373B74 /* GribFileConversionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D346E21D67DF500373B74 /* GribFileConversionViewController.swift */; };
 		134D347121D67DF500373B74 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 134D347021D67DF500373B74 /* Assets.xcassets */; };
 		134D347421D67DF500373B74 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 134D347221D67DF500373B74 /* Main.storyboard */; };
 		134D348421D680D900373B74 /* grib_api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 134D348321D680D900373B74 /* grib_api.dylib */; };
@@ -22,12 +22,16 @@
 		138011EF21DBD19600FA65AE /* GribGeographyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138011EE21DBD19600FA65AE /* GribGeographyData.swift */; };
 		138011F121DBD1BF00FA65AE /* GribParameterData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138011F021DBD1BF00FA65AE /* GribParameterData.swift */; };
 		138011F321DBD1F500FA65AE /* GribValueData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138011F221DBD1F400FA65AE /* GribValueData.swift */; };
+		138011FC21DD467B00FA65AE /* GribFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138011FB21DD467B00FA65AE /* GribFile.swift */; };
+		1380120121DDF8A400FA65AE /* ParameterTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1380120021DDF8A400FA65AE /* ParameterTableCellView.swift */; };
+		1380120321DDF8C400FA65AE /* GribFileInfoTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1380120221DDF8C400FA65AE /* GribFileInfoTableCellView.swift */; };
+		1380120521DE25E300FA65AE /* GribGridDimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1380120421DE25E300FA65AE /* GribGridDimensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		134D346921D67DF500373B74 /* gribParserTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gribParserTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		134D346C21D67DF500373B74 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		134D346E21D67DF500373B74 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		134D346E21D67DF500373B74 /* GribFileConversionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribFileConversionViewController.swift; sourceTree = "<group>"; };
 		134D347021D67DF500373B74 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		134D347321D67DF500373B74 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		134D347521D67DF500373B74 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -51,6 +55,10 @@
 		138011EE21DBD19600FA65AE /* GribGeographyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribGeographyData.swift; sourceTree = "<group>"; };
 		138011F021DBD1BF00FA65AE /* GribParameterData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribParameterData.swift; sourceTree = "<group>"; };
 		138011F221DBD1F400FA65AE /* GribValueData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribValueData.swift; sourceTree = "<group>"; };
+		138011FB21DD467B00FA65AE /* GribFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribFile.swift; sourceTree = "<group>"; };
+		1380120021DDF8A400FA65AE /* ParameterTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterTableCellView.swift; sourceTree = "<group>"; };
+		1380120221DDF8C400FA65AE /* GribFileInfoTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribFileInfoTableCellView.swift; sourceTree = "<group>"; };
+		1380120421DE25E300FA65AE /* GribGridDimensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribGridDimensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,17 +95,13 @@
 		134D346B21D67DF500373B74 /* gribParserTest */ = {
 			isa = PBXGroup;
 			children = (
+				138011F921DD136000FA65AE /* supporting files */,
 				138011F621DD11E700FA65AE /* tecioAPI */,
 				138011F421DD117300FA65AE /* gribAPI */,
-				134D348021D67EBC00373B74 /* gribParserTest-Bridging-Header.h */,
 				138011F721DD121D00FA65AE /* grabDataTypes */,
 				138011F821DD12A400FA65AE /* gribUtilityClasses */,
-				134D346C21D67DF500373B74 /* AppDelegate.swift */,
-				134D346E21D67DF500373B74 /* ViewController.swift */,
-				134D347021D67DF500373B74 /* Assets.xcassets */,
-				134D347221D67DF500373B74 /* Main.storyboard */,
-				134D347521D67DF500373B74 /* Info.plist */,
-				134D347621D67DF500373B74 /* gribParserTest.entitlements */,
+				138011FA21DD137E00FA65AE /* UI */,
+				138011FD21DD482A00FA65AE /* Model */,
 			);
 			path = gribParserTest;
 			sourceTree = "<group>";
@@ -142,6 +146,7 @@
 				138011F021DBD1BF00FA65AE /* GribParameterData.swift */,
 				138011EE21DBD19600FA65AE /* GribGeographyData.swift */,
 				138011EC21DBD13400FA65AE /* GribGridData.swift */,
+				1380120421DE25E300FA65AE /* GribGridDimensions.swift */,
 			);
 			name = grabDataTypes;
 			sourceTree = "<group>";
@@ -153,6 +158,37 @@
 				138011E421DB64F400FA65AE /* TecplotExports.swift */,
 			);
 			name = gribUtilityClasses;
+			sourceTree = "<group>";
+		};
+		138011F921DD136000FA65AE /* supporting files */ = {
+			isa = PBXGroup;
+			children = (
+				134D348021D67EBC00373B74 /* gribParserTest-Bridging-Header.h */,
+				134D346C21D67DF500373B74 /* AppDelegate.swift */,
+				134D347021D67DF500373B74 /* Assets.xcassets */,
+				134D347521D67DF500373B74 /* Info.plist */,
+				134D347621D67DF500373B74 /* gribParserTest.entitlements */,
+			);
+			name = "supporting files";
+			sourceTree = "<group>";
+		};
+		138011FA21DD137E00FA65AE /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				134D347221D67DF500373B74 /* Main.storyboard */,
+				1380120021DDF8A400FA65AE /* ParameterTableCellView.swift */,
+				1380120221DDF8C400FA65AE /* GribFileInfoTableCellView.swift */,
+				134D346E21D67DF500373B74 /* GribFileConversionViewController.swift */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
+		138011FD21DD482A00FA65AE /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				138011FB21DD467B00FA65AE /* GribFile.swift */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -230,12 +266,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				138011FC21DD467B00FA65AE /* GribFile.swift in Sources */,
 				134D348821D91FEE00373B74 /* GribRotationMatrix.swift in Sources */,
 				138011F321DBD1F500FA65AE /* GribValueData.swift in Sources */,
-				134D346F21D67DF500373B74 /* ViewController.swift in Sources */,
+				134D346F21D67DF500373B74 /* GribFileConversionViewController.swift in Sources */,
+				1380120521DE25E300FA65AE /* GribGridDimensions.swift in Sources */,
 				138011F121DBD1BF00FA65AE /* GribParameterData.swift in Sources */,
 				134D348621D6817C00373B74 /* GribParser.swift in Sources */,
 				138011E521DB64F400FA65AE /* TecplotExports.swift in Sources */,
+				1380120121DDF8A400FA65AE /* ParameterTableCellView.swift in Sources */,
+				1380120321DDF8C400FA65AE /* GribFileInfoTableCellView.swift in Sources */,
 				138011ED21DBD13400FA65AE /* GribGridData.swift in Sources */,
 				134D346D21D67DF500373B74 /* AppDelegate.swift in Sources */,
 				138011EF21DBD19600FA65AE /* GribGeographyData.swift in Sources */,
