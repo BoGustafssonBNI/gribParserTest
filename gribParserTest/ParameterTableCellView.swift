@@ -8,6 +8,7 @@
 
 protocol ParameterSelection {
     var parameterSelected : [GribParameterData: Bool] {get set}
+    var rotationCaseForParameter : [GribParameterData: GribParameterRotationCases] {get set}
 }
 
 import Cocoa
@@ -18,25 +19,59 @@ class ParameterTableCellView: NSTableCellView {
         didSet {
             if let name = parameter?.name {
                 parameterSelectionButton?.title = name
-                parameterSelectionButton?.state = .on
-                delegate?.parameterSelected[parameter!] = true
+            }
+            if let para = parameter, let del = delegate {
+                if let value = del.parameterSelected[para] {
+                    parameterSelectionButton?.state = value ? .on : .off
+                }
+                if let rotationCase = del.rotationCaseForParameter[para] {
+                    rotationCaseSelector.setSelected(true, forSegment: rotationCase.rawValue)
+                }
             }
         }
     }
     var delegate : ParameterSelection? {
         didSet {
             if let para = parameter {
-                delegate?.parameterSelected[para] = true
+                if let value = delegate?.parameterSelected[para] {
+                    parameterSelectionButton?.state = value ? .on : .off
+                } else {
+                    delegate?.parameterSelected[para] = false
+                }
+                if let rotationCase = delegate?.rotationCaseForParameter[para] {
+                    rotationCaseSelector.setSelected(true, forSegment: rotationCase.rawValue)
+                } else {
+                    delegate?.rotationCaseForParameter[para] = selectedCase
+                }
             }
         }
     }
     
     @IBOutlet weak private var parameterSelectionButton: NSButton?
-
+    @IBOutlet weak var rotationCaseSelector: NSSegmentedControl!
+    
     @IBAction private func parameterSelection(_ sender: NSButton) {
         if let state = parameterSelectionButton?.state {
             delegate?.parameterSelected[parameter!] = state == .on
         }
     }
-    
+    @IBAction func newRotationCaseSelected(_ sender: NSSegmentedControl) {
+        if let param = parameter {
+            delegate?.rotationCaseForParameter[param] = selectedCase
+        }
+    }
+    private var selectedCase : GribParameterRotationCases {
+        get {
+            switch rotationCaseSelector.selectedSegment {
+            case 0:
+                return .none
+            case 1:
+                return .u
+            case 2:
+                return .v
+            default:
+                return .none
+            }
+        }
+    }
 }

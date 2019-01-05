@@ -26,6 +26,10 @@
 		1380120121DDF8A400FA65AE /* ParameterTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1380120021DDF8A400FA65AE /* ParameterTableCellView.swift */; };
 		1380120321DDF8C400FA65AE /* GribFileInfoTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1380120221DDF8C400FA65AE /* GribFileInfoTableCellView.swift */; };
 		1380120521DE25E300FA65AE /* GribGridDimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1380120421DE25E300FA65AE /* GribGridDimensions.swift */; };
+		1380120721DF6E5000FA65AE /* TecplotExporterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1380120621DF6E5000FA65AE /* TecplotExporterViewController.swift */; };
+		1380120921DF71FF00FA65AE /* MyDateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1380120821DF71FF00FA65AE /* MyDateConverter.swift */; };
+		1380120B21DFF72A00FA65AE /* GribTimeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1380120A21DFF72A00FA65AE /* GribTimeData.swift */; };
+		1380120D21E08B5D00FA65AE /* GribParameterRotationCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1380120C21E08B5C00FA65AE /* GribParameterRotationCases.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +63,10 @@
 		1380120021DDF8A400FA65AE /* ParameterTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterTableCellView.swift; sourceTree = "<group>"; };
 		1380120221DDF8C400FA65AE /* GribFileInfoTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribFileInfoTableCellView.swift; sourceTree = "<group>"; };
 		1380120421DE25E300FA65AE /* GribGridDimensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribGridDimensions.swift; sourceTree = "<group>"; };
+		1380120621DF6E5000FA65AE /* TecplotExporterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TecplotExporterViewController.swift; sourceTree = "<group>"; };
+		1380120821DF71FF00FA65AE /* MyDateConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyDateConverter.swift; sourceTree = "<group>"; };
+		1380120A21DFF72A00FA65AE /* GribTimeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribTimeData.swift; sourceTree = "<group>"; };
+		1380120C21E08B5C00FA65AE /* GribParameterRotationCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribParameterRotationCases.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,8 +150,10 @@
 			children = (
 				134D348921D9294D00373B74 /* GribCoordinate.swift */,
 				134D348721D91FEE00373B74 /* GribRotationMatrix.swift */,
+				1380120A21DFF72A00FA65AE /* GribTimeData.swift */,
 				138011F221DBD1F400FA65AE /* GribValueData.swift */,
 				138011F021DBD1BF00FA65AE /* GribParameterData.swift */,
+				1380120C21E08B5C00FA65AE /* GribParameterRotationCases.swift */,
 				138011EE21DBD19600FA65AE /* GribGeographyData.swift */,
 				138011EC21DBD13400FA65AE /* GribGridData.swift */,
 				1380120421DE25E300FA65AE /* GribGridDimensions.swift */,
@@ -163,6 +173,7 @@
 		138011F921DD136000FA65AE /* supporting files */ = {
 			isa = PBXGroup;
 			children = (
+				1380120821DF71FF00FA65AE /* MyDateConverter.swift */,
 				134D348021D67EBC00373B74 /* gribParserTest-Bridging-Header.h */,
 				134D346C21D67DF500373B74 /* AppDelegate.swift */,
 				134D347021D67DF500373B74 /* Assets.xcassets */,
@@ -176,6 +187,7 @@
 			isa = PBXGroup;
 			children = (
 				134D347221D67DF500373B74 /* Main.storyboard */,
+				1380120621DF6E5000FA65AE /* TecplotExporterViewController.swift */,
 				1380120021DDF8A400FA65AE /* ParameterTableCellView.swift */,
 				1380120221DDF8C400FA65AE /* GribFileInfoTableCellView.swift */,
 				134D346E21D67DF500373B74 /* GribFileConversionViewController.swift */,
@@ -266,17 +278,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1380120721DF6E5000FA65AE /* TecplotExporterViewController.swift in Sources */,
 				138011FC21DD467B00FA65AE /* GribFile.swift in Sources */,
 				134D348821D91FEE00373B74 /* GribRotationMatrix.swift in Sources */,
 				138011F321DBD1F500FA65AE /* GribValueData.swift in Sources */,
 				134D346F21D67DF500373B74 /* GribFileConversionViewController.swift in Sources */,
 				1380120521DE25E300FA65AE /* GribGridDimensions.swift in Sources */,
+				1380120D21E08B5D00FA65AE /* GribParameterRotationCases.swift in Sources */,
 				138011F121DBD1BF00FA65AE /* GribParameterData.swift in Sources */,
 				134D348621D6817C00373B74 /* GribParser.swift in Sources */,
 				138011E521DB64F400FA65AE /* TecplotExports.swift in Sources */,
 				1380120121DDF8A400FA65AE /* ParameterTableCellView.swift in Sources */,
 				1380120321DDF8C400FA65AE /* GribFileInfoTableCellView.swift in Sources */,
 				138011ED21DBD13400FA65AE /* GribGridData.swift in Sources */,
+				1380120921DF71FF00FA65AE /* MyDateConverter.swift in Sources */,
+				1380120B21DFF72A00FA65AE /* GribTimeData.swift in Sources */,
 				134D346D21D67DF500373B74 /* AppDelegate.swift in Sources */,
 				138011EF21DBD19600FA65AE /* GribGeographyData.swift in Sources */,
 				134D348A21D9294D00373B74 /* GribCoordinate.swift in Sources */,

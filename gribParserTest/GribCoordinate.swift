@@ -57,6 +57,40 @@ struct GribCoordinate {
         self.i = Int((lonRot - geography.longitudeOfFirstGridPointInDegrees) / geography.iDirectionIncrementInDegrees)
         self.j = Int((latRot - geography.latitudeOfFirstGridPointInDegrees) / geography.jDirectionIncrementInDegrees)
     }
+    init(lonRot: Double, latRot: Double, geography: GribGeographyData ) {
+        if geography.rotated {
+            let zrad = Double.pi / 180.0
+            let zradi = 1.0 / zrad
+            let zsycen = sin(zrad*(geography.latitudeOfSouthernPoleInDegrees+90.0))
+            let zcycen = cos(zrad*(geography.latitudeOfSouthernPoleInDegrees+90.0))
+            let zsxrot = sin(zrad*lonRot)
+            let zcxrot = cos(zrad*lonRot)
+            let zsyrot = sin(zrad*latRot)
+            let zcyrot = cos(zrad*latRot)
+            var zsyreg = zcycen*zsyrot + zsycen*zcyrot*zcxrot
+             zsyreg = max(zsyreg,-1.0)
+             zsyreg = min(zsyreg,+1.0)
+            let lat = asin(zsyreg)*zradi
+            let zcyreg = cos(lat*zrad)
+            var zcxmxc = (zcycen*zcyrot*zcxrot - zsycen*zsyrot)/zcyreg
+             zcxmxc = max(zcxmxc,-1.0)
+             zcxmxc = min(zcxmxc,+1.0)
+            let zsxmxc = zcyrot*zsxrot/zcyreg
+            var zxmxc = acos(zcxmxc)*zradi
+            if zsxmxc < 0.0 {zxmxc = -zxmxc}
+            let lon = zxmxc + geography.longitudeOfSouthernPoleInDegrees
+            self.lat = lat
+            self.lon = lon
+        } else {
+            self.lat = latRot
+            self.lon = lonRot
+            
+        }
+        self.latRot = latRot
+        self.lonRot = lonRot
+        self.i = Int((lonRot - geography.longitudeOfFirstGridPointInDegrees) / geography.iDirectionIncrementInDegrees)
+        self.j = Int((latRot - geography.latitudeOfFirstGridPointInDegrees) / geography.jDirectionIncrementInDegrees)
+    }
 }
 
 extension GribCoordinate: Comparable, Equatable {

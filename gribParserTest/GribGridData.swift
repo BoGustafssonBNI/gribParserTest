@@ -8,7 +8,16 @@
 
 import Foundation
 struct GribGridData {
-    var coordinates = [GribCoordinate]()
-    var rotationMatrices = [GribRotationMatrix]()
+    let coordinates : [GribCoordinate]
+    let rotationMatrices : [GribRotationMatrix]
+    init?(from parser: GribParser) {
+        do {
+            let grid = try parser.getGridData()
+            self.coordinates = grid.coordinates
+            self.rotationMatrices = grid.rotationMatrices
+        } catch {
+            return nil
+        }
+    }
 }
 

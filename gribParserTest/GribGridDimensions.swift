@@ -7,7 +7,7 @@
 //
 
 import Foundation
-struct GribGridDimensions {
+struct GribGridDimensions: Equatable {
     var nI = 0
     var nJ = 0
 }

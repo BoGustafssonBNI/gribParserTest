@@ -15,23 +15,18 @@ enum ConversionTypes: String {
 
 class GribFileConversionViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, ParameterSelection {
     
-    @IBOutlet weak var gribFileTable: NSTableView! {
-        didSet {
-            gribFileTable.rowHeight = 77
-        }
-    }
-    @IBOutlet weak var parameterSelectionTable: NSTableView! {
-        didSet {
-            parameterSelectionTable.rowHeight = 24
-         }
-    }
     
     @IBOutlet weak var fileSearchURLButton: NSButton!
     @IBOutlet weak var OutputURLButton: NSButton!
     @IBOutlet weak var conversionTypeSelector: NSPopUpButton!
     @IBOutlet weak var pointSpecificationURLButton: NSButton!
+    @IBOutlet weak var performConversionButton: NSButton!
+    @IBOutlet weak var selectAllButton: NSButton!
+    @IBOutlet weak var unselectAllButton: NSButton!
+    @IBOutlet weak var showAllButton: NSButton!
     
-    private var conversionType = ConversionTypes.points
+    
+    
     var gribFiles : [GribFile]? {
         didSet {
             if gribFiles != nil {
@@ -47,16 +42,11 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
                 if !tempList.isEmpty {
                     tempList.sort{$0.paramId < $1.paramId}
                     parameterList = tempList
-                    
+                    allParametersList = tempList
                 }
             }
+            performConversionButton.isEnabled = canPerformConversion
             gribFileTable.reloadData()
-        }
-    }
-    
-    var parameterList : [GribParameterData]? {
-        didSet {
-            parameterSelectionTable.reloadData()
         }
     }
     
@@ -67,11 +57,57 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         conversionTypeSelector.addItem(withTitle: ConversionTypes.tecplotFields.rawValue)
         conversionTypeSelector.selectItem(withTitle: conversionType.rawValue)
         pointSpecificationURLButton.isHidden = conversionType == .tecplotFields ? true : false
+        performConversionButton.isEnabled = false
+        showAllButton.isEnabled = false
         gribFileTable.delegate = self
         gribFileTable.dataSource = self
         parameterSelectionTable.dataSource = self
         parameterSelectionTable.delegate = self
      }
+    
+    private var canPerformConversion : Bool {
+        get {
+            let result = outputURL != nil && (conversionType == .points ? pointSpecificationFileURL != nil : true) && !parameterSelected.isEmpty
+            return result
+        }
+    }
+    
+    
+    private var conversionType = ConversionTypes.points
+
+    @IBAction func changedConversionType(_ sender: NSPopUpButton) {
+        if let item = conversionTypeSelector.titleOfSelectedItem {
+            switch item {
+            case ConversionTypes.points.rawValue:
+                conversionType = .points
+            case ConversionTypes.tecplotFields.rawValue:
+                conversionType = .tecplotFields
+            default:
+                break
+            }
+        }
+        performConversionButton.isEnabled = canPerformConversion
+        pointSpecificationURLButton.isHidden = conversionType == .tecplotFields ? true : false
+    }
+    
+    var pointSpecificationFileURL : URL?
+    
+    @IBAction func getPointSpecifivationURL(_ sender: NSButton) {
+        let op = NSOpenPanel()
+        op.canChooseDirectories = false
+        op.canChooseFiles = true
+        op.allowsMultipleSelection = false
+        op.canCreateDirectories = false
+        op.begin { (result) -> Void in
+            if result == NSApplication.ModalResponse.OK, let url = op.url {
+                DispatchQueue.main.async {
+                    self.pointSpecificationFileURL = url
+                    self.pointSpecificationURLButton.title = url.absoluteString
+                    self.performConversionButton.isEnabled = self.canPerformConversion
+                }
+            }
+        }
+    }
     
     private var urlsFromOpenPanel : [URL]! {
         didSet {
@@ -90,14 +126,12 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
                         }
                     } else {
                         newURLs.append(url)
-                        print("\(url) is a file")
                     }
                 }
                 if !newURLs.isEmpty {
                     newURLs.sort{$0.lastPathComponent < $1.lastPathComponent}
                     initializeNewGribFiles(urls: newURLs)
                 }
-                print(newURLs)
             }
         }
     }
@@ -129,13 +163,87 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         }
     }
     
-    //    Mark: TableView methods
+    private var outputURL : URL?
     
+    @IBAction func setOutputDirectory(_ sender: NSButton) {
+        let op = NSOpenPanel()
+        op.canChooseDirectories = true
+        op.canChooseFiles = false
+        op.allowsMultipleSelection = false
+        op.canCreateDirectories = true
+        op.begin { (result) -> Void in
+            if result == NSApplication.ModalResponse.OK, let url = op.url {
+                DispatchQueue.main.async {
+                    self.outputURL = url
+                    self.OutputURLButton.title = url.absoluteString
+                }
+            }
+        }
+
+    }
+    private var allParametersList : [GribParameterData]?
+    
+    var parameterList : [GribParameterData]? {
+        didSet {
+            parameterSelectionTable.reloadData()
+            performConversionButton.isEnabled = canPerformConversion
+        }
+    }
+
     var parameterSelected = [GribParameterData: Bool]()
     
+    var rotationCaseForParameter = [GribParameterData: GribParameterRotationCases]()
+    
+    @IBAction func showAllParameters(_ sender: NSButton) {
+        if let list = allParametersList {
+            parameterList = list
+            showAllButton.isEnabled = false
+        }
+    }
+    
+    @IBAction func selectAllParameters(_ sender: NSButton) {
+        if let list = parameterList {
+            for param in list {
+                parameterSelected[param] = sender == selectAllButton
+             }
+        }
+        parameterSelectionTable.reloadData()
+    }
+    
+    let tecplotExportSegueIdentifier : NSStoryboardSegue.Identifier = "TecplotExportSegue"
+    @IBAction func convert(_ sender: NSButton) {
+        switch conversionType {
+        case .tecplotFields:
+            performSegue(withIdentifier: tecplotExportSegueIdentifier, sender: self)
+        default:
+            break
+        }
+    }
+    
+    
+    
+    //    Mark: TableView methods
+    
+    @IBOutlet weak var gribFileTable: NSTableView! {
+        didSet {
+            gribFileTable.rowHeight = 77
+        }
+    }
+    @IBOutlet weak var parameterSelectionTable: NSTableView! {
+        didSet {
+            parameterSelectionTable.rowHeight = 24
+        }
+    }
     let gribFileCell = NSUserInterfaceItemIdentifier.init("GribFileInfoCell")
     let parameterCell = NSUserInterfaceItemIdentifier.init("ParameterCell")
     
+    @IBAction func selectedFile(_ sender: NSTableView) {
+        let row = sender.selectedRow
+        if row >= 0, let file = gribFiles?[row] {
+            showAllButton.isEnabled = true
+            parameterList = file.parser.parameterList
+        }
+    }
     
     func numberOfRows(in tableView: NSTableView) -> Int {
         switch tableView {
@@ -174,5 +282,7 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         }
         return nil
     }
+
+    
 }
 

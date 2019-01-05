@@ -15,5 +15,14 @@ struct GribParameterData {
     var name = ""
     var shortName = ""
 }
-extension GribParameterData: Hashable {}
+
+extension GribParameterData: Hashable {
+    static func == (lhs: GribParameterData, rhs: GribParameterData) -> Bool {
+        return lhs.paramId == rhs.paramId
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(self.paramId)
+    }
+}
 

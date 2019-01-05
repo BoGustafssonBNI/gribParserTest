@@ -39,6 +39,10 @@ enum GribGeography: String {
     case angleOfRotationInDegrees = "angleOfRotationInDegrees"
     case gridType = "gridType"
 }
+enum GribTime: String {
+    case dataDate
+    case dataTime
+}
 
 
 
@@ -54,7 +58,7 @@ class GribParser {
     var parameterList = [GribParameterData]()
     var geographyData = GribGeographyData()
     var gridDimensions = GribGridDimensions()
-    var gridData = GribGridData()
+    var dataTime = GribTimeData()
     private var filePointer : FilePointer?
     required init(file: String) throws {
         filePointer = fopen(file, "r")
@@ -65,11 +69,53 @@ class GribParser {
             geographyData = try getGeography()
             parameterList = try getParameterList()
             gridDimensions = try getGridDimensions()
-//            gridData = try getGridData()
+            dataTime = try getTime()
         } catch let error {
             throw error
         }
     }
+    private func getTime() throws -> GribTimeData {
+        //        let MAX_KEY_LEN = 255
+        let MAX_VAL_LEN = 1024
+        let key_iterator_filter_flags : Int32  = GRIB_KEYS_ITERATOR_ALL_KEYS
+        let name_space = GribNameSpaces.time.rawValue
+        var err: Int32  = 0
+        var value = [CChar]()
+        value.reserveCapacity(MAX_VAL_LEN)
+        let p : OpaquePointer? = nil
+        guard let fp = filePointer, fp != nil else {
+            throw GribErrors.CouldNotGetFileHandle
+        }
+        rewind(fp)
+        let h = grib_handle_new_from_file(p,fp,&err)
+        let kiter = grib_keys_iterator_new(h, UInt(key_iterator_filter_flags), name_space)
+        if (kiter == nil) {
+            throw GribErrors.CouldNotCreateKeysIterator
+        }
+        var time = GribTimeData()
+        while(grib_keys_iterator_next(kiter) == 1)
+        {
+            let name = grib_keys_iterator_get_name(kiter)
+            var vlen = MAX_VAL_LEN
+            bzero(&value, vlen)
+            grib_get_string(h,name,&value,&vlen)
+            if let string = String(validatingUTF8: name!), let svalue = String(validatingUTF8: &value) {
+                print("name= \(string), value= \(svalue)")
+                switch string {
+                case GribTime.dataDate.rawValue:
+                    time.dataTime = svalue
+                case GribTime.dataTime.rawValue:
+                    time.dataTime = svalue
+                default:
+                    break
+                }
+            }
+        }
+        grib_keys_iterator_delete(kiter)
+        grib_handle_delete(h)
+        return time
+    }
+
     private func getParameterList() throws -> [GribParameterData] {
         //        let MAX_KEY_LEN = 255
         let MAX_VAL_LEN = 1024
@@ -155,7 +201,6 @@ class GribParser {
             bzero(&value, vlen)
             grib_get_string(h,name,&value,&vlen)
             if let string = String(validatingUTF8: name!), let svalue = String(validatingUTF8: &value) {
-                print("\(string): \(svalue)")
                 switch string {
                 case GribGeography.bitmapPresent.rawValue:
                     if let i = Int(svalue) {
@@ -239,8 +284,7 @@ class GribParser {
         grib_handle_delete(h)
         return dimensions
     }
-    private func getGridData() throws -> GribGridData {
-        var gridData = GribGridData()
+    func getGridData() throws -> (coordinates: [GribCoordinate], rotationMatrices: [GribRotationMatrix]) {
         let p : OpaquePointer? = nil
         var err : Int32 = 0
         guard let fp = filePointer, fp != nil else {
@@ -259,11 +303,13 @@ class GribParser {
         let iterator = grib_iterator_new(h, 0, &err)
         var i = 0
         var j = 0
+        var coordinates = [GribCoordinate]()
+        var rotationMatrices = [GribRotationMatrix]()
         while grib_iterator_next(iterator, &y, &x, &value) == 1 {
             let coord = GribCoordinate(i: i, j: j, lon: x, lat: y, longitudeOfFirstGridPointInDegrees: geographyData.longitudeOfFirstGridPointInDegrees, latitudeOfFirstGridPointInDegrees: geographyData.latitudeOfFirstGridPointInDegrees, iDirectionIncrementInDegrees: geographyData.iDirectionIncrementInDegrees, jDirectionIncrementInDegrees: geographyData.jDirectionIncrementInDegrees)
             let rotationMatrix = GribRotationMatrix(coordinate: coord, geography: geographyData)
-            gridData.coordinates.append(coord)
-            gridData.rotationMatrices.append(rotationMatrix)
+            coordinates.append(coord)
+            rotationMatrices.append(rotationMatrix)
             if i == nI - 1 {
                 i = 0
                 j += 1
@@ -273,7 +319,7 @@ class GribParser {
         }
         grib_iterator_delete(iterator)
         grib_handle_delete(h)
-        return gridData
+        return (coordinates, rotationMatrices)
     }
     func getValues(for parameter: GribParameterData) -> [Double]? {
         //        let MAX_KEY_LEN = 255
