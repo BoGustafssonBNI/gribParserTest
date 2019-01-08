@@ -795,7 +795,7 @@
                                                 </tableColumn>
                                             </tableColumns>
                                             <connections>
-                                                <action selector="selectedFile:" target="XfG-lQ-9wD" id="UID-Ko-WML"/>
+                                                <action selector="selectedFile:" target="XfG-lQ-9wD" id="DQ9-FL-vO9"/>
                                             </connections>
                                         </tableView>
                                     </subviews>
@@ -907,7 +907,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="searchForFileURLs:" target="XfG-lQ-9wD" id="38J-vV-2U8"/>
+                                    <action selector="searchForFileURLs:" target="XfG-lQ-9wD" id="tFx-D4-cVY"/>
                                 </connections>
                             </button>
                             <button horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="fPs-A9-cV6">
@@ -917,7 +917,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="setOutputDirectory:" target="XfG-lQ-9wD" id="JQw-EL-RJv"/>
+                                    <action selector="setOutputDirectory:" target="XfG-lQ-9wD" id="eO9-fY-Rj2"/>
                                 </connections>
                             </button>
                             <popUpButton horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ka1-0J-DgY">
@@ -934,7 +934,7 @@
                                     </menu>
                                 </popUpButtonCell>
                                 <connections>
-                                    <action selector="changedConversionType:" target="XfG-lQ-9wD" id="NW0-30-n8S"/>
+                                    <action selector="changedConversionType:" target="XfG-lQ-9wD" id="1F8-4H-cW2"/>
                                 </connections>
                             </popUpButton>
                             <button horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Zk2-ji-5uP">
@@ -944,7 +944,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="getPointSpecifivationURL:" target="XfG-lQ-9wD" id="F0U-FE-Ywu"/>
+                                    <action selector="getPointSpecificationURL:" target="XfG-lQ-9wD" id="F0U-FE-Ywu"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Pwz-eo-MTm">
@@ -954,7 +954,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="convert:" target="XfG-lQ-9wD" id="ZBW-jc-XHR"/>
+                                    <action selector="convert:" target="XfG-lQ-9wD" id="09l-CQ-QZQ"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ldB-4N-7vK">
@@ -964,7 +964,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="selectAllParameters:" target="XfG-lQ-9wD" id="WOJ-UF-HUa"/>
+                                    <action selector="selectAllParameters:" target="XfG-lQ-9wD" id="ksc-t0-x8K"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iDB-Ik-w7R">
@@ -974,7 +974,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="selectAllParameters:" target="XfG-lQ-9wD" id="8o0-pZ-PuX"/>
+                                    <action selector="selectAllParameters:" target="XfG-lQ-9wD" id="V8r-i5-wZm"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="T5j-VB-B1b">
@@ -984,7 +984,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="showAllParameters:" target="XfG-lQ-9wD" id="KSt-rf-jMT"/>
+                                    <action selector="showAllParameters:" target="XfG-lQ-9wD" id="iqK-gP-Tfa"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -1024,7 +1024,7 @@
                         <outlet property="OutputURLButton" destination="fPs-A9-cV6" id="1vl-QX-Bgd"/>
                         <outlet property="conversionTypeSelector" destination="Ka1-0J-DgY" id="Vg4-RI-Gar"/>
                         <outlet property="fileSearchURLButton" destination="tRd-FB-JEV" id="5uh-Tx-fsA"/>
-                        <outlet property="gribFileTable" destination="Yci-Ra-5L9" id="DZN-wZ-PaB"/>
+                        <outlet property="gribFileTable" destination="Yci-Ra-5L9" id="aT2-c7-HrU"/>
                         <outlet property="parameterSelectionTable" destination="Q1a-JA-0La" id="sbs-Dv-Ejv"/>
                         <outlet property="performConversionButton" destination="Pwz-eo-MTm" id="vND-J1-y6N"/>
                         <outlet property="pointSpecificationURLButton" destination="Zk2-ji-5uP" id="sab-mW-MH8"/>

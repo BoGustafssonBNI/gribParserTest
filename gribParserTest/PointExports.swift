@@ -52,11 +52,14 @@ class PointExports {
                 first = false
                 gribPoints = []
                 for p in points {
-                    gribPoints.append(GribPoint(from: p, geography: lastGeographyData, dimensions: lastDimension))
+                    if let gp = GribPoint(from: p, geography: lastGeographyData, dimensions: lastDimension) {
+                        gribPoints.append(gp)
+                    }
                 }
                 for id in ids {
                     indicesForID[id] = gribPoints.indices(for: id)
                     matricesForID[id] = gribPoints.rotationMatrices(for: id, geography: lastGeographyData)
+                    if indicesForID[id]!.count == 0 {print("no points for id=\(id)")}
                 }
             }
             

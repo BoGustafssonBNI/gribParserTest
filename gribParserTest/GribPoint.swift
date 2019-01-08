@@ -12,10 +12,13 @@ struct GribPoint {
     var point : Point
     var coordinate : GribCoordinate
     var index : Int
-    init(from point: Point, geography: GribGeographyData, dimensions: GribGridDimensions) {
+    init?(from point: Point, geography: GribGeographyData, dimensions: GribGridDimensions) {
         self.point = point
-        self.coordinate = GribCoordinate.init(lon: point.lon, lat: point.lat, geography: geography)
-        self.index = self.coordinate.i + dimensions.nI * self.coordinate.j
+        let coordinate = GribCoordinate.init(lon: point.lon, lat: point.lat, geography: geography)
+        self.coordinate = coordinate
+        self.index = coordinate.i + dimensions.nI * coordinate.j
+        let valid = coordinate.i >= 0 && coordinate.i < dimensions.nI && coordinate.j >= 0 && coordinate.j < dimensions.nJ
+        if !valid {return nil}
     }
  }
 

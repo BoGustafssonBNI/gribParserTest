@@ -67,8 +67,12 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
     
     private var canPerformConversion : Bool {
         get {
-            let result = outputURL != nil && (conversionType == .points ? pointsForExtraction != nil : true) && !parameterSelected.isEmpty
-            return result
+            let result = outputURL != nil && (conversionType == .points ? pointsForExtraction != nil : true)
+            var select = false
+            for (_, selected) in parameterSelected {
+                select = select || selected
+            }
+            return result && select
         }
     }
     
@@ -109,12 +113,13 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         }
     }
     
-    @IBAction func getPointSpecifivationURL(_ sender: NSButton) {
+    @IBAction func getPointSpecificationURL(_ sender: NSButton) {
         let op = NSOpenPanel()
         op.canChooseDirectories = false
         op.canChooseFiles = true
         op.allowsMultipleSelection = false
         op.canCreateDirectories = false
+        op.allowedFileTypes = ["txt","csv"]
         op.begin { (result) -> Void in
             if result == NSApplication.ModalResponse.OK, let url = op.url {
                 DispatchQueue.main.async {
@@ -168,13 +173,17 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         op.canChooseFiles = true
         op.allowsMultipleSelection = true
         op.canCreateDirectories = false
-        op.begin { (result) -> Void in
-            if result == NSApplication.ModalResponse.OK {
-                let urls = op.urls
-                DispatchQueue.main.async {
-                    self.urlsFromOpenPanel = urls
-                }
-            }
+//        op.begin {(result) -> Void in
+//            if result == NSApplication.ModalResponse.OK {
+//                let urls = op.urls
+//                DispatchQueue.main.async { self.urlsFromOpenPanel = urls
+//                }
+//            }
+//        }
+        let result = op.runModal()
+        if result == NSApplication.ModalResponse.OK {
+            let urls = op.urls
+            urlsFromOpenPanel = urls
         }
     }
     
@@ -205,7 +214,11 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         }
     }
 
-    var parameterSelected = [GribParameterData: Bool]()
+    var parameterSelected = [GribParameterData: Bool]() {
+        didSet {
+            performConversionButton.isEnabled = canPerformConversion
+        }
+    }
     
     var rotationCaseForParameter = [GribParameterData: GribParameterRotationCases]()
     

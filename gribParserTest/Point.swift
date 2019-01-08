@@ -18,7 +18,23 @@ struct Point {
         self.lat = lat
     }
     init?(from textLine: String, using delimiter: String) {
-        let components = (textLine.components(separatedBy: .whitespaces).joined()).components(separatedBy: delimiter)
+        var filteredLine = ""
+        if delimiter == "\t" {
+            var cSet = CharacterSet.whitespaces
+            cSet.remove("\t")
+            filteredLine = textLine.components(separatedBy: cSet).joined()
+        } else if delimiter == " " {
+            let words = textLine.components(separatedBy: " ")
+            for w in words {
+                if w != " " && !w.isEmpty{
+                    filteredLine += w + " "
+                }
+            }
+            filteredLine = String(filteredLine.dropLast())
+        } else {
+            filteredLine = textLine.components(separatedBy: .whitespaces).joined()
+        }
+        let components = filteredLine.components(separatedBy: delimiter)
         if components.count < 3 {return nil}
          if let cd = components.first, let id = Int(cd), let lon = Double(components[1]), let lat = Double(components[2]) {
             self.id = id
@@ -51,8 +67,27 @@ extension Array where Element == Point {
     init?(from fileURL: URL, separatedBy delimiter: String) {
         var pointArray = [Point]()
         do {
-            let fileContent = try String.init(contentsOf: fileURL)
-            let lines = fileContent.components(separatedBy: "\n")
+            var encoding = String.Encoding.ascii
+            let fileContent = try String.init(contentsOf: fileURL, usedEncoding: &encoding)
+            let eol : String
+            if fileContent.contains("\r\n") {
+                eol = "\r\n"
+            } else if fileContent.contains("\n") {
+                eol = "\n"
+            } else {
+                eol = "\r"
+            }
+            let delimiter : String
+            if fileContent.contains(";") {
+                delimiter = ";"
+            } else if fileContent.contains("\t") {
+                delimiter = "\t"
+            } else if fileContent.contains(","){
+                delimiter = ","
+            } else {
+                delimiter = " "
+            }
+            let lines = fileContent.components(separatedBy: eol)
             for line in lines {
                 if let point = Point(from: line, using: delimiter) {
                     pointArray.append(point)
