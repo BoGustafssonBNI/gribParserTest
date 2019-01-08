@@ -13,10 +13,11 @@ enum TecplotExportErrors: Error {
     case DataReadError(GribFile)
     case CouldNotCreateHeader(String)
     case DataWriteError
+    case Cancelled
 }
-
 class TecplotExports {
     let missingValue = -9999.9
+    var delegate : ExportProgressDelegate?
     
     func exportGribFiles(gribFiles: [GribFile], for parameters: [GribParameterData], uParameter: GribParameterData?, vParameter: GribParameterData?, to url: URL, title: String) throws {
         let firstFile = gribFiles.first!
@@ -36,11 +37,17 @@ class TecplotExports {
         var lastDimension = GribGridDimensions()
         var gridReferenceZone = 1
         var lastGridData : GribGridData?
+        let numberOfExpectedZones = gribFiles.count
+        delegate?.numberToWrite = numberOfExpectedZones
         var zoneNumber = 1
         for file in gribFiles {
-            var tecData = [[Double]]()
+            if let cancel = delegate?.cancel, cancel {
+                closeTecFile()
+                throw TecplotExportErrors.Cancelled
+            }
+            delegate?.progress = Double(zoneNumber) / Double(numberOfExpectedZones)
             let zoneTitle = file.parser.dataTime.dataDate + file.parser.dataTime.dataTime
-            let solutionTime = file.parser.dataTime.date?.timeIntervalSince(refDate) ?? 0
+            let solutionTime = (file.parser.dataTime.date?.timeIntervalSince(refDate) ?? 0.0) / 86400.0
             if first || lastDimension != file.parser.gridDimensions || lastGridData == nil {
                 let nvar : Int
                 if file.parser.geographyData.rotated {
@@ -65,8 +72,12 @@ class TecplotExports {
                         x.append(c.lonRot)
                         y.append(c.latRot)
                     }
-                    tecData.append(x)
-                    tecData.append(y)
+                    do {
+                        try exportDoubleArray(array: x)
+                        try exportDoubleArray(array: y)
+                    } catch {
+                        throw error
+                    }
                 }
                 var lon = [Double]()
                 var lat = [Double]()
@@ -74,8 +85,12 @@ class TecplotExports {
                     lon.append(c.lon)
                     lat.append(c.lat)
                 }
-                tecData.append(lon)
-                tecData.append(lat)
+                do {
+                    try exportDoubleArray(array: lon)
+                    try exportDoubleArray(array: lat)
+                } catch {
+                    throw error
+                }
             } else {
                 let nvar : Int
                 let ncoord : Int
@@ -91,7 +106,7 @@ class TecplotExports {
                 } catch {
                     throw error
                 }
-
+                
             }
             
             guard let gridData = lastGridData else {throw TecplotExportErrors.GridDataReadError(file)}
@@ -111,22 +126,43 @@ class TecplotExports {
             }
             let ndata = file.parser.gridDimensions.nI * file.parser.gridDimensions.nJ
             for param in parameters {
-                if let y = data[param] {
-                    if let uP = uParameter, uP == param {
-                        tecData.append(u)
-                    } else if let vP = vParameter, vP == param {
-                        tecData.append(v)
-                    } else {
-                        tecData.append(y)
+                if let uP = uParameter, uP == param {
+                    do {
+                        try exportDoubleArray(array: u)
+                    } catch {
+                        throw error
+                    }
+                } else if let vP = vParameter, vP == param {
+                    do {
+                        try exportDoubleArray(array: v)
+                    } catch {
+                        throw error
                     }
                 } else {
-                    let y = [Double].init(repeating: missingValue, count: ndata)
-                    tecData.append(y)
+                    if let y = data[param] {
+                        do {
+                            try exportDoubleArray(array: y)
+                        } catch {
+                            throw error
+                        }
+                        
+                    } else {
+                        let y = [Double].init(repeating: missingValue, count: ndata)
+                        do {
+                            try exportDoubleArray(array: y)
+                        } catch {
+                            throw error
+                        }
+                        
+                    }
                 }
             }
+            delegate?.numberWritten = zoneNumber
+            zoneNumber += 1
         }
+        closeTecFile()
+        delegate?.done = true
     }
-    
     private func header(zoneTitle: String, solutionTime: Double, strandID: Int, imax: Int, jmax:Int, nvar: Int) throws {
         var solutionT = solutionTime
         var zonetype : Int32 = 0
@@ -166,7 +202,6 @@ class TecplotExports {
         var totalnumfacenodes : Int32 = 0
         var numconnectedboundaryfaces : Int32 = 0
         var totalnumboundaryconnections : Int32 = 0
-        var sharevarfromzone : Int32 = 0
         var shareconnectivityfromzone : Int32 = 0
         
         var shareVarFromZone : [Int32] = []
@@ -177,7 +212,7 @@ class TecplotExports {
         for _ in numberOfCoordinates..<nvar {
             shareVarFromZone.append(0)
         }
-        let io = teczne142(zoneTitle, &zonetype, &imax32, &jmax32, &kmax, &icellmax, &jcellmax, &kcellmax, &solutionT, &strandID32, &parentzone, &isblock, &Numfaceconnections, &faceneighbormode, &totalnumfacenodes, &numconnectedboundaryfaces, &totalnumboundaryconnections, nil, nil, &sharevarfromzone, &shareconnectivityfromzone)
+        let io = teczne142(zoneTitle, &zonetype, &imax32, &jmax32, &kmax, &icellmax, &jcellmax, &kcellmax, &solutionT, &strandID32, &parentzone, &isblock, &Numfaceconnections, &faceneighbormode, &totalnumfacenodes, &numconnectedboundaryfaces, &totalnumboundaryconnections, nil, nil, &shareVarFromZone, &shareconnectivityfromzone)
         if io != 0 {throw TecplotExportErrors.CouldNotCreateHeader(zoneTitle)}
     }
     private func exportDoubleArray(array: [Double]) throws {
@@ -257,7 +292,6 @@ class TecplotExports {
         var totalnumfacenodes : Int32 = 0
         var numconnectedboundaryfaces : Int32 = 0
         var totalnumboundaryconnections : Int32 = 0
-        var sharevarfromzone : Int32 = 0
         var shareconnectivityfromzone : Int32 = 0
         var isDouble : Int32 = 1
 
@@ -278,7 +312,7 @@ class TecplotExports {
             for _ in 4..<nvar {
                 shareVarFromZone.append(0)
             }
-            let io = teczne142(zoneTitle, &zonetype, &imax32, &jmax32, &kmax, &icellmax, &jcellmax, &kcellmax, &solutionT, &strandID32, &parentzone, &isblock, &Numfaceconnections, &faceneighbormode, &totalnumfacenodes, &numconnectedboundaryfaces, &totalnumboundaryconnections, nil, nil, &sharevarfromzone, &shareconnectivityfromzone)
+            let io = teczne142(zoneTitle, &zonetype, &imax32, &jmax32, &kmax, &icellmax, &jcellmax, &kcellmax, &solutionT, &strandID32, &parentzone, &isblock, &Numfaceconnections, &faceneighbormode, &totalnumfacenodes, &numconnectedboundaryfaces, &totalnumboundaryconnections, nil, nil, &shareVarFromZone, &shareconnectivityfromzone)
             if io == 0 {
                 print("io = 0")
             }

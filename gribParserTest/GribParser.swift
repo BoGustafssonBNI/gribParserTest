@@ -100,10 +100,9 @@ class GribParser {
             bzero(&value, vlen)
             grib_get_string(h,name,&value,&vlen)
             if let string = String(validatingUTF8: name!), let svalue = String(validatingUTF8: &value) {
-                print("name= \(string), value= \(svalue)")
-                switch string {
+                 switch string {
                 case GribTime.dataDate.rawValue:
-                    time.dataTime = svalue
+                    time.dataDate = svalue
                 case GribTime.dataTime.rawValue:
                     time.dataTime = svalue
                 default:

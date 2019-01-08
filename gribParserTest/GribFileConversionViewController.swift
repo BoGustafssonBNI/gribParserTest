@@ -67,7 +67,7 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
     
     private var canPerformConversion : Bool {
         get {
-            let result = outputURL != nil && (conversionType == .points ? pointSpecificationFileURL != nil : true) && !parameterSelected.isEmpty
+            let result = outputURL != nil && (conversionType == .points ? pointsForExtraction != nil : true) && !parameterSelected.isEmpty
             return result
         }
     }
@@ -90,7 +90,24 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         pointSpecificationURLButton.isHidden = conversionType == .tecplotFields ? true : false
     }
     
-    var pointSpecificationFileURL : URL?
+    var pointSpecificationFileURL : URL? {
+        didSet {
+            if let url = pointSpecificationFileURL {
+                if let points = [Point].init(from: url, separatedBy: ",") {
+                    pointsForExtraction = points
+                }
+            }
+        }
+    }
+    
+    var pointsForExtraction : [Point]? {
+        didSet {
+            if let url = pointSpecificationFileURL {
+                pointSpecificationURLButton.title = url.absoluteString
+                performConversionButton.isEnabled = canPerformConversion
+            }
+        }
+    }
     
     @IBAction func getPointSpecifivationURL(_ sender: NSButton) {
         let op = NSOpenPanel()
@@ -102,8 +119,6 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
             if result == NSApplication.ModalResponse.OK, let url = op.url {
                 DispatchQueue.main.async {
                     self.pointSpecificationFileURL = url
-                    self.pointSpecificationURLButton.title = url.absoluteString
-                    self.performConversionButton.isEnabled = self.canPerformConversion
                 }
             }
         }
@@ -210,13 +225,38 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         parameterSelectionTable.reloadData()
     }
     
-    let tecplotExportSegueIdentifier : NSStoryboardSegue.Identifier = "TecplotExportSegue"
+    let exportSegueIdentifier : NSStoryboardSegue.Identifier = "TecplotExportSegue"
     @IBAction func convert(_ sender: NSButton) {
-        switch conversionType {
-        case .tecplotFields:
-            performSegue(withIdentifier: tecplotExportSegueIdentifier, sender: self)
-        default:
-            break
+        performSegue(withIdentifier: exportSegueIdentifier, sender: self)
+    }
+    
+    override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
+        if segue.identifier == exportSegueIdentifier, let vc = segue.destinationController as? ExporterViewController, let outURL = outputURL, let files = gribFiles {
+            vc.gribFiles = files
+            var params = [GribParameterData]()
+            var uParam : GribParameterData?
+            var vParam : GribParameterData?
+            for (param, write) in parameterSelected {
+                if write {
+                    if let rotCase = rotationCaseForParameter[param] {
+                        switch rotCase {
+                        case .u:
+                            uParam = param
+                        case .v:
+                            vParam = param
+                        case .none:
+                            break
+                        }
+                    }
+                    params.append(param)
+                }
+            }
+            vc.parameters = params
+            vc.uParameter = uParam
+            vc.vParameter = vParam
+            vc.outputURL = outURL
+            vc.conversionType = conversionType
+            vc.pointsToExport = pointsForExtraction
         }
     }
     

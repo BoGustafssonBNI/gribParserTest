@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct GribGeographyData {
+struct GribGeographyData : Equatable {
     var bitmapPresent = false
     var latitudeOfFirstGridPointInDegrees = 0.0
     var longitudeOfFirstGridPointInDegrees = 0.0
@@ -27,5 +27,21 @@ struct GribGeographyData {
         get {
             return self.gridType.contains("rotated")
         }
+    }
+    static func == (lhs: GribGeographyData, rhs: GribGeographyData) -> Bool {
+        return lhs.angleOfRotationInDegrees == rhs.angleOfRotationInDegrees &&
+        lhs.bitmapPresent == rhs.bitmapPresent &&
+        lhs.gridType == rhs.gridType &&
+        lhs.iDirectionIncrementInDegrees == rhs.iDirectionIncrementInDegrees &&
+        lhs.iScansNegatively == rhs.iScansNegatively &&
+        lhs.jDirectionIncrementInDegrees == rhs.jDirectionIncrementInDegrees &&
+        lhs.jScansPositively == rhs.jScansPositively &&
+        lhs.jPointsAreConsecutive == rhs.jPointsAreConsecutive &&
+        lhs.latitudeOfFirstGridPointInDegrees == rhs.latitudeOfFirstGridPointInDegrees &&
+        lhs.latitudeOfLastGridPointInDegrees == rhs.latitudeOfLastGridPointInDegrees &&
+        lhs.latitudeOfSouthernPoleInDegrees == rhs.latitudeOfSouthernPoleInDegrees &&
+        lhs.longitudeOfFirstGridPointInDegrees == rhs.longitudeOfFirstGridPointInDegrees &&
+        lhs.longitudeOfLastGridPointInDegrees == rhs.longitudeOfLastGridPointInDegrees &&
+        lhs.longitudeOfSouthernPoleInDegrees == rhs.longitudeOfSouthernPoleInDegrees
     }
 }
