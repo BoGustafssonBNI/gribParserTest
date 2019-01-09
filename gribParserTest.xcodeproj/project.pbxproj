@@ -33,6 +33,7 @@
 		1380120921DF71FF00FA65AE /* MyDateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1380120821DF71FF00FA65AE /* MyDateConverter.swift */; };
 		1380120B21DFF72A00FA65AE /* GribTimeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1380120A21DFF72A00FA65AE /* GribTimeData.swift */; };
 		1380120D21E08B5D00FA65AE /* GribParameterRotationCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1380120C21E08B5C00FA65AE /* GribParameterRotationCases.swift */; };
+		13C1401721E5C5DD0017CA81 /* .gitattributes in Resources */ = {isa = PBXBuildFile; fileRef = 13C1401621E5C5DD0017CA81 /* .gitattributes */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +74,7 @@
 		1380120821DF71FF00FA65AE /* MyDateConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyDateConverter.swift; sourceTree = "<group>"; };
 		1380120A21DFF72A00FA65AE /* GribTimeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribTimeData.swift; sourceTree = "<group>"; };
 		1380120C21E08B5C00FA65AE /* GribParameterRotationCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribParameterRotationCases.swift; sourceTree = "<group>"; };
+		13C1401621E5C5DD0017CA81 /* .gitattributes */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitattributes; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +94,7 @@
 		134D346021D67DF500373B74 = {
 			isa = PBXGroup;
 			children = (
+				13C1401621E5C5DD0017CA81 /* .gitattributes */,
 				134D346B21D67DF500373B74 /* gribParserTest */,
 				134D346A21D67DF500373B74 /* Products */,
 				134D347C21D67E4E00373B74 /* Frameworks */,
@@ -276,6 +279,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				134D347121D67DF500373B74 /* Assets.xcassets in Resources */,
+				13C1401721E5C5DD0017CA81 /* .gitattributes in Resources */,
 				134D347421D67DF500373B74 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -444,9 +448,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = GS9HMMYWL7;
+				DEVELOPMENT_TEAM = 2Q7BDYRRCJ;
 				INFOPLIST_FILE = gribParserTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -458,6 +463,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.balticnest.gribParserTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "gribParserTest/gribParserTest-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 			};
@@ -467,9 +473,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = GS9HMMYWL7;
+				DEVELOPMENT_TEAM = 2Q7BDYRRCJ;
 				INFOPLIST_FILE = gribParserTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -481,6 +488,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.balticnest.gribParserTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "gribParserTest/gribParserTest-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 			};
