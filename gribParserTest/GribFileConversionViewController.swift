@@ -13,13 +13,13 @@ enum ConversionTypes: String {
     case tecplotFields = "Tecplot fields"
 }
 
-class GribFileConversionViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, ParameterSelection {
+class GribFileConversionViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, ParameterSelection, SubGridSpecificationDelegate {
     
     
     @IBOutlet weak var fileSearchURLButton: NSButton!
     @IBOutlet weak var OutputURLButton: NSButton!
     @IBOutlet weak var conversionTypeSelector: NSPopUpButton!
-    @IBOutlet weak var pointSpecificationURLButton: NSButton!
+    @IBOutlet weak var specificationButton: NSButton!
     @IBOutlet weak var performConversionButton: NSButton!
     @IBOutlet weak var selectAllButton: NSButton!
     @IBOutlet weak var unselectAllButton: NSButton!
@@ -56,7 +56,7 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         conversionTypeSelector.addItem(withTitle: ConversionTypes.points.rawValue)
         conversionTypeSelector.addItem(withTitle: ConversionTypes.tecplotFields.rawValue)
         conversionTypeSelector.selectItem(withTitle: conversionType.rawValue)
-        pointSpecificationURLButton.isHidden = conversionType == .tecplotFields ? true : false
+        setSpecificationButtonTitle()
         performConversionButton.isEnabled = false
         showAllButton.isEnabled = false
         gribFileTable.delegate = self
@@ -64,7 +64,14 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         parameterSelectionTable.dataSource = self
         parameterSelectionTable.delegate = self
      }
-    
+    private func setSpecificationButtonTitle() {
+        switch conversionType {
+        case .points:
+            specificationButton.title = "Set file for point(s)"
+        case .tecplotFields:
+            specificationButton.title = "Specify sub-grid"
+        }
+    }
     private var canPerformConversion : Bool {
         get {
             let result = outputURL != nil && (conversionType == .points ? pointsForExtraction != nil : true)
@@ -91,7 +98,7 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
             }
         }
         performConversionButton.isEnabled = canPerformConversion
-        pointSpecificationURLButton.isHidden = conversionType == .tecplotFields ? true : false
+        setSpecificationButtonTitle()
     }
     
     var pointSpecificationFileURL : URL? {
@@ -107,13 +114,16 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
     var pointsForExtraction : [Point]? {
         didSet {
             if let url = pointSpecificationFileURL {
-                pointSpecificationURLButton.title = url.absoluteString
+                specificationButton.title = url.path
                 performConversionButton.isEnabled = canPerformConversion
             }
         }
     }
+    let setSubGridSpecificationSegue : NSStoryboardSegue.Identifier = "setSubGridSpecificationSegue"
     
-    @IBAction func getPointSpecificationURL(_ sender: NSButton) {
+    @IBAction func setOutputSpecification(_ sender: NSButton) {
+        switch conversionType {
+        case .points:
         let op = NSOpenPanel()
         op.canChooseDirectories = false
         op.canChooseFiles = true
@@ -127,8 +137,20 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
                 }
             }
         }
+        case .tecplotFields:
+            performSegue(withIdentifier: setSubGridSpecificationSegue, sender: self)
+        }
     }
     
+    var swCornerPoint: Point?
+    
+    var neCornerPoint: Point?
+    
+    var iSkip: Int?
+    
+    var jSkip: Int?
+    
+
     private var urlsFromOpenPanel : [URL]! {
         didSet {
             if !urlsFromOpenPanel.isEmpty {
@@ -199,7 +221,7 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
             if result == NSApplication.ModalResponse.OK, let url = op.url {
                 DispatchQueue.main.async {
                     self.outputURL = url
-                    self.OutputURLButton.title = url.absoluteString
+                    self.OutputURLButton.title = url.path
                 }
             }
         }
@@ -270,6 +292,18 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
             vc.outputURL = outURL
             vc.conversionType = conversionType
             vc.pointsToExport = pointsForExtraction
+            vc.swCornerPoint = swCornerPoint
+            vc.neCornerPoint = neCornerPoint
+            vc.iSkip = iSkip
+            vc.jSkip = jSkip
+        } else if segue.identifier == setSubGridSpecificationSegue, let vc = segue.destinationController as? SubGridSpecificationViewController {
+            vc.delegate = self
+            vc.swLon = swCornerPoint?.lon
+            vc.swLat = swCornerPoint?.lat
+            vc.neLon = neCornerPoint?.lon
+            vc.neLat = neCornerPoint?.lat
+            vc.iSkip = iSkip
+            vc.jSkip = jSkip
         }
     }
     

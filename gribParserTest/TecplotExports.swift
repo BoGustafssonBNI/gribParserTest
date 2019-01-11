@@ -163,7 +163,7 @@ class TecplotExports {
         closeTecFile()
         delegate?.done = true
     }
-    func exportSubSetGribFiles(gribFiles: [GribFile], for parameters: [GribParameterData], uParameter: GribParameterData?, vParameter: GribParameterData?, to url: URL, title: String, swPoint: Point?, nePoint: Point?, iSkip: Int, jSkip: Int) throws {
+    func exportGribFiles(gribFiles: [GribFile], for parameters: [GribParameterData], uParameter: GribParameterData?, vParameter: GribParameterData?, to url: URL, title: String, swPoint: Point?, nePoint: Point?, iSkip: Int, jSkip: Int) throws {
         let firstFile = gribFiles.first!
         let refDate = MyDateConverter.shared.date(from: "189912300000")!
         var variables = ""

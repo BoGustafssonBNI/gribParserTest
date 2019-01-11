@@ -30,8 +30,8 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
     var jSkip : Int?
     var conversionType : ConversionTypes?
     private let tecFileName = "Tec" + MyDateConverter.shared.string(from: Date()) + ".plt"
-    let tecExporter = TecplotExports()
-    let pointExporter = PointExports()
+    private let tecExporter = TecplotExports()
+    private let pointExporter = PointExports()
     
     var progress: Double = 0.0 {
         didSet {
@@ -60,9 +60,9 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
     
 
     
-    @IBOutlet weak var progresIndicator: NSProgressIndicator?
-    @IBOutlet weak var progressLabel: NSTextField?
-    @IBOutlet weak var cancelButton: NSButton!
+    @IBOutlet weak private var progresIndicator: NSProgressIndicator?
+    @IBOutlet weak private var progressLabel: NSTextField?
+    @IBOutlet weak private var cancelButton: NSButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,7 +77,19 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
                 let queue = DispatchQueue.global(qos: .userInitiated)
                 queue.async { [weak weakself = self] in
                     do {
-                        try weakself?.tecExporter.exportGribFiles(gribFiles: gb, for: params, uParameter: weakself?.uParameter, vParameter: weakself?.vParameter, to: file, title: "test")
+                        if let iS = weakself?.iSkip, let jS = weakself?.jSkip {
+                            if let swP = weakself?.swCornerPoint, let neP = weakself?.neCornerPoint {
+                                try weakself?.tecExporter.exportGribFiles(gribFiles: gb, for: params, uParameter: weakself?.uParameter, vParameter: weakself?.vParameter, to: file, title: "test", swPoint: swP, nePoint: neP, iSkip: iS, jSkip: jS)
+                            } else {
+                                try weakself?.tecExporter.exportGribFiles(gribFiles: gb, for: params, uParameter: weakself?.uParameter, vParameter: weakself?.vParameter, to: file, title: "test", swPoint: nil, nePoint: nil, iSkip: iS, jSkip: jS)
+                            }
+                        } else {
+                            if let swP = weakself?.swCornerPoint, let neP = weakself?.neCornerPoint {
+                                try weakself?.tecExporter.exportGribFiles(gribFiles: gb, for: params, uParameter: weakself?.uParameter, vParameter: weakself?.vParameter, to: file, title: "test", swPoint: swP, nePoint: neP, iSkip: 1, jSkip: 1)
+                            } else {
+                                try weakself?.tecExporter.exportGribFiles(gribFiles: gb, for: params, uParameter: weakself?.uParameter, vParameter: weakself?.vParameter, to: file, title: "test")
+                            }
+                        }
                     } catch {
                         print("Tec write error \(error)")
                     }
@@ -102,7 +114,7 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
         super.viewWillAppear()
         view.window?.title = "Data Export"
     }
-    @IBAction func cancel(_ sender: NSButton) {
+    @IBAction private func cancel(_ sender: NSButton) {
         cancelButton.title = "Cancelled"
         cancelButton.isEnabled = false
         cancel = true
