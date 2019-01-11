@@ -68,13 +68,13 @@ struct GribCoordinate {
             let zsyrot = sin(zrad*latRot)
             let zcyrot = cos(zrad*latRot)
             var zsyreg = zcycen*zsyrot + zsycen*zcyrot*zcxrot
-             zsyreg = max(zsyreg,-1.0)
-             zsyreg = min(zsyreg,+1.0)
+            zsyreg = max(zsyreg,-1.0)
+            zsyreg = min(zsyreg,+1.0)
             let lat = asin(zsyreg)*zradi
             let zcyreg = cos(lat*zrad)
             var zcxmxc = (zcycen*zcyrot*zcxrot - zsycen*zsyrot)/zcyreg
-             zcxmxc = max(zcxmxc,-1.0)
-             zcxmxc = min(zcxmxc,+1.0)
+            zcxmxc = max(zcxmxc,-1.0)
+            zcxmxc = min(zcxmxc,+1.0)
             let zsxmxc = zcyrot*zsxrot/zcyreg
             var zxmxc = acos(zcxmxc)*zradi
             if zsxmxc < 0.0 {zxmxc = -zxmxc}

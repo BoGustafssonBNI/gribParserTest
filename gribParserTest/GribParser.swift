@@ -490,5 +490,34 @@ class GribParser {
         return coordinate.i + self.gridDimensions.nI * coordinate.j
     }
     
+    func getSubGrid(swCorner: GribCoordinate, neCorner: GribCoordinate, iStep: Int, jStep: Int) -> (iMax: Int, jMax: Int, indices: [Int]) {
+        var indices = [Int]()
+        let iMax = (neCorner.i - swCorner.i + 1)/iStep
+        let jMax = (neCorner.j - swCorner.j + 1)/jStep
+        for j in 0..<jMax {
+            let jC = swCorner.j + j * jStep
+            for i in 0..<iMax {
+                let iC = swCorner.i + i * iStep
+                let index = iC + jC * self.gridDimensions.nI
+                indices.append(index)
+            }
+        }
+        return (iMax, jMax, indices)
+    }
+    func getSubGrid(iStep: Int, jStep: Int) -> (iMax: Int, jMax: Int, indices: [Int]) {
+        var indices = [Int]()
+        let iMax = self.gridDimensions.nI/iStep
+        let jMax = self.gridDimensions.nJ/jStep
+        for j in 0..<jMax {
+            let jC = j * jStep
+            for i in 0..<iMax {
+                let iC = i * iStep
+                let index = iC + jC * self.gridDimensions.nI
+                indices.append(index)
+            }
+        }
+        return (iMax, jMax, indices)
+    }
+
     
 }

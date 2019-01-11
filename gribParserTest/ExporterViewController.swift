@@ -24,6 +24,10 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
     var vParameter : GribParameterData?
     var pointsToExport : [Point]?
     var outputURL : URL?
+    var swCornerPoint : Point?
+    var neCornerPoint : Point?
+    var iSkip : Int?
+    var jSkip : Int?
     var conversionType : ConversionTypes?
     private let tecFileName = "Tec" + MyDateConverter.shared.string(from: Date()) + ".plt"
     let tecExporter = TecplotExports()

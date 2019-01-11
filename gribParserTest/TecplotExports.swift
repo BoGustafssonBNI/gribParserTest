@@ -163,6 +163,168 @@ class TecplotExports {
         closeTecFile()
         delegate?.done = true
     }
+    func exportSubSetGribFiles(gribFiles: [GribFile], for parameters: [GribParameterData], uParameter: GribParameterData?, vParameter: GribParameterData?, to url: URL, title: String, swPoint: Point?, nePoint: Point?, iSkip: Int, jSkip: Int) throws {
+        let firstFile = gribFiles.first!
+        let refDate = MyDateConverter.shared.date(from: "189912300000")!
+        var variables = ""
+        if firstFile.parser.geographyData.rotated {
+            variables = "X Y Lon Lat"
+        } else {
+            variables = "Lon Lat"
+        }
+        for p in parameters {
+            variables += " " + p.shortName
+        }
+        let fileName = url.path
+        openTecFile(title: title, fileName: fileName, variables: variables)
+        var first = true
+        var lastDimension = GribGridDimensions()
+        var gridReferenceZone = 1
+        var lastGridData : GribGridData?
+        let numberOfExpectedZones = gribFiles.count
+        delegate?.numberToWrite = numberOfExpectedZones
+        var zoneNumber = 1
+        var iMax = 0
+        var jMax = 0
+        var indices = [Int]()
+        for file in gribFiles {
+            if let cancel = delegate?.cancel, cancel {
+                closeTecFile()
+                throw TecplotExportErrors.Cancelled
+            }
+            delegate?.progress = Double(zoneNumber) / Double(numberOfExpectedZones)
+            let zoneTitle = file.parser.dataTime.dataDate + file.parser.dataTime.dataTime
+            let solutionTime = (file.parser.dataTime.date?.timeIntervalSince(refDate) ?? 0.0) / 86400.0
+            if first || lastDimension != file.parser.gridDimensions || lastGridData == nil {
+                let nvar : Int
+                if file.parser.geographyData.rotated {
+                    nvar = 4 + parameters.count
+                } else {
+                    nvar = 2 + parameters.count
+                }
+                lastGridData = GribGridData.init(from: file.parser)
+                lastDimension = file.parser.gridDimensions
+                if let swP = swPoint, let neP = nePoint {
+                    let swGribPoint = GribCoordinate(lon: swP.lon, lat: swP.lat, geography: file.parser.geographyData)
+                    let neGribPoint = GribCoordinate(lon: neP.lon, lat: neP.lat, geography: file.parser.geographyData)
+                    let subGrid = file.parser.getSubGrid(swCorner: swGribPoint, neCorner: neGribPoint, iStep: iSkip, jStep: jSkip)
+                    iMax = subGrid.iMax
+                    jMax = subGrid.jMax
+                    indices = subGrid.indices
+               } else {
+                    let subGrid = file.parser.getSubGrid(iStep: iSkip, jStep: jSkip)
+                    iMax = subGrid.iMax
+                    jMax = subGrid.jMax
+                    indices = subGrid.indices
+                }
+                gridReferenceZone = zoneNumber
+                first = false
+                guard let gridData = lastGridData else {throw TecplotExportErrors.GridDataReadError(file)}
+                do {
+                    try header(zoneTitle: zoneTitle, solutionTime: solutionTime, strandID: 1, imax: iMax, jmax: jMax, nvar: nvar)
+                } catch {
+                    throw error
+                }
+                if file.parser.geographyData.rotated {
+                    var x = [Double]()
+                    var y = [Double]()
+                    for i in indices {
+                        x.append(gridData.coordinates[i].lonRot)
+                        y.append(gridData.coordinates[i].latRot)
+                    }
+                    do {
+                        try exportDoubleArray(array: x)
+                        try exportDoubleArray(array: y)
+                    } catch {
+                        throw error
+                    }
+                }
+                var lon = [Double]()
+                var lat = [Double]()
+                for i in indices {
+                    lon.append(gridData.coordinates[i].lon)
+                    lat.append(gridData.coordinates[i].lat)
+                }
+                do {
+                    try exportDoubleArray(array: lon)
+                    try exportDoubleArray(array: lat)
+                } catch {
+                    throw error
+                }
+            } else {
+                let nvar : Int
+                let ncoord : Int
+                if file.parser.geographyData.rotated {
+                    nvar = 4 + parameters.count
+                    ncoord = 4
+                } else {
+                    nvar = 2 + parameters.count
+                    ncoord = 2
+                }
+                do {
+                    try header(zoneTitle: zoneTitle, solutionTime: solutionTime, strandID: 1, imax: iMax, jmax: jMax, nvar: nvar, zoneForSharedCoordinates: gridReferenceZone, numberOfCoordinates: ncoord)
+                } catch {
+                    throw error
+                }
+                
+            }
+            
+            guard let gridData = lastGridData else {throw TecplotExportErrors.GridDataReadError(file)}
+            guard let data = file.parser.getValues(for: parameters)  else {throw TecplotExportErrors.DataReadError(file)}
+            var u = [Double]()
+            var v = [Double]()
+            if file.parser.geographyData.rotated {
+                if let uP = uParameter, let vP = vParameter, let uRot = data[uP], let vRot = data[vP] {
+                    for i in indices {
+                        let matrix = gridData.rotationMatrices[i]
+                        let uv = matrix.rotateWind(uRot: uRot[i], vRot: vRot[i])
+                        u.append(uv.u)
+                        v.append(uv.v)
+                    }
+                }
+            }
+            let ndata = iMax * jMax
+            for param in parameters {
+                if let uP = uParameter, uP == param {
+                    do {
+                        try exportDoubleArray(array: u)
+                    } catch {
+                        throw error
+                    }
+                } else if let vP = vParameter, vP == param {
+                    do {
+                        try exportDoubleArray(array: v)
+                    } catch {
+                        throw error
+                    }
+                } else {
+                    if let y = data[param] {
+                        var exportArray = [Double]()
+                        for i in indices {
+                            exportArray.append(y[i])
+                        }
+                        do {
+                            try exportDoubleArray(array: exportArray)
+                        } catch {
+                            throw error
+                        }
+                        
+                    } else {
+                        let y = [Double].init(repeating: missingValue, count: ndata)
+                        do {
+                            try exportDoubleArray(array: y)
+                        } catch {
+                            throw error
+                        }
+                    }
+                }
+            }
+            delegate?.numberWritten = zoneNumber
+            zoneNumber += 1
+        }
+        closeTecFile()
+        delegate?.done = true
+    }
     private func header(zoneTitle: String, solutionTime: Double, strandID: Int, imax: Int, jmax:Int, nvar: Int) throws {
         var solutionT = solutionTime
         var zonetype : Int32 = 0
