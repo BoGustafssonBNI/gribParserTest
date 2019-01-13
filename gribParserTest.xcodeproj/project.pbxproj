@@ -96,6 +96,7 @@
 		134D346021D67DF500373B74 = {
 			isa = PBXGroup;
 			children = (
+				13C1401621E5C5DD0017CA81 /* .gitattributes */,
 				134D346B21D67DF500373B74 /* gribParserTest */,
 				134D346A21D67DF500373B74 /* Products */,
 				134D347C21D67E4E00373B74 /* Frameworks */,
@@ -113,7 +114,6 @@
 		134D346B21D67DF500373B74 /* gribParserTest */ = {
 			isa = PBXGroup;
 			children = (
-				13C1401621E5C5DD0017CA81 /* .gitattributes */,
 				138011F921DD136000FA65AE /* supporting files */,
 				138011F621DD11E700FA65AE /* tecioAPI */,
 				138011F421DD117300FA65AE /* gribAPI */,
