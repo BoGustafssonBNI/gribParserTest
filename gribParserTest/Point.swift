@@ -44,6 +44,11 @@ struct Point {
             return nil
         }
     }
+    var position : String {
+        get {
+            return String(format: "%.2lf", self.lon) + "°E," + String(format: "%.2lf", lat) + "°N"
+        }
+    }
 }
 
 extension Array where Element == Point {

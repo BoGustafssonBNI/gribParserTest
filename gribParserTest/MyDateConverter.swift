@@ -20,5 +20,8 @@ class MyDateConverter: DateFormatter {
     }
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        self.locale = Locale(identifier: "en_US_POSIX")
+        self.dateFormat = "yyyyMMddHHmm"
+        self.timeZone = TimeZone(secondsFromGMT: 0)
     }
 }

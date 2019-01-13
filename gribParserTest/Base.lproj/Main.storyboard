@@ -715,7 +715,7 @@
                                     <rect key="frame" x="1" y="0.0" width="828" height="630"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="77" rowSizeStyle="automatic" headerView="fgw-Ps-9nK" viewBased="YES" id="Yci-Ra-5L9">
+                                        <tableView toolTip="Grib files to convert" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="77" rowSizeStyle="automatic" headerView="fgw-Ps-9nK" viewBased="YES" id="Yci-Ra-5L9">
                                             <rect key="frame" x="0.0" y="0.0" width="828" height="605"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
@@ -735,7 +735,7 @@
                                                     </textFieldCell>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
-                                                        <tableCellView identifier="GribFileInfoCell" id="fxf-VP-94U" customClass="GribFileInfoTableCellView" customModule="gribParserTest" customModuleProvider="target">
+                                                        <tableCellView identifier="GribFileInfoCell" toolTip="Select to show parameters, Swipe to delete" id="fxf-VP-94U" customClass="GribFileInfoTableCellView" customModule="gribParserTest" customModuleProvider="target">
                                                             <rect key="frame" x="1" y="1" width="825" height="77"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
@@ -843,7 +843,7 @@
                                                             <rect key="frame" x="1" y="1" width="410" height="24"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Y2V-R7-Fay">
+                                                                <button toolTip="Select for output" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Y2V-R7-Fay">
                                                                     <rect key="frame" x="18" y="3" width="61" height="18"/>
                                                                     <buttonCell key="cell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="right" lineBreakMode="truncatingTail" inset="2" id="VAi-7v-7Zm">
                                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -853,7 +853,7 @@
                                                                         <action selector="parameterSelection:" target="31a-Iw-Dn0" id="G7J-IR-DKZ"/>
                                                                     </connections>
                                                                 </button>
-                                                                <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="p8H-ty-U7i">
+                                                                <segmentedControl toolTip="Type of parameter for rotation of vectors (s = scalar, u = u-component of wind, v = v-component of wind)" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="p8H-ty-U7i">
                                                                     <rect key="frame" x="336" y="1" width="56" height="21"/>
                                                                     <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="3S9-4J-PvN">
                                                                         <font key="font" metaFont="smallSystem"/>
@@ -902,6 +902,7 @@
                             </scrollView>
                             <button horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tRd-FB-JEV">
                                 <rect key="frame" x="14" y="623" width="427" height="32"/>
+                                <string key="toolTip">Select grib file source(s), multiple selection of files and directories are possible. NB! when directories are selected it performs sub-directory search</string>
                                 <buttonCell key="cell" type="push" title="FileSearchDirectory" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="N2k-0M-e54">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -910,7 +911,7 @@
                                     <action selector="searchForFileURLs:" target="XfG-lQ-9wD" id="tFx-D4-cVY"/>
                                 </connections>
                             </button>
-                            <button horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="fPs-A9-cV6">
+                            <button toolTip="Specifies output directory" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="fPs-A9-cV6">
                                 <rect key="frame" x="14" y="590" width="427" height="32"/>
                                 <buttonCell key="cell" type="push" title="OutputDirectory" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingHead" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vfs-Ce-Tx2">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -920,25 +921,19 @@
                                     <action selector="setOutputDirectory:" target="XfG-lQ-9wD" id="eO9-fY-Rj2"/>
                                 </connections>
                             </button>
-                            <popUpButton horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ka1-0J-DgY">
-                                <rect key="frame" x="18" y="562" width="77" height="25"/>
-                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="KWl-x8-LJ4" id="Dr4-7X-cHs">
+                            <popUpButton toolTip="Select output file format" horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ka1-0J-DgY">
+                                <rect key="frame" x="18" y="561" width="38" height="25"/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="Dr4-7X-cHs">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
-                                    <menu key="menu" id="P7k-Tp-3Ax">
-                                        <items>
-                                            <menuItem title="Item 1" state="on" id="KWl-x8-LJ4"/>
-                                            <menuItem title="Item 2" id="FMK-Q8-05E"/>
-                                            <menuItem title="Item 3" id="fY8-qg-rzT"/>
-                                        </items>
-                                    </menu>
+                                    <menu key="menu" id="P7k-Tp-3Ax"/>
                                 </popUpButtonCell>
                                 <connections>
                                     <action selector="changedConversionType:" target="XfG-lQ-9wD" id="1F8-4H-cW2"/>
                                 </connections>
                             </popUpButton>
                             <button horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Zk2-ji-5uP">
-                                <rect key="frame" x="94" y="557" width="347" height="32"/>
+                                <rect key="frame" x="55" y="557" width="386" height="32"/>
                                 <buttonCell key="cell" type="push" title="FileForPointSpecification" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingHead" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="VsD-J8-PSX">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -947,7 +942,7 @@
                                     <action selector="setOutputSpecification:" target="XfG-lQ-9wD" id="UzF-lU-3Pl"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Pwz-eo-MTm">
+                            <button toolTip="Perform conversion" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Pwz-eo-MTm">
                                 <rect key="frame" x="14" y="524" width="89" height="32"/>
                                 <buttonCell key="cell" type="push" title="Convert" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="baz-Ud-jLn">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -957,7 +952,7 @@
                                     <action selector="convert:" target="XfG-lQ-9wD" id="09l-CQ-QZQ"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ldB-4N-7vK">
+                            <button toolTip="Select all parameters" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ldB-4N-7vK">
                                 <rect key="frame" x="103" y="524" width="96" height="32"/>
                                 <buttonCell key="cell" type="push" title="Select all" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4Qu-Ar-d2i">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -967,7 +962,7 @@
                                     <action selector="selectAllParameters:" target="XfG-lQ-9wD" id="ksc-t0-x8K"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iDB-Ik-w7R">
+                            <button toolTip="Unselect all parameters" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iDB-Ik-w7R">
                                 <rect key="frame" x="199" y="524" width="111" height="32"/>
                                 <buttonCell key="cell" type="push" title="Unselect all" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Lpr-hp-HWg">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -977,7 +972,7 @@
                                     <action selector="selectAllParameters:" target="XfG-lQ-9wD" id="V8r-i5-wZm"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="T5j-VB-B1b">
+                            <button toolTip="Show all parameters in the grib files" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="T5j-VB-B1b">
                                 <rect key="frame" x="310" y="524" width="91" height="32"/>
                                 <buttonCell key="cell" type="push" title="Show all" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="YSn-3a-h08">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -987,6 +982,9 @@
                                     <action selector="showAllParameters:" target="XfG-lQ-9wD" id="iqK-gP-Tfa"/>
                                 </connections>
                             </button>
+                            <progressIndicator hidden="YES" wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="3e0-5m-C0j">
+                                <rect key="frame" x="631" y="320" width="32" height="32"/>
+                            </progressIndicator>
                         </subviews>
                         <constraints>
                             <constraint firstItem="Zk2-ji-5uP" firstAttribute="leading" secondItem="Ka1-0J-DgY" secondAttribute="trailing" constant="8" symbolic="YES" id="2kA-nm-S7z"/>
@@ -998,6 +996,7 @@
                             <constraint firstAttribute="bottom" secondItem="SHu-OY-oQ5" secondAttribute="bottom" constant="20" symbolic="YES" id="8w0-Fm-6O4"/>
                             <constraint firstItem="T5j-VB-B1b" firstAttribute="leading" secondItem="iDB-Ik-w7R" secondAttribute="trailing" constant="12" symbolic="YES" id="CDg-Zx-Ije"/>
                             <constraint firstItem="Ka1-0J-DgY" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" symbolic="YES" id="DAV-ub-sw4"/>
+                            <constraint firstItem="3e0-5m-C0j" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="E0X-F9-UlL"/>
                             <constraint firstItem="SHu-OY-oQ5" firstAttribute="width" secondItem="wbX-qw-4ap" secondAttribute="width" multiplier="2" id="F8W-b5-krX"/>
                             <constraint firstItem="wbX-qw-4ap" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" id="GHR-Ot-n2P"/>
                             <constraint firstItem="tRd-FB-JEV" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" symbolic="YES" id="KhB-SF-t3j"/>
@@ -1017,6 +1016,7 @@
                             <constraint firstItem="ldB-4N-7vK" firstAttribute="firstBaseline" secondItem="Pwz-eo-MTm" secondAttribute="firstBaseline" id="kiP-Zr-fZA"/>
                             <constraint firstItem="wbX-qw-4ap" firstAttribute="top" secondItem="Pwz-eo-MTm" secondAttribute="bottom" constant="20" symbolic="YES" id="oeW-vr-Fde"/>
                             <constraint firstItem="SHu-OY-oQ5" firstAttribute="leading" secondItem="tRd-FB-JEV" secondAttribute="trailing" constant="8" symbolic="YES" id="rQ5-P6-z0p"/>
+                            <constraint firstItem="3e0-5m-C0j" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="sV7-pN-psI"/>
                             <constraint firstItem="iDB-Ik-w7R" firstAttribute="firstBaseline" secondItem="ldB-4N-7vK" secondAttribute="firstBaseline" id="z3y-W7-Xo6"/>
                         </constraints>
                     </view>
@@ -1030,6 +1030,7 @@
                         <outlet property="selectAllButton" destination="ldB-4N-7vK" id="oeC-os-4qu"/>
                         <outlet property="showAllButton" destination="T5j-VB-B1b" id="3Ci-BZ-J3z"/>
                         <outlet property="specificationButton" destination="Zk2-ji-5uP" id="sab-mW-MH8"/>
+                        <outlet property="spinner" destination="3e0-5m-C0j" id="hdA-OG-HGH"/>
                         <outlet property="unselectAllButton" destination="iDB-Ik-w7R" id="eIH-aj-BMd"/>
                         <segue destination="oN5-wy-QH8" kind="modal" identifier="TecplotExportSegue" id="bru-OD-hPN"/>
                         <segue destination="Ic0-xz-2aM" kind="modal" identifier="setSubGridSpecificationSegue" id="K0k-RQ-lwg"/>

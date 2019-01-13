@@ -145,10 +145,10 @@ class SubGridSpecificationViewController: NSViewController {
                 neLat = x
             case iSkipTextField!:
                 iSkip = Int(x)
-                test()
+                _ = test()
             case jSkipTextField!:
                 jSkip = Int(x)
-                test()
+                _ = test()
             default:
                 break
             }

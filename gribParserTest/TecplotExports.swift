@@ -73,8 +73,8 @@ class TecplotExports {
                         y.append(c.latRot)
                     }
                     do {
-                        try exportDoubleArray(array: x)
-                        try exportDoubleArray(array: y)
+                        try exportArray(array: x)
+                        try exportArray(array: y)
                     } catch {
                         throw error
                     }
@@ -86,8 +86,8 @@ class TecplotExports {
                     lat.append(c.lat)
                 }
                 do {
-                    try exportDoubleArray(array: lon)
-                    try exportDoubleArray(array: lat)
+                    try exportArray(array: lon)
+                    try exportArray(array: lat)
                 } catch {
                     throw error
                 }
@@ -128,20 +128,20 @@ class TecplotExports {
             for param in parameters {
                 if let uP = uParameter, uP == param {
                     do {
-                        try exportDoubleArray(array: u)
+                        try exportArray(array: u)
                     } catch {
                         throw error
                     }
                 } else if let vP = vParameter, vP == param {
                     do {
-                        try exportDoubleArray(array: v)
+                        try exportArray(array: v)
                     } catch {
                         throw error
                     }
                 } else {
                     if let y = data[param] {
                         do {
-                            try exportDoubleArray(array: y)
+                            try exportArray(array: y)
                         } catch {
                             throw error
                         }
@@ -149,7 +149,7 @@ class TecplotExports {
                     } else {
                         let y = [Double].init(repeating: missingValue, count: ndata)
                         do {
-                            try exportDoubleArray(array: y)
+                            try exportArray(array: y)
                         } catch {
                             throw error
                         }
@@ -226,28 +226,28 @@ class TecplotExports {
                     throw error
                 }
                 if file.parser.geographyData.rotated {
-                    var x = [Double]()
-                    var y = [Double]()
+                    var x = [Float]()
+                    var y = [Float]()
                     for i in indices {
-                        x.append(gridData.coordinates[i].lonRot)
-                        y.append(gridData.coordinates[i].latRot)
+                        x.append(Float(gridData.coordinates[i].lonRot))
+                        y.append(Float(gridData.coordinates[i].latRot))
                     }
                     do {
-                        try exportDoubleArray(array: x)
-                        try exportDoubleArray(array: y)
+                        try exportArray(array: x)
+                        try exportArray(array: y)
                     } catch {
                         throw error
                     }
                 }
-                var lon = [Double]()
-                var lat = [Double]()
+                var lon = [Float]()
+                var lat = [Float]()
                 for i in indices {
-                    lon.append(gridData.coordinates[i].lon)
-                    lat.append(gridData.coordinates[i].lat)
+                    lon.append(Float(gridData.coordinates[i].lon))
+                    lat.append(Float(gridData.coordinates[i].lat))
                 }
                 do {
-                    try exportDoubleArray(array: lon)
-                    try exportDoubleArray(array: lat)
+                    try exportArray(array: lon)
+                    try exportArray(array: lat)
                 } catch {
                     throw error
                 }
@@ -271,15 +271,15 @@ class TecplotExports {
             
             guard let gridData = lastGridData else {throw TecplotExportErrors.GridDataReadError(file)}
             guard let data = file.parser.getValues(for: parameters)  else {throw TecplotExportErrors.DataReadError(file)}
-            var u = [Double]()
-            var v = [Double]()
+            var u = [Float]()
+            var v = [Float]()
             if file.parser.geographyData.rotated {
                 if let uP = uParameter, let vP = vParameter, let uRot = data[uP], let vRot = data[vP] {
                     for i in indices {
                         let matrix = gridData.rotationMatrices[i]
                         let uv = matrix.rotateWind(uRot: uRot[i], vRot: vRot[i])
-                        u.append(uv.u)
-                        v.append(uv.v)
+                        u.append(Float(uv.u))
+                        v.append(Float(uv.v))
                     }
                 }
             }
@@ -287,32 +287,32 @@ class TecplotExports {
             for param in parameters {
                 if let uP = uParameter, uP == param {
                     do {
-                        try exportDoubleArray(array: u)
+                        try exportArray(array: u)
                     } catch {
                         throw error
                     }
                 } else if let vP = vParameter, vP == param {
                     do {
-                        try exportDoubleArray(array: v)
+                        try exportArray(array: v)
                     } catch {
                         throw error
                     }
                 } else {
                     if let y = data[param] {
-                        var exportArray = [Double]()
+                        var yPoints = [Float]()
                         for i in indices {
-                            exportArray.append(y[i])
+                            yPoints.append(Float(y[i]))
                         }
                         do {
-                            try exportDoubleArray(array: exportArray)
+                            try exportArray(array: yPoints)
                         } catch {
                             throw error
                         }
                         
                     } else {
-                        let y = [Double].init(repeating: missingValue, count: ndata)
+                        let y = [Float].init(repeating: Float(missingValue), count: ndata)
                         do {
-                            try exportDoubleArray(array: y)
+                            try exportArray(array: y)
                         } catch {
                             throw error
                         }
@@ -377,7 +377,7 @@ class TecplotExports {
         let io = teczne142(zoneTitle, &zonetype, &imax32, &jmax32, &kmax, &icellmax, &jcellmax, &kcellmax, &solutionT, &strandID32, &parentzone, &isblock, &Numfaceconnections, &faceneighbormode, &totalnumfacenodes, &numconnectedboundaryfaces, &totalnumboundaryconnections, nil, nil, &shareVarFromZone, &shareconnectivityfromzone)
         if io != 0 {throw TecplotExportErrors.CouldNotCreateHeader(zoneTitle)}
     }
-    private func exportDoubleArray(array: [Double]) throws {
+    private func exportArray(array: [Double]) throws {
         var isDouble : Int32 = 1
         var numPoints = Int32(array.count)
         let io = tecdat142(&numPoints, array, &isDouble)
@@ -385,7 +385,15 @@ class TecplotExports {
             throw TecplotExportErrors.DataWriteError
         }
     }
-    
+    private func exportArray(array: [Float]) throws {
+        var isDouble : Int32 = 0
+        var numPoints = Int32(array.count)
+        let io = tecdat142(&numPoints, array, &isDouble)
+        if io != 0 {
+            throw TecplotExportErrors.DataWriteError
+        }
+    }
+
 
     func exportSingleField(gridDimensions: GribGridDimensions, gridData : GribGridData, data: GribValueData) {
         let params = [GribParameterData](data.keys)

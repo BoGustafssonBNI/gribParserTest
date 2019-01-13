@@ -26,11 +26,18 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
     @IBOutlet weak var showAllButton: NSButton!
     
     
+    var firstDate : Date?
+    var lastDate : Date?
+    var gribFilesTimeIntervals = [TimeInterval]()
     
     var gribFiles : [GribFile]? {
         didSet {
             if gribFiles != nil {
                 var tempList = [GribParameterData]()
+                gribFilesTimeIntervals = []
+                var fD = Date()
+                var lD = Date.init(timeIntervalSince1970: 0.0)
+                var previousDate : Date?
                 for file in gribFiles! {
                     let params = file.parser.parameterList
                     for param in params {
@@ -38,6 +45,22 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
                             tempList.append(param)
                         }
                     }
+                    if let date = file.parser.dataTime.date {
+                        fD = min(date, fD)
+                        lD = max(date, lD)
+                        if let pD = previousDate {
+                            let tDiff = date.timeIntervalSince(pD)
+                            if !gribFilesTimeIntervals.contains(tDiff) {
+                                gribFilesTimeIntervals.append(tDiff)
+                            }
+                        }
+                        previousDate = date
+                     }
+                }
+                if fD <= lD {
+                    firstDate = fD
+                    lastDate = lD
+                    setDateInTableColumnHeader()
                 }
                 if !tempList.isEmpty {
                     tempList.sort{$0.paramId < $1.paramId}
@@ -59,17 +82,20 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         setSpecificationButtonTitle()
         performConversionButton.isEnabled = false
         showAllButton.isEnabled = false
-        gribFileTable.delegate = self
-        gribFileTable.dataSource = self
-        parameterSelectionTable.dataSource = self
-        parameterSelectionTable.delegate = self
-     }
+    }
+    
+    override func viewWillAppear() {
+        super.viewWillAppear()
+        view.window?.title = "Grib Parser"
+    }
     private func setSpecificationButtonTitle() {
         switch conversionType {
         case .points:
             specificationButton.title = "Set file for point(s)"
+            specificationButton.toolTip = "Choose a file that specifices which points to extract. The file should include 3 columns: id, lon and lat. All points with same id will be averaged. File should be ASCII, any separator should work (e.g., space, comma, tab etc.)"
         case .tecplotFields:
-            specificationButton.title = "Specify sub-grid"
+            specificationButton.title = subGridInfoString()
+            specificationButton.toolTip = "Specifies/shows sub-grid to extract"
         }
     }
     private var canPerformConversion : Bool {
@@ -142,15 +168,53 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         }
     }
     
-    var swCornerPoint: Point?
+    var swCornerPoint: Point? {
+        didSet {
+            setSpecificationButtonTitle()
+        }
+    }
     
-    var neCornerPoint: Point?
+    var neCornerPoint: Point? {
+        didSet {
+            setSpecificationButtonTitle()
+        }
+    }
     
-    var iSkip: Int?
+    var iSkip: Int? {
+        didSet {
+            setSpecificationButtonTitle()
+        }
+    }
     
-    var jSkip: Int?
+    var jSkip: Int? {
+        didSet {
+            setSpecificationButtonTitle()
+        }
+    }
     
-
+    private func subGridInfoString() -> String {
+        var strings = [String]()
+        if let swC = swCornerPoint {
+            strings.append("SW:" + swC.position)
+        }
+        if let neC = neCornerPoint {
+            strings.append("NE:" + neC.position)
+        }
+        if let iS = iSkip {
+            strings.append("Δi=\(iS)")
+        }
+        if let jS = jSkip {
+            strings.append("Δj=\(jS)")
+        }
+        if strings.count > 0 {
+            return strings.joined(separator: ",")
+        } else {
+            return "Specify sub-grid"
+        }
+    }
+    
+    @IBOutlet weak var spinner: NSProgressIndicator!
+    
     private var urlsFromOpenPanel : [URL]! {
         didSet {
             if !urlsFromOpenPanel.isEmpty {
@@ -171,8 +235,11 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
                     }
                 }
                 if !newURLs.isEmpty {
-                    newURLs.sort{$0.lastPathComponent < $1.lastPathComponent}
-                    initializeNewGribFiles(urls: newURLs)
+                    spinner.isHidden = false
+                    spinner.startAnimation(nil)
+                    DispatchQueue.global(qos: .userInitiated).async {[weak weakself = self] in
+                        weakself?.initializeNewGribFiles(urls: newURLs)
+                    }
                 }
             }
         }
@@ -185,7 +252,14 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
                 gribTemp.append(file)
             }
         }
-        if !gribTemp.isEmpty {gribFiles = gribTemp}
+        gribTemp.sort(by: {return $0.parser.dataTime.date ?? Date() < $1.parser.dataTime.date ?? Date()})
+        if !gribTemp.isEmpty {
+            DispatchQueue.main.async {
+                self.gribFiles = gribTemp
+                self.spinner.stopAnimation(nil)
+                self.spinner.isHidden = true
+            }
+        }
     }
     
     
@@ -248,6 +322,10 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         if let list = allParametersList {
             parameterList = list
             showAllButton.isEnabled = false
+            let row = gribFileTable.selectedRow
+            if row >= 0 {
+                gribFileTable.deselectRow(row)
+            }
         }
     }
     
@@ -259,7 +337,7 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         }
         parameterSelectionTable.reloadData()
     }
-    
+
     let exportSegueIdentifier : NSStoryboardSegue.Identifier = "TecplotExportSegue"
     @IBAction func convert(_ sender: NSButton) {
         performSegue(withIdentifier: exportSegueIdentifier, sender: self)
@@ -309,20 +387,38 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
     
     
     
-    //    Mark: TableView methods
+    //    Mark: - TableView methods
     
     @IBOutlet weak var gribFileTable: NSTableView! {
         didSet {
+            gribFileTable.delegate = self
+            gribFileTable.dataSource = self
             gribFileTable.rowHeight = 77
         }
     }
     @IBOutlet weak var parameterSelectionTable: NSTableView! {
         didSet {
+            parameterSelectionTable.dataSource = self
+            parameterSelectionTable.delegate = self
             parameterSelectionTable.rowHeight = 24
         }
     }
     let gribFileCell = NSUserInterfaceItemIdentifier.init("GribFileInfoCell")
     let parameterCell = NSUserInterfaceItemIdentifier.init("ParameterCell")
+    
+    private func setDateInTableColumnHeader() {
+        if let fD = firstDate, let lD = lastDate, let numberOfFiles = gribFiles?.count {
+            let beginning = MyDateConverter.shared.string(from: fD)
+            let end = MyDateConverter.shared.string(from: lD)
+            var timeInterval = ""
+            for tDiff in gribFilesTimeIntervals {
+                 timeInterval += ", Δt=\(tDiff/3600.0)h"
+            }
+            if let column = gribFileTable.tableColumns.first {
+                column.headerCell.title = "\(numberOfFiles) grib files from \(beginning) to \(end)" + timeInterval
+            }
+        }
+    }
     
     @IBAction func selectedFile(_ sender: NSTableView) {
         let row = sender.selectedRow
@@ -369,7 +465,41 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         }
         return nil
     }
-
     
+    func tableView(_ tableView: NSTableView, rowActionsForRow row: Int, edge: NSTableView.RowActionEdge) -> [NSTableViewRowAction] {
+        switch tableView {
+        case gribFileTable:
+            let action = NSTableViewRowAction(style: .destructive, title: "Delete", handler:
+            {action, row in
+                self.gribFiles?.remove(at: row)
+                tableView.removeRows(at: IndexSet.init(integer: row), withAnimation: .effectFade)
+            })
+            return [action]
+        case parameterSelectionTable:
+            return []
+        default:
+            return []
+        }
+    }
+    func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
+        switch tableView {
+        case gribFileTable:
+            return true
+        case parameterSelectionTable:
+            return false
+        default:
+            return false
+        }
+    }
+    func tableView(_ tableView: NSTableView, shouldSelect tableColumn: NSTableColumn?) -> Bool {
+        switch tableView {
+        case gribFileTable:
+            return true
+        case parameterSelectionTable:
+            return false
+        default:
+            return false
+        }
+    }
 }
 
