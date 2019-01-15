@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct GribFile {
+struct GribFile: Equatable {
     var fileURL : URL
     var parser : GribParser
     init?(fileURL: URL) {
@@ -19,5 +19,8 @@ struct GribFile {
         } catch {
             return nil
         }
+    }
+    static func == (lhs: GribFile, rhs: GribFile) -> Bool {
+        return lhs.fileURL.lastPathComponent == rhs.fileURL.lastPathComponent && lhs.parser.parameterList.count == rhs.parser.parameterList.count && lhs.parser.dataTime == rhs.parser.dataTime && lhs.parser.gridDimensions == rhs.parser.gridDimensions
     }
 }

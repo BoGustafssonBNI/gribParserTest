@@ -96,6 +96,7 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
                 }
             case .points:
                 pointExporter.delegate = self
+                cancelButton.isHidden = false
                 if let points = pointsToExport {
                     let queue = DispatchQueue.global(qos: .userInitiated)
                     queue.async { [weak weakself = self] in
@@ -114,7 +115,7 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
         super.viewWillAppear()
         view.window?.title = "Data Export"
     }
-    @IBAction private func cancel(_ sender: NSButton) {
+    @IBAction private func cancelProcess(_ sender: NSButton) {
         cancelButton.title = "Cancelled"
         cancelButton.isEnabled = false
         cancel = true

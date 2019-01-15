@@ -19,4 +19,7 @@ struct GribTimeData {
             return nil
         }
     }
+    static func == (lhs: GribTimeData, rhs: GribTimeData) -> Bool {
+        return lhs.dataDate == rhs.dataDate && lhs.dataTime == rhs.dataTime
+    }
 }

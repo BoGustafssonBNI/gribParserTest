@@ -253,9 +253,21 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
             }
         }
         gribTemp.sort(by: {return $0.parser.dataTime.date ?? Date() < $1.parser.dataTime.date ?? Date()})
-        if !gribTemp.isEmpty {
+        var gribUnique = [GribFile]()
+        var lastFile : GribFile?
+        for file in gribTemp {
+            if let last = lastFile {
+                if file != last {
+                    gribUnique.append(file)
+                }
+            } else {
+                gribUnique.append(file)
+            }
+            lastFile = file
+        }
+        if !gribUnique.isEmpty {
             DispatchQueue.main.async {
-                self.gribFiles = gribTemp
+                self.gribFiles = gribUnique
                 self.spinner.stopAnimation(nil)
                 self.spinner.isHidden = true
             }
@@ -340,7 +352,9 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
 
     let exportSegueIdentifier : NSStoryboardSegue.Identifier = "TecplotExportSegue"
     @IBAction func convert(_ sender: NSButton) {
-        performSegue(withIdentifier: exportSegueIdentifier, sender: self)
+        if canPerformConversion {
+            performSegue(withIdentifier: exportSegueIdentifier, sender: self)
+        }
     }
     
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
