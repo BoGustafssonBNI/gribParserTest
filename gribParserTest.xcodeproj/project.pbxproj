@@ -76,6 +76,7 @@
 		1380120A21DFF72A00FA65AE /* GribTimeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribTimeData.swift; sourceTree = "<group>"; };
 		1380120C21E08B5C00FA65AE /* GribParameterRotationCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribParameterRotationCases.swift; sourceTree = "<group>"; };
 		13AF33CF21E881710023D1AB /* SubGridSpecificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubGridSpecificationViewController.swift; sourceTree = "<group>"; };
+		13BD2BC621EE18BA0052091A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		13C1401621E5C5DD0017CA81 /* .gitattributes */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitattributes; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -97,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				13C1401621E5C5DD0017CA81 /* .gitattributes */,
+				13BD2BC621EE18BA0052091A /* README.md */,
 				134D346B21D67DF500373B74 /* gribParserTest */,
 				134D346A21D67DF500373B74 /* Products */,
 				134D347C21D67E4E00373B74 /* Frameworks */,
