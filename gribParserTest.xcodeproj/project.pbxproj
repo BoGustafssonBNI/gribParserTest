@@ -10,6 +10,7 @@
 		1321773121E1FE2100881586 /* PointExports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1321773021E1FE2000881586 /* PointExports.swift */; };
 		1321773321E2057500881586 /* GribPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1321773221E2057500881586 /* GribPoint.swift */; };
 		1321773521E4BFDF00881586 /* Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1321773421E4BFDF00881586 /* Point.swift */; };
+		1336A71B21F1CFC20031C214 /* grib_api.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 134D348321D680D900373B74 /* grib_api.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		134D346D21D67DF500373B74 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D346C21D67DF500373B74 /* AppDelegate.swift */; };
 		134D346F21D67DF500373B74 /* GribFileConversionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D346E21D67DF500373B74 /* GribFileConversionViewController.swift */; };
 		134D347121D67DF500373B74 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 134D347021D67DF500373B74 /* Assets.xcassets */; };
@@ -36,6 +37,20 @@
 		13AF33D021E881710023D1AB /* SubGridSpecificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AF33CF21E881710023D1AB /* SubGridSpecificationViewController.swift */; };
 		13C1401721E5C5DD0017CA81 /* .gitattributes in Resources */ = {isa = PBXBuildFile; fileRef = 13C1401621E5C5DD0017CA81 /* .gitattributes */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		1336A71C21F1CFC20031C214 /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				1336A71B21F1CFC20031C214 /* grib_api.dylib in Embed Libraries */,
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1321773021E1FE2000881586 /* PointExports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointExports.swift; sourceTree = "<group>"; };
@@ -230,6 +245,7 @@
 				134D346521D67DF500373B74 /* Sources */,
 				134D346621D67DF500373B74 /* Frameworks */,
 				134D346721D67DF500373B74 /* Resources */,
+				1336A71C21F1CFC20031C214 /* Embed Libraries */,
 			);
 			buildRules = (
 			);

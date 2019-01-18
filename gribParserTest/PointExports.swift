@@ -16,7 +16,7 @@ enum PointExportErrors: Error {
 class PointExports {
     let missingValue = -9999.0
     let delimiter = ","
-    let encoding = String.Encoding.unicode
+    let encoding = String.Encoding.utf8
     var delegate : ExportProgressDelegate?
     
     func exportPointFiles(gribFiles: [GribFile], for parameters: [GribParameterData], uParameter: GribParameterData?, vParameter: GribParameterData?, at points: [Point], to url: URL) throws {
