@@ -35,6 +35,7 @@
 		1380120D21E08B5D00FA65AE /* GribParameterRotationCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1380120C21E08B5C00FA65AE /* GribParameterRotationCases.swift */; };
 		13AF33D021E881710023D1AB /* SubGridSpecificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AF33CF21E881710023D1AB /* SubGridSpecificationViewController.swift */; };
 		13C1401721E5C5DD0017CA81 /* .gitattributes in Resources */ = {isa = PBXBuildFile; fileRef = 13C1401621E5C5DD0017CA81 /* .gitattributes */; };
+		13C2126A21F20AA20075BA0E /* definitions in Resources */ = {isa = PBXBuildFile; fileRef = 13C2126921F20AA10075BA0E /* definitions */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -92,6 +93,7 @@
 		13AF33CF21E881710023D1AB /* SubGridSpecificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubGridSpecificationViewController.swift; sourceTree = "<group>"; };
 		13BD2BC621EE18BA0052091A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		13C1401621E5C5DD0017CA81 /* .gitattributes */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitattributes; sourceTree = "<group>"; };
+		13C2126921F20AA10075BA0E /* definitions */ = {isa = PBXFileReference; lastKnownFileType = folder; path = definitions; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,7 @@
 			children = (
 				13C1401621E5C5DD0017CA81 /* .gitattributes */,
 				13BD2BC621EE18BA0052091A /* README.md */,
+				13C2126921F20AA10075BA0E /* definitions */,
 				134D346B21D67DF500373B74 /* gribParserTest */,
 				134D346A21D67DF500373B74 /* Products */,
 				134D347C21D67E4E00373B74 /* Frameworks */,
@@ -302,6 +305,7 @@
 				134D347121D67DF500373B74 /* Assets.xcassets in Resources */,
 				13C1401721E5C5DD0017CA81 /* .gitattributes in Resources */,
 				134D347421D67DF500373B74 /* Main.storyboard in Resources */,
+				13C2126A21F20AA20075BA0E /* definitions in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

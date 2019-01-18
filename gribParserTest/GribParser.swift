@@ -61,6 +61,9 @@ class GribParser {
     var dataTime = GribTimeData()
     private var filePointer : FilePointer?
     required init(file: String) throws {
+        if let path = Bundle.main.resourcePath {
+        setenv("ECCODES_DEFINITION_PATH", path + "/definitions",1)
+        }
         filePointer = fopen(file, "r")
         if let fp = filePointer, fp == nil {
             throw GribErrors.CouldNotOpenFile
@@ -198,65 +201,67 @@ class GribParser {
             let name = codes_keys_iterator_get_name(kiter)
             var vlen = MAX_VAL_LEN
             bzero(&value, vlen)
-            codes_get_string(h,name,&value,&vlen)
-            if let string = String(validatingUTF8: name!), let svalue = String(validatingUTF8: &value) {
-                switch string {
-                case GribGeography.bitmapPresent.rawValue:
-                    if let i = Int(svalue) {
-                        geography.bitmapPresent = i == 1 ? true : false
+            if let s = String(validatingUTF8: name!), s != "bitmap" {
+                codes_get_string(h,name,&value,&vlen)
+                if let string = String(validatingUTF8: name!), let svalue = String(validatingUTF8: &value) {
+                    switch string {
+                    case GribGeography.bitmapPresent.rawValue:
+                        if let i = Int(svalue) {
+                            geography.bitmapPresent = i == 1 ? true : false
+                        }
+                    case GribGeography.latitudeOfFirstGridPointInDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.latitudeOfFirstGridPointInDegrees = x
+                        }
+                    case GribGeography.longitudeOfFirstGridPointInDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.longitudeOfFirstGridPointInDegrees = x
+                        }
+                    case GribGeography.latitudeOfLastGridPointInDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.latitudeOfLastGridPointInDegrees = x
+                        }
+                    case GribGeography.longitudeOfLastGridPointInDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.longitudeOfLastGridPointInDegrees = x
+                        }
+                    case GribGeography.iScansNegatively.rawValue:
+                        if let i = Int(svalue) {
+                            geography.iScansNegatively = i == 1 ? true : false
+                        }
+                    case GribGeography.jScansPositively.rawValue:
+                        if let i = Int(svalue) {
+                            geography.jScansPositively = i == 1 ? true : false
+                        }
+                    case GribGeography.jPointsAreConsecutive.rawValue:
+                        if let i = Int(svalue) {
+                            geography.jPointsAreConsecutive = i == 1 ? true : false
+                        }
+                    case GribGeography.jDirectionIncrementInDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.jDirectionIncrementInDegrees = x
+                        }
+                    case GribGeography.iDirectionIncrementInDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.iDirectionIncrementInDegrees = x
+                        }
+                    case GribGeography.latitudeOfSouthernPoleInDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.latitudeOfSouthernPoleInDegrees = x
+                        }
+                    case GribGeography.longitudeOfSouthernPoleInDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.longitudeOfSouthernPoleInDegrees = x
+                        }
+                    case GribGeography.angleOfRotationInDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.angleOfRotationInDegrees = x
+                        }
+                    case GribGeography.gridType.rawValue:
+                        geography.gridType = svalue
+                    default:
+                        break
                     }
-                case GribGeography.latitudeOfFirstGridPointInDegrees.rawValue:
-                    if let x = Double(svalue) {
-                        geography.latitudeOfFirstGridPointInDegrees = x
-                    }
-                case GribGeography.longitudeOfFirstGridPointInDegrees.rawValue:
-                    if let x = Double(svalue) {
-                        geography.longitudeOfFirstGridPointInDegrees = x
-                    }
-                case GribGeography.latitudeOfLastGridPointInDegrees.rawValue:
-                    if let x = Double(svalue) {
-                        geography.latitudeOfLastGridPointInDegrees = x
-                    }
-                case GribGeography.longitudeOfLastGridPointInDegrees.rawValue:
-                    if let x = Double(svalue) {
-                        geography.longitudeOfLastGridPointInDegrees = x
-                    }
-                case GribGeography.iScansNegatively.rawValue:
-                    if let i = Int(svalue) {
-                        geography.iScansNegatively = i == 1 ? true : false
-                    }
-                case GribGeography.jScansPositively.rawValue:
-                    if let i = Int(svalue) {
-                        geography.jScansPositively = i == 1 ? true : false
-                    }
-                case GribGeography.jPointsAreConsecutive.rawValue:
-                    if let i = Int(svalue) {
-                        geography.jPointsAreConsecutive = i == 1 ? true : false
-                    }
-                case GribGeography.jDirectionIncrementInDegrees.rawValue:
-                    if let x = Double(svalue) {
-                        geography.jDirectionIncrementInDegrees = x
-                    }
-                case GribGeography.iDirectionIncrementInDegrees.rawValue:
-                    if let x = Double(svalue) {
-                        geography.iDirectionIncrementInDegrees = x
-                    }
-                case GribGeography.latitudeOfSouthernPoleInDegrees.rawValue:
-                    if let x = Double(svalue) {
-                        geography.latitudeOfSouthernPoleInDegrees = x
-                    }
-                case GribGeography.longitudeOfSouthernPoleInDegrees.rawValue:
-                    if let x = Double(svalue) {
-                        geography.longitudeOfSouthernPoleInDegrees = x
-                    }
-                case GribGeography.angleOfRotationInDegrees.rawValue:
-                    if let x = Double(svalue) {
-                        geography.angleOfRotationInDegrees = x
-                    }
-                case GribGeography.gridType.rawValue:
-                    geography.gridType = svalue
-                default:
-                    break
                 }
             }
         }
