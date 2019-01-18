@@ -10,12 +10,11 @@
 		1321773121E1FE2100881586 /* PointExports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1321773021E1FE2000881586 /* PointExports.swift */; };
 		1321773321E2057500881586 /* GribPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1321773221E2057500881586 /* GribPoint.swift */; };
 		1321773521E4BFDF00881586 /* Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1321773421E4BFDF00881586 /* Point.swift */; };
-		1336A71B21F1CFC20031C214 /* grib_api.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 134D348321D680D900373B74 /* grib_api.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		1336A71E21F1DBEA0031C214 /* libeccodes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1336A71D21F1DBEA0031C214 /* libeccodes.a */; };
 		134D346D21D67DF500373B74 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D346C21D67DF500373B74 /* AppDelegate.swift */; };
 		134D346F21D67DF500373B74 /* GribFileConversionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D346E21D67DF500373B74 /* GribFileConversionViewController.swift */; };
 		134D347121D67DF500373B74 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 134D347021D67DF500373B74 /* Assets.xcassets */; };
 		134D347421D67DF500373B74 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 134D347221D67DF500373B74 /* Main.storyboard */; };
-		134D348421D680D900373B74 /* grib_api.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 134D348321D680D900373B74 /* grib_api.dylib */; };
 		134D348621D6817C00373B74 /* GribParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D348521D6817C00373B74 /* GribParser.swift */; };
 		134D348821D91FEE00373B74 /* GribRotationMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D348721D91FEE00373B74 /* GribRotationMatrix.swift */; };
 		134D348A21D9294D00373B74 /* GribCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D348921D9294D00373B74 /* GribCoordinate.swift */; };
@@ -45,7 +44,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				1336A71B21F1CFC20031C214 /* grib_api.dylib in Embed Libraries */,
 			);
 			name = "Embed Libraries";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -56,6 +54,11 @@
 		1321773021E1FE2000881586 /* PointExports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointExports.swift; sourceTree = "<group>"; };
 		1321773221E2057500881586 /* GribPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribPoint.swift; sourceTree = "<group>"; };
 		1321773421E4BFDF00881586 /* Point.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Point.swift; sourceTree = "<group>"; };
+		1336A71D21F1DBEA0031C214 /* libeccodes.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libeccodes.a; sourceTree = "<group>"; };
+		1336A71F21F1DC020031C214 /* eccodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = eccodes.h; sourceTree = "<group>"; };
+		1336A72321F1E7750031C214 /* grib_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grib_api.h; sourceTree = "<group>"; };
+		1336A72421F1E7920031C214 /* grib_api_windef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grib_api_windef.h; sourceTree = "<group>"; };
+		1336A72521F1E7AE0031C214 /* grib_api_version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grib_api_version.h; sourceTree = "<group>"; };
 		134D346921D67DF500373B74 /* gribParserTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gribParserTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		134D346C21D67DF500373B74 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		134D346E21D67DF500373B74 /* GribFileConversionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribFileConversionViewController.swift; sourceTree = "<group>"; };
@@ -64,11 +67,7 @@
 		134D347521D67DF500373B74 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		134D347621D67DF500373B74 /* gribParserTest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = gribParserTest.entitlements; sourceTree = "<group>"; };
 		134D347D21D67E4E00373B74 /* libgrib_api.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libgrib_api.dylib; path = ../../../../../usr/local/lib/libgrib_api.dylib; sourceTree = "<group>"; };
-		134D347F21D67E9300373B74 /* grib_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grib_api.h; sourceTree = "<group>"; };
 		134D348021D67EBC00373B74 /* gribParserTest-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "gribParserTest-Bridging-Header.h"; sourceTree = "<group>"; };
-		134D348121D6800D00373B74 /* grib_api_windef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grib_api_windef.h; sourceTree = "<group>"; };
-		134D348221D6802F00373B74 /* grib_api_version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grib_api_version.h; sourceTree = "<group>"; };
-		134D348321D680D900373B74 /* grib_api.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = grib_api.dylib; sourceTree = "<group>"; };
 		134D348521D6817C00373B74 /* GribParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribParser.swift; sourceTree = "<group>"; };
 		134D348721D91FEE00373B74 /* GribRotationMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribRotationMatrix.swift; sourceTree = "<group>"; };
 		134D348921D9294D00373B74 /* GribCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribCoordinate.swift; sourceTree = "<group>"; };
@@ -100,15 +99,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1336A71E21F1DBEA0031C214 /* libeccodes.a in Frameworks */,
 				138011EB21DBA3AC00FA65AE /* libc++.tbd in Frameworks */,
 				138011E921DBA19200FA65AE /* tecio.a in Frameworks */,
-				134D348421D680D900373B74 /* grib_api.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1336A72021F1DC0C0031C214 /* eccodesAPI */ = {
+			isa = PBXGroup;
+			children = (
+				1336A72321F1E7750031C214 /* grib_api.h */,
+				1336A71F21F1DC020031C214 /* eccodes.h */,
+				1336A72421F1E7920031C214 /* grib_api_windef.h */,
+				1336A72521F1E7AE0031C214 /* grib_api_version.h */,
+				1336A71D21F1DBEA0031C214 /* libeccodes.a */,
+			);
+			name = eccodesAPI;
+			sourceTree = "<group>";
+		};
 		134D346021D67DF500373B74 = {
 			isa = PBXGroup;
 			children = (
@@ -131,9 +142,9 @@
 		134D346B21D67DF500373B74 /* gribParserTest */ = {
 			isa = PBXGroup;
 			children = (
+				1336A72021F1DC0C0031C214 /* eccodesAPI */,
 				138011F921DD136000FA65AE /* supporting files */,
 				138011F621DD11E700FA65AE /* tecioAPI */,
-				138011F421DD117300FA65AE /* gribAPI */,
 				138011F721DD121D00FA65AE /* grabDataTypes */,
 				138011F821DD12A400FA65AE /* gribUtilityClasses */,
 				138011FA21DD137E00FA65AE /* UI */,
@@ -149,17 +160,6 @@
 				134D347D21D67E4E00373B74 /* libgrib_api.dylib */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		138011F421DD117300FA65AE /* gribAPI */ = {
-			isa = PBXGroup;
-			children = (
-				134D347F21D67E9300373B74 /* grib_api.h */,
-				134D348221D6802F00373B74 /* grib_api_version.h */,
-				134D348121D6800D00373B74 /* grib_api_windef.h */,
-				134D348321D680D900373B74 /* grib_api.dylib */,
-			);
-			name = gribAPI;
 			sourceTree = "<group>";
 		};
 		138011F621DD11E700FA65AE /* tecioAPI */ = {
