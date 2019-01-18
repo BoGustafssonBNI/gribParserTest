@@ -61,6 +61,9 @@ class GribParser {
     var dataTime = GribTimeData()
     private var filePointer : FilePointer?
     required init(file: String) throws {
+        if let path = Bundle.main.resourcePath {
+        setenv("ECCODES_DEFINITION_PATH", path + "/definitions",1)
+        }
         filePointer = fopen(file, "r")
         if let fp = filePointer, fp == nil {
             throw GribErrors.CouldNotOpenFile
@@ -87,18 +90,18 @@ class GribParser {
             throw GribErrors.CouldNotGetFileHandle
         }
         rewind(fp)
-        let h = grib_handle_new_from_file(p,fp,&err)
-        let kiter = grib_keys_iterator_new(h, UInt(key_iterator_filter_flags), name_space)
+        let h = codes_handle_new_from_file(p,fp,PRODUCT_GRIB,&err)
+        let kiter = codes_keys_iterator_new(h, UInt(key_iterator_filter_flags), name_space)
         if (kiter == nil) {
             throw GribErrors.CouldNotCreateKeysIterator
         }
         var time = GribTimeData()
-        while(grib_keys_iterator_next(kiter) == 1)
+        while(codes_keys_iterator_next(kiter) == 1)
         {
-            let name = grib_keys_iterator_get_name(kiter)
+            let name = codes_keys_iterator_get_name(kiter)
             var vlen = MAX_VAL_LEN
             bzero(&value, vlen)
-            grib_get_string(h,name,&value,&vlen)
+            codes_get_string(h,name,&value,&vlen)
             if let string = String(validatingUTF8: name!), let svalue = String(validatingUTF8: &value) {
                  switch string {
                 case GribTime.dataDate.rawValue:
@@ -110,8 +113,8 @@ class GribParser {
                 }
             }
         }
-        grib_keys_iterator_delete(kiter)
-        grib_handle_delete(h)
+        codes_keys_iterator_delete(kiter)
+        codes_handle_delete(h)
         return time
     }
 
@@ -130,21 +133,21 @@ class GribParser {
             throw GribErrors.CouldNotGetFileHandle
         }
         rewind(fp)
-        var h = grib_handle_new_from_file(p,fp,&err)
+        var h = codes_handle_new_from_file(p, fp, PRODUCT_GRIB, &err)
         while (h != nil)
         {
             grib_count += 1
-            let kiter = grib_keys_iterator_new(h, UInt(key_iterator_filter_flags), name_space)
+            let kiter = codes_keys_iterator_new(h, UInt(key_iterator_filter_flags), name_space)
             if (kiter == nil) {
                 throw GribErrors.CouldNotCreateKeysIterator
             }
             var parameter = GribParameterData()
-            while(grib_keys_iterator_next(kiter) == 1)
+            while(codes_keys_iterator_next(kiter) == 1)
             {
-                let name = grib_keys_iterator_get_name(kiter)
+                let name = codes_keys_iterator_get_name(kiter)
                 var vlen = MAX_VAL_LEN
                 bzero(&value, vlen)
-                grib_get_string(h,name,&value,&vlen)
+                codes_get_string(h,name,&value,&vlen)
                 if let string = String(validatingUTF8: name!), let svalue = String(validatingUTF8: &value) {
                     switch string {
                     case GribParameter.centre.rawValue:
@@ -165,11 +168,11 @@ class GribParser {
                 }
             }
             result.append(parameter)
-            grib_keys_iterator_delete(kiter)
-            grib_handle_delete(h)
-            h = grib_handle_new_from_file(p,fp,&err)
+            codes_keys_iterator_delete(kiter)
+            codes_handle_delete(h)
+            h = codes_handle_new_from_file(p,fp,PRODUCT_GRIB,&err)
         }
-        if h != nil {grib_handle_delete(h)}
+        if h != nil {codes_handle_delete(h)}
         return result
     }
     private func getGeography() throws -> GribGeographyData {
@@ -186,82 +189,84 @@ class GribParser {
             throw GribErrors.CouldNotGetFileHandle
         }
         rewind(fp)
-        let h = grib_handle_new_from_file(p,fp,&err)
+        let h = codes_handle_new_from_file(p,fp,PRODUCT_GRIB,&err)
         grib_count += 1
-        let kiter = grib_keys_iterator_new(h, UInt(key_iterator_filter_flags), name_space)
+        let kiter = codes_keys_iterator_new(h, UInt(key_iterator_filter_flags), name_space)
         if (kiter == nil) {
             throw GribErrors.CouldNotCreateKeysIterator
         }
         var geography = GribGeographyData()
-        while(grib_keys_iterator_next(kiter) == 1)
+        while(codes_keys_iterator_next(kiter) == 1)
         {
-            let name = grib_keys_iterator_get_name(kiter)
+            let name = codes_keys_iterator_get_name(kiter)
             var vlen = MAX_VAL_LEN
             bzero(&value, vlen)
-            grib_get_string(h,name,&value,&vlen)
-            if let string = String(validatingUTF8: name!), let svalue = String(validatingUTF8: &value) {
-                switch string {
-                case GribGeography.bitmapPresent.rawValue:
-                    if let i = Int(svalue) {
-                        geography.bitmapPresent = i == 1 ? true : false
+            if let s = String(validatingUTF8: name!), s != "bitmap" {
+                codes_get_string(h,name,&value,&vlen)
+                if let string = String(validatingUTF8: name!), let svalue = String(validatingUTF8: &value) {
+                    switch string {
+                    case GribGeography.bitmapPresent.rawValue:
+                        if let i = Int(svalue) {
+                            geography.bitmapPresent = i == 1 ? true : false
+                        }
+                    case GribGeography.latitudeOfFirstGridPointInDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.latitudeOfFirstGridPointInDegrees = x
+                        }
+                    case GribGeography.longitudeOfFirstGridPointInDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.longitudeOfFirstGridPointInDegrees = x
+                        }
+                    case GribGeography.latitudeOfLastGridPointInDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.latitudeOfLastGridPointInDegrees = x
+                        }
+                    case GribGeography.longitudeOfLastGridPointInDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.longitudeOfLastGridPointInDegrees = x
+                        }
+                    case GribGeography.iScansNegatively.rawValue:
+                        if let i = Int(svalue) {
+                            geography.iScansNegatively = i == 1 ? true : false
+                        }
+                    case GribGeography.jScansPositively.rawValue:
+                        if let i = Int(svalue) {
+                            geography.jScansPositively = i == 1 ? true : false
+                        }
+                    case GribGeography.jPointsAreConsecutive.rawValue:
+                        if let i = Int(svalue) {
+                            geography.jPointsAreConsecutive = i == 1 ? true : false
+                        }
+                    case GribGeography.jDirectionIncrementInDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.jDirectionIncrementInDegrees = x
+                        }
+                    case GribGeography.iDirectionIncrementInDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.iDirectionIncrementInDegrees = x
+                        }
+                    case GribGeography.latitudeOfSouthernPoleInDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.latitudeOfSouthernPoleInDegrees = x
+                        }
+                    case GribGeography.longitudeOfSouthernPoleInDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.longitudeOfSouthernPoleInDegrees = x
+                        }
+                    case GribGeography.angleOfRotationInDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.angleOfRotationInDegrees = x
+                        }
+                    case GribGeography.gridType.rawValue:
+                        geography.gridType = svalue
+                    default:
+                        break
                     }
-                case GribGeography.latitudeOfFirstGridPointInDegrees.rawValue:
-                    if let x = Double(svalue) {
-                        geography.latitudeOfFirstGridPointInDegrees = x
-                    }
-                case GribGeography.longitudeOfFirstGridPointInDegrees.rawValue:
-                    if let x = Double(svalue) {
-                        geography.longitudeOfFirstGridPointInDegrees = x
-                    }
-                case GribGeography.latitudeOfLastGridPointInDegrees.rawValue:
-                    if let x = Double(svalue) {
-                        geography.latitudeOfLastGridPointInDegrees = x
-                    }
-                case GribGeography.longitudeOfLastGridPointInDegrees.rawValue:
-                    if let x = Double(svalue) {
-                        geography.longitudeOfLastGridPointInDegrees = x
-                    }
-                case GribGeography.iScansNegatively.rawValue:
-                    if let i = Int(svalue) {
-                        geography.iScansNegatively = i == 1 ? true : false
-                    }
-                case GribGeography.jScansPositively.rawValue:
-                    if let i = Int(svalue) {
-                        geography.jScansPositively = i == 1 ? true : false
-                    }
-                case GribGeography.jPointsAreConsecutive.rawValue:
-                    if let i = Int(svalue) {
-                        geography.jPointsAreConsecutive = i == 1 ? true : false
-                    }
-                case GribGeography.jDirectionIncrementInDegrees.rawValue:
-                    if let x = Double(svalue) {
-                        geography.jDirectionIncrementInDegrees = x
-                    }
-                case GribGeography.iDirectionIncrementInDegrees.rawValue:
-                    if let x = Double(svalue) {
-                        geography.iDirectionIncrementInDegrees = x
-                    }
-                case GribGeography.latitudeOfSouthernPoleInDegrees.rawValue:
-                    if let x = Double(svalue) {
-                        geography.latitudeOfSouthernPoleInDegrees = x
-                    }
-                case GribGeography.longitudeOfSouthernPoleInDegrees.rawValue:
-                    if let x = Double(svalue) {
-                        geography.longitudeOfSouthernPoleInDegrees = x
-                    }
-                case GribGeography.angleOfRotationInDegrees.rawValue:
-                    if let x = Double(svalue) {
-                        geography.angleOfRotationInDegrees = x
-                    }
-                case GribGeography.gridType.rawValue:
-                    geography.gridType = svalue
-                default:
-                    break
                 }
             }
         }
-        grib_keys_iterator_delete(kiter)
-        grib_handle_delete(h)
+        codes_keys_iterator_delete(kiter)
+        codes_handle_delete(h)
         return geography
     }
     private func getGridDimensions() throws -> GribGridDimensions {
@@ -272,15 +277,15 @@ class GribParser {
             throw GribErrors.CouldNotGetFileHandle
         }
         rewind(fp)
-        let h = grib_handle_new_from_file(p,fp,&err)
+        let h = codes_handle_new_from_file(p,fp,PRODUCT_GRIB,&err)
         guard h != nil else {throw GribErrors.CouldNotGetFileHandle}
         var nI = 0
         var nJ = 0
-        grib_get_long(h, "Ni", &nI)
-        grib_get_long(h, "Nj", &nJ)
+        codes_get_long(h, "Ni", &nI)
+        codes_get_long(h, "Nj", &nJ)
         dimensions.nI = nI
         dimensions.nJ = nJ
-        grib_handle_delete(h)
+        codes_handle_delete(h)
         return dimensions
     }
     func getGridData() throws -> (coordinates: [GribCoordinate], rotationMatrices: [GribRotationMatrix]) {
@@ -290,21 +295,21 @@ class GribParser {
             throw GribErrors.CouldNotGetFileHandle
         }
         rewind(fp)
-        let h = grib_handle_new_from_file(p,fp,&err)
+        let h = codes_handle_new_from_file(p,fp,PRODUCT_GRIB,&err)
         guard h != nil else {throw GribErrors.CouldNotGetFileHandle}
         var nI = 0
         var nJ = 0
-        grib_get_long(h, "Ni", &nI)
-        grib_get_long(h, "Nj", &nJ)
+        codes_get_long(h, "Ni", &nI)
+        codes_get_long(h, "Nj", &nJ)
         var x = 0.0
         var y = 0.0
         var value = 0.0
-        let iterator = grib_iterator_new(h, 0, &err)
+        let iterator = codes_grib_iterator_new(h, 0, &err)
         var i = 0
         var j = 0
         var coordinates = [GribCoordinate]()
         var rotationMatrices = [GribRotationMatrix]()
-        while grib_iterator_next(iterator, &y, &x, &value) == 1 {
+        while codes_grib_iterator_next(iterator, &y, &x, &value) == 1 {
             let coord = GribCoordinate(i: i, j: j, lon: x, lat: y, longitudeOfFirstGridPointInDegrees: geographyData.longitudeOfFirstGridPointInDegrees, latitudeOfFirstGridPointInDegrees: geographyData.latitudeOfFirstGridPointInDegrees, iDirectionIncrementInDegrees: geographyData.iDirectionIncrementInDegrees, jDirectionIncrementInDegrees: geographyData.jDirectionIncrementInDegrees)
             let rotationMatrix = GribRotationMatrix(coordinate: coord, geography: geographyData)
             coordinates.append(coord)
@@ -316,8 +321,8 @@ class GribParser {
                 i += 1
             }
         }
-        grib_iterator_delete(iterator)
-        grib_handle_delete(h)
+        codes_grib_iterator_delete(iterator)
+        codes_handle_delete(h)
         return (coordinates, rotationMatrices)
     }
     func getValues(for parameter: GribParameterData) -> [Double]? {
@@ -329,24 +334,24 @@ class GribParser {
         guard let f = filePointer, f != nil else {return nil}
         rewind(f)
         let p : OpaquePointer? = nil
-        var h = grib_handle_new_from_file(p,f,&err)
+        var h = codes_handle_new_from_file(p,f,PRODUCT_GRIB,&err)
         while (h != nil)
         {
             var vlen = MAX_VAL_LEN
             bzero(&value, vlen)
-            grib_get_string(h, GribParameter.name.rawValue, &value, &vlen)
+            codes_get_string(h, GribParameter.name.rawValue, &value, &vlen)
             if let svalue = String(validatingUTF8: &value) {
                 if parameter.name == svalue {
                     var size = 0
-                    grib_get_size(h, "values", &size)
+                    codes_get_size(h, "values", &size)
                     var data = [Double](repeating: 0.0, count: size)
-                    grib_get_double_array(h, "values", &data, &size)
-                    grib_handle_delete(h)
+                    codes_get_double_array(h, "values", &data, &size)
+                    codes_handle_delete(h)
                     return data
                 }
             }
-            grib_handle_delete(h)
-            h = grib_handle_new_from_file(p,f,&err)
+            codes_handle_delete(h)
+            h = codes_handle_new_from_file(p,f,PRODUCT_GRIB,&err)
         }
         return nil
     }
@@ -358,7 +363,7 @@ class GribParser {
         guard let f = filePointer, f != nil else {return nil}
         rewind(f)
         let p : OpaquePointer? = nil
-        var h = grib_handle_new_from_file(p,f,&err)
+        var h = codes_handle_new_from_file(p,f,PRODUCT_GRIB,&err)
         var names = [String]()
         for parameter in parameters {
             names.append(parameter.name)
@@ -368,18 +373,18 @@ class GribParser {
         {
             var vlen = MAX_VAL_LEN
             bzero(&value, vlen)
-            grib_get_string(h, GribParameter.name.rawValue, &value, &vlen)
+            codes_get_string(h, GribParameter.name.rawValue, &value, &vlen)
             if let svalue = String(validatingUTF8: &value) {
                 if let index = names.firstIndex(of: svalue) {
                     var size = 0
-                    grib_get_size(h, "values", &size)
+                    codes_get_size(h, "values", &size)
                     var data = [Double](repeating: 0.0, count: size)
-                    grib_get_double_array(h, "values", &data, &size)
+                    codes_get_double_array(h, "values", &data, &size)
                     result[parameters[index]] = data
                 }
             }
-            grib_handle_delete(h)
-            h = grib_handle_new_from_file(p,f,&err)
+            codes_handle_delete(h)
+            h = codes_handle_new_from_file(p,f,PRODUCT_GRIB,&err)
         }
         return result
     }
@@ -398,7 +403,7 @@ class GribParser {
         guard let f = filePointer, f != nil else {return nil}
         rewind(f)
         let p : OpaquePointer? = nil
-        var h = grib_handle_new_from_file(p,f,&err)
+        var h = codes_handle_new_from_file(p,f,PRODUCT_GRIB,&err)
         var names = [String]()
         for parameter in parameters {
             names.append(parameter.name)
@@ -408,13 +413,13 @@ class GribParser {
         {
             var vlen = MAX_VAL_LEN
             bzero(&value, vlen)
-            grib_get_string(h, GribParameter.name.rawValue, &value, &vlen)
+            codes_get_string(h, GribParameter.name.rawValue, &value, &vlen)
             if let svalue = String(validatingUTF8: &value) {
                 if let index = names.firstIndex(of: svalue) {
                     var size = 0
-                    grib_get_size(h, "values", &size)
+                    codes_get_size(h, "values", &size)
                     var data = [Double](repeating: 0.0, count: size)
-                    grib_get_double_array(h, "values", &data, &size)
+                    codes_get_double_array(h, "values", &data, &size)
                     var tempArray = [Double]()
                     for index in indices {
                         tempArray.append(data[index])
@@ -422,8 +427,8 @@ class GribParser {
                     result[parameters[index]] = tempArray
                 }
             }
-            grib_handle_delete(h)
-            h = grib_handle_new_from_file(p,f,&err)
+            codes_handle_delete(h)
+            h = codes_handle_new_from_file(p,f,PRODUCT_GRIB,&err)
         }
         return result
     }
@@ -436,7 +441,7 @@ class GribParser {
 //        guard let f = filePointer else {return nil}
 //        rewind(f)
 //        let p : OpaquePointer? = nil
-//        var h = grib_handle_new_from_file(p,f,&err)
+//        var h = codes_handle_new_from_file(p,f,PRODUCT_GRIB,&err)
 //        var names = [String]()
 //        for parameter in parameters {
 //            names.append(parameter.name)
@@ -446,7 +451,7 @@ class GribParser {
 //        {
 //            var vlen = MAX_VAL_LEN
 //            bzero(&value, vlen)
-//            grib_get_string(h, GribParameter.name.rawValue, &value, &vlen)
+//            codes_get_string(h, GribParameter.name.rawValue, &value, &vlen)
 //            if let svalue = String(validatingUTF8: &value) {
 //                if let index = names.firstIndex(of: svalue) {
 //                    let size = lons.count
@@ -457,12 +462,12 @@ class GribParser {
 //                    var values = [Double].init(repeating: 0.0, count: size)
 //                    var distances = [Double].init(repeating: 0.0, count: size)
 //                    var indexes = [Int32].init(repeating: 0, count: lons.count)
-//                    grib_nearest_find_multiple(h, 0, &y, &x, size, &outLats, &outLons, &values, &distances, &indexes)
+//                    codes_nearest_find_multiple(h, 0, &y, &x, size, &outLats, &outLons, &values, &distances, &indexes)
 //                    result[parameters[index]] = values
 //                }
 //            }
-//            grib_handle_delete(h)
-//            h = grib_handle_new_from_file(p,f,&err)
+//            codes_handle_delete(h)
+//            h = codes_handle_new_from_file(p,f,PRODUCT_GRIB,&err)
 //        }
 //        return result
 //    }
