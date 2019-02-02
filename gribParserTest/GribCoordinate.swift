@@ -25,26 +25,26 @@ struct GribCoordinate {
     }
     init(lon: Double, lat: Double, geography: GribGeographyData ) {
         if geography.rotated {
-        let zrad = Double.pi / 180.0
-        let zradi = 1.0 / zrad
-        let zsycen = sin(zrad * (geography.latitudeOfSouthernPoleInDegrees + 90.0))
-        let zcycen = cos(zrad * (geography.latitudeOfSouthernPoleInDegrees + 90.0))
-        let zxmxc = zrad * (lon - geography.longitudeOfSouthernPoleInDegrees)
-        let zsxmxc = sin(zxmxc)
-        let zcxmxc = cos(zxmxc)
-        let zsyreg = sin(zrad * lat)
-        let zcyreg = cos(zrad * lat)
-        var zsyrot = zcycen * zsyreg - zsycen * zcyreg * zcxmxc
-        zsyrot = max(zsyrot, -1.0)
-        zsyrot = min(zsyrot, 1.0)
-        let latRot = asin(zsyrot) * zradi
-        let zcyrot = cos(latRot*zrad)
-        var zcxrot = (zcycen * zcyreg * zcxmxc + zsycen * zsyreg) / zcyrot
-        zcxrot = max(zcxrot, -1.0)
-        zcxrot = min(zcxrot, 1.0)
-        let zsxrot = zcyreg * zsxmxc / zcyrot
-        var lonRot = acos(zcxrot) * zradi
-        if zsxrot < 0.0 {lonRot = -lonRot}
+            let zrad = Double.pi / 180.0
+            let zradi = 1.0 / zrad
+            let zsycen = sin(zrad * (geography.latitudeOfSouthernPoleInDegrees + 90.0))
+            let zcycen = cos(zrad * (geography.latitudeOfSouthernPoleInDegrees + 90.0))
+            let zxmxc = zrad * (lon - geography.longitudeOfSouthernPoleInDegrees)
+            let zsxmxc = sin(zxmxc)
+            let zcxmxc = cos(zxmxc)
+            let zsyreg = sin(zrad * lat)
+            let zcyreg = cos(zrad * lat)
+            var zsyrot = zcycen * zsyreg - zsycen * zcyreg * zcxmxc
+            zsyrot = max(zsyrot, -1.0)
+            zsyrot = min(zsyrot, 1.0)
+            let latRot = asin(zsyrot) * zradi
+            let zcyrot = cos(latRot*zrad)
+            var zcxrot = (zcycen * zcyreg * zcxmxc + zsycen * zsyreg) / zcyrot
+            zcxrot = max(zcxrot, -1.0)
+            zcxrot = min(zcxrot, 1.0)
+            let zsxrot = zcyreg * zsxmxc / zcyrot
+            var lonRot = acos(zcxrot) * zradi
+            if zsxrot < 0.0 {lonRot = -lonRot}
             self.latRot = latRot
             self.lonRot = lonRot
         } else {

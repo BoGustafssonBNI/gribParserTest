@@ -36,6 +36,7 @@
 		13AF33D021E881710023D1AB /* SubGridSpecificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AF33CF21E881710023D1AB /* SubGridSpecificationViewController.swift */; };
 		13C1401721E5C5DD0017CA81 /* .gitattributes in Resources */ = {isa = PBXBuildFile; fileRef = 13C1401621E5C5DD0017CA81 /* .gitattributes */; };
 		13C2126A21F20AA20075BA0E /* definitions in Resources */ = {isa = PBXBuildFile; fileRef = 13C2126921F20AA10075BA0E /* definitions */; };
+		13C6988722056B81005AC8DD /* GridMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C6988622056B81005AC8DD /* GridMapping.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -94,6 +95,7 @@
 		13BD2BC621EE18BA0052091A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		13C1401621E5C5DD0017CA81 /* .gitattributes */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitattributes; sourceTree = "<group>"; };
 		13C2126921F20AA10075BA0E /* definitions */ = {isa = PBXFileReference; lastKnownFileType = folder; path = definitions; sourceTree = "<group>"; };
+		13C6988622056B81005AC8DD /* GridMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridMapping.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,6 +154,7 @@
 				138011F821DD12A400FA65AE /* gribUtilityClasses */,
 				138011FA21DD137E00FA65AE /* UI */,
 				138011FD21DD482A00FA65AE /* Model */,
+				13C6988622056B81005AC8DD /* GridMapping.swift */,
 			);
 			path = gribParserTest;
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 			files = (
 				1321773121E1FE2100881586 /* PointExports.swift in Sources */,
 				1380120721DF6E5000FA65AE /* ExporterViewController.swift in Sources */,
+				13C6988722056B81005AC8DD /* GridMapping.swift in Sources */,
 				138011FC21DD467B00FA65AE /* GribFile.swift in Sources */,
 				134D348821D91FEE00373B74 /* GribRotationMatrix.swift in Sources */,
 				138011F321DBD1F500FA65AE /* GribValueData.swift in Sources */,
