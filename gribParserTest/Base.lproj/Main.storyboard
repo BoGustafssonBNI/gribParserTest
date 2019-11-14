@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -194,15 +195,15 @@
                                                     </textFieldCell>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
-                                                        <tableCellView identifier="GribFileInfoCell" toolTip="Select to show parameters, Swipe to delete" id="fxf-VP-94U" customClass="GribFileInfoTableCellView" customModule="gribParserTest" customModuleProvider="target">
+                                                        <tableCellView identifier="GribFileInfoCell" toolTip="Select to show parameters, Swipe to delete" misplaced="YES" id="fxf-VP-94U" customClass="GribFileInfoTableCellView" customModule="gribParserTest" customModuleProvider="target">
                                                             <rect key="frame" x="1" y="1" width="825" height="77"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PSN-y0-EaW">
-                                                                    <rect key="frame" x="20" y="5" width="785" height="67"/>
+                                                                    <rect key="frame" x="20" y="5" width="785" height="64"/>
                                                                     <subviews>
                                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lgu-iZ-tSB">
-                                                                            <rect key="frame" x="-2" y="50" width="37" height="17"/>
+                                                                            <rect key="frame" x="-2" y="48" width="37" height="16"/>
                                                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="KAY-q7-VFM">
                                                                                 <font key="font" usesAppearanceFont="YES"/>
                                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -210,7 +211,7 @@
                                                                             </textFieldCell>
                                                                         </textField>
                                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ShV-if-8jT">
-                                                                            <rect key="frame" x="-2" y="25" width="37" height="17"/>
+                                                                            <rect key="frame" x="-2" y="24" width="37" height="16"/>
                                                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="p4k-vl-NAh">
                                                                                 <font key="font" metaFont="system"/>
                                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -218,7 +219,7 @@
                                                                             </textFieldCell>
                                                                         </textField>
                                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YRA-DQ-oSU">
-                                                                            <rect key="frame" x="-2" y="0.0" width="37" height="17"/>
+                                                                            <rect key="frame" x="-2" y="0.0" width="37" height="16"/>
                                                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="Uae-JZ-r0d">
                                                                                 <font key="font" metaFont="system"/>
                                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -381,7 +382,7 @@
                                 </connections>
                             </button>
                             <popUpButton toolTip="Select output file format" horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ka1-0J-DgY">
-                                <rect key="frame" x="18" y="561" width="38" height="25"/>
+                                <rect key="frame" x="18" y="560" width="38" height="25"/>
                                 <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="Dr4-7X-cHs">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
@@ -504,14 +505,14 @@
             <objects>
                 <viewController id="oN5-wy-QH8" customClass="ExporterViewController" customModule="gribParserTest" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="DRu-IB-kNa">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="83"/>
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="82"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <progressIndicator wantsLayer="YES" verticalHuggingPriority="750" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="6M8-a0-Wla">
-                                <rect key="frame" x="20" y="44" width="410" height="20"/>
+                                <rect key="frame" x="20" y="43" width="410" height="20"/>
                             </progressIndicator>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uug-dZ-11j">
-                                <rect key="frame" x="18" y="20" width="337" height="17"/>
+                                <rect key="frame" x="18" y="20" width="337" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Prepairing..." id="cJr-AQ-4CN">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -559,11 +560,11 @@ Gw
             <objects>
                 <viewController id="Ic0-xz-2aM" customClass="SubGridSpecificationViewController" customModule="gribParserTest" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="vJj-OW-cJ3">
-                        <rect key="frame" x="0.0" y="0.0" width="346" height="166"/>
+                        <rect key="frame" x="0.0" y="0.0" width="346" height="162"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="D8t-Fc-S2d">
-                                <rect key="frame" x="18" y="127" width="137" height="17"/>
+                                <rect key="frame" x="18" y="124" width="137" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Southwestern Corner:" id="1KV-Dg-RVJ">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -571,7 +572,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yks-ir-BYv">
-                                <rect key="frame" x="178" y="124" width="70" height="22"/>
+                                <rect key="frame" x="178" y="121" width="70" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="70" id="2Ig-Jz-ilh"/>
                                 </constraints>
@@ -585,7 +586,7 @@ Gw
                                 </connections>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="A49-Do-f6d">
-                                <rect key="frame" x="256" y="124" width="70" height="22"/>
+                                <rect key="frame" x="256" y="121" width="70" height="21"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Latitude" drawsBackground="YES" id="wUJ-1K-y9m">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -596,7 +597,7 @@ Gw
                                 </connections>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Chy-AQ-lYZ">
-                                <rect key="frame" x="18" y="95" width="134" height="17"/>
+                                <rect key="frame" x="18" y="93" width="134" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Northeastern Corner:" id="CwO-Jy-H3z">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -604,7 +605,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zBS-fS-0ou">
-                                <rect key="frame" x="178" y="92" width="70" height="22"/>
+                                <rect key="frame" x="178" y="90" width="70" height="21"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Longitude" drawsBackground="YES" id="CLq-dx-E9e">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -615,7 +616,7 @@ Gw
                                 </connections>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iXs-ah-LHF">
-                                <rect key="frame" x="256" y="92" width="70" height="22"/>
+                                <rect key="frame" x="256" y="90" width="70" height="21"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Latitude" drawsBackground="YES" id="SMU-GP-fNW">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -626,7 +627,7 @@ Gw
                                 </connections>
                             </textField>
                             <textField horizontalHuggingPriority="1000" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4aE-RP-Fc5">
-                                <rect key="frame" x="18" y="63" width="154" height="17"/>
+                                <rect key="frame" x="18" y="62" width="154" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="I and J gridpoint interval:" id="9SM-uO-8PB">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -634,7 +635,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="t0Q-lh-90m">
-                                <rect key="frame" x="178" y="60" width="70" height="22"/>
+                                <rect key="frame" x="178" y="59" width="70" height="21"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="I index" drawsBackground="YES" id="YX6-zZ-Es4">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -645,7 +646,7 @@ Gw
                                 </connections>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iKY-EA-3Mg">
-                                <rect key="frame" x="256" y="60" width="70" height="22"/>
+                                <rect key="frame" x="256" y="59" width="70" height="21"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="J index" drawsBackground="YES" id="1wm-P7-vQw">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
