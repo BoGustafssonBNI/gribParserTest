@@ -52,6 +52,10 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
                             let tDiff = date.timeIntervalSince(pD)
                             if !gribFilesTimeIntervals.contains(tDiff) {
                                 gribFilesTimeIntervals.append(tDiff)
+                                if gribFilesTimeIntervals.count > 1 {
+                                    print("Previous date \(pD)")
+                                    print("Current data \(date)")
+                                }
                             }
                         }
                         previousDate = date

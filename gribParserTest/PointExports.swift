@@ -46,8 +46,6 @@ class PointExports {
             }
             delegate?.progress = Double(fileNo) / Double(numberOfGribFiles)
             let solutionTime = (file.parser.dataTime.date?.timeIntervalSince(refDate) ?? 0.0) / 86400.0
-            print("last: \(lastDimension.nI)x\(lastDimension.nJ)")
-            print("new: \(file.parser.gridDimensions.nI)x\(file.parser.gridDimensions.nJ)")
             if first || lastDimension != file.parser.gridDimensions || lastGeographyData != file.parser.geographyData {
                 lastGeographyData = file.parser.geographyData
                 lastDimension = file.parser.gridDimensions

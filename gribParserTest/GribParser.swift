@@ -105,7 +105,11 @@ class GribParser {
             if let string = String(validatingUTF8: name!), let svalue = String(validatingUTF8: &value) {
                  switch string {
                 case GribTime.dataDate.rawValue:
-                    time.dataDate = svalue
+                    if let itime = Int(svalue), itime > 20300000 {
+                        time.dataDate = String(itime - 1000000)
+                    } else {
+                        time.dataDate = svalue
+                    }
                 case GribTime.dataTime.rawValue:
                     time.dataTime = svalue
                 default:
