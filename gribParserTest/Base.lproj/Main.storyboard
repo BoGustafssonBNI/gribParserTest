@@ -195,8 +195,8 @@
                                                     </textFieldCell>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
-                                                        <tableCellView identifier="GribFileInfoCell" toolTip="Select to show parameters, Swipe to delete" misplaced="YES" id="fxf-VP-94U" customClass="GribFileInfoTableCellView" customModule="gribParserTest" customModuleProvider="target">
-                                                            <rect key="frame" x="1" y="1" width="825" height="77"/>
+                                                        <tableCellView identifier="GribFileInfoCell" toolTip="Select to show parameters, Swipe to delete" id="fxf-VP-94U" customClass="GribFileInfoTableCellView" customModule="gribParserTest" customModuleProvider="target">
+                                                            <rect key="frame" x="1" y="1" width="825" height="74"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PSN-y0-EaW">

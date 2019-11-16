@@ -154,19 +154,19 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
     @IBAction func setOutputSpecification(_ sender: NSButton) {
         switch conversionType {
         case .points:
-        let op = NSOpenPanel()
-        op.canChooseDirectories = false
-        op.canChooseFiles = true
-        op.allowsMultipleSelection = false
-        op.canCreateDirectories = false
-        op.allowedFileTypes = ["txt","csv"]
-        op.begin { (result) -> Void in
-            if result == NSApplication.ModalResponse.OK, let url = op.url {
-                DispatchQueue.main.async {
-                    self.pointSpecificationFileURL = url
+            let op = NSOpenPanel()
+            op.canChooseDirectories = false
+            op.canChooseFiles = true
+            op.allowsMultipleSelection = false
+            op.canCreateDirectories = false
+            op.allowedFileTypes = ["txt","csv"]
+            op.begin { (result) -> Void in
+                if result == NSApplication.ModalResponse.OK, let url = op.url {
+                    DispatchQueue.main.async {
+                        self.pointSpecificationFileURL = url
+                    }
                 }
             }
-        }
         case .tecplotFields:
             performSegue(withIdentifier: setSubGridSpecificationSegue, sender: self)
         }
@@ -295,7 +295,9 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         let result = op.runModal()
         if result == NSApplication.ModalResponse.OK {
             let urls = op.urls
-            urlsFromOpenPanel = urls
+            DispatchQueue.main.async {
+                self.urlsFromOpenPanel = urls
+            }
         }
     }
     
@@ -354,7 +356,7 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         parameterSelectionTable.reloadData()
     }
 
-    let exportSegueIdentifier : NSStoryboardSegue.Identifier = "TecplotExportSegue"
+    let exportSegueIdentifier = NSStoryboardSegue.Identifier.init("TecplotExportSegue")
     @IBAction func convert(_ sender: NSButton) {
         if canPerformConversion {
             performSegue(withIdentifier: exportSegueIdentifier, sender: self)

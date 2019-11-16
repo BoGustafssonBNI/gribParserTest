@@ -62,18 +62,18 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
     
     @IBOutlet weak private var progresIndicator: NSProgressIndicator?
     @IBOutlet weak private var progressLabel: NSTextField?
-    @IBOutlet weak private var cancelButton: NSButton!
+    @IBOutlet weak private var cancelButton: NSButton?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        cancelButton.isHidden = true
+        cancelButton?.isHidden = true
         if let ct = conversionType, let gb = gribFiles, let params = parameters, let url = outputURL {
             switch ct {
             case .tecplotFields:
                 tecExporter.delegate = self
                 
                 let file = url.appendingPathComponent(tecFileName)
-                cancelButton.isHidden = false
+                cancelButton?.isHidden = false
                 let queue = DispatchQueue.global(qos: .userInitiated)
                 queue.async { [weak weakself = self] in
                     do {
@@ -96,7 +96,7 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
                 }
             case .points:
                 pointExporter.delegate = self
-                cancelButton.isHidden = false
+                cancelButton?.isHidden = false
                 if let points = pointsToExport {
                     let queue = DispatchQueue.global(qos: .userInitiated)
                     queue.async { [weak weakself = self] in
@@ -116,9 +116,12 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
         view.window?.title = "Data Export"
     }
     @IBAction private func cancelProcess(_ sender: NSButton) {
-        cancelButton.title = "Cancelled"
-        cancelButton.isEnabled = false
+        cancelButton?.title = "Cancelled"
+        cancelButton?.isEnabled = false
         cancel = true
+        DispatchQueue.main.async {
+            self.presentingViewController?.dismiss(self)
+        }
     }
     
 }
