@@ -59,25 +59,28 @@ class GribParser {
     var geographyData = GribGeographyData()
     var gridDimensions = GribGridDimensions()
     var dataTime = GribTimeData()
-    private var filePointer : FilePointer?
+    private var fileName : String?
     required init(file: String) throws {
         if let path = Bundle.main.resourcePath {
         setenv("ECCODES_DEFINITION_PATH", path + "/definitions",1)
         }
+        fileName = file
+        var filePointer : FilePointer?
         filePointer = fopen(file, "r")
         if let fp = filePointer, fp == nil {
             throw GribErrors.CouldNotOpenFile
         }
         do {
-            geographyData = try getGeography()
-            parameterList = try getParameterList()
-            gridDimensions = try getGridDimensions()
-            dataTime = try getTime()
+            geographyData = try getGeography(filePointer: filePointer)
+            parameterList = try getParameterList(filePointer: filePointer)
+            gridDimensions = try getGridDimensions(filePointer: filePointer)
+            dataTime = try getTime(filePointer: filePointer)
+            fclose(filePointer!)
         } catch let error {
             throw error
         }
     }
-    private func getTime() throws -> GribTimeData {
+    private func getTime(filePointer: FilePointer?) throws -> GribTimeData {
         //        let MAX_KEY_LEN = 255
         let MAX_VAL_LEN = 1024
         let key_iterator_filter_flags : Int32  = GRIB_KEYS_ITERATOR_ALL_KEYS
@@ -122,7 +125,7 @@ class GribParser {
         return time
     }
 
-    private func getParameterList() throws -> [GribParameterData] {
+    private func getParameterList(filePointer: FilePointer?) throws -> [GribParameterData] {
         //        let MAX_KEY_LEN = 255
         let MAX_VAL_LEN = 1024
         let key_iterator_filter_flags : Int32  = GRIB_KEYS_ITERATOR_ALL_KEYS
@@ -179,7 +182,7 @@ class GribParser {
         if h != nil {codes_handle_delete(h)}
         return result
     }
-    private func getGeography() throws -> GribGeographyData {
+    private func getGeography(filePointer: FilePointer?) throws -> GribGeographyData {
         //        let MAX_KEY_LEN = 255
         let MAX_VAL_LEN = 1024
         let key_iterator_filter_flags : Int32  = GRIB_KEYS_ITERATOR_ALL_KEYS
@@ -273,7 +276,7 @@ class GribParser {
         codes_handle_delete(h)
         return geography
     }
-    private func getGridDimensions() throws -> GribGridDimensions {
+    private func getGridDimensions(filePointer: FilePointer?) throws -> GribGridDimensions {
         var dimensions = GribGridDimensions()
         let p : OpaquePointer? = nil
         var err : Int32 = 0
@@ -295,6 +298,11 @@ class GribParser {
     func getGridData() throws -> (coordinates: [GribCoordinate], rotationMatrices: [GribRotationMatrix]) {
         let p : OpaquePointer? = nil
         var err : Int32 = 0
+        var filePointer : FilePointer?
+        guard let file = fileName else {
+            throw GribErrors.CouldNotOpenFile
+        }
+        filePointer = fopen(file, "r")
         guard let fp = filePointer, fp != nil else {
             throw GribErrors.CouldNotGetFileHandle
         }
@@ -327,6 +335,7 @@ class GribParser {
         }
         codes_grib_iterator_delete(iterator)
         codes_handle_delete(h)
+        fclose(fp)
         return (coordinates, rotationMatrices)
     }
     func getValues(for parameter: GribParameterData) -> [Double]? {
@@ -335,6 +344,11 @@ class GribParser {
         var err: Int32  = 0
         var value = [CChar]()
         value.reserveCapacity(MAX_VAL_LEN)
+        var filePointer : FilePointer?
+        guard let file = fileName else {
+            return nil
+        }
+        filePointer = fopen(file, "r")
         guard let f = filePointer, f != nil else {return nil}
         rewind(f)
         let p : OpaquePointer? = nil
@@ -351,12 +365,14 @@ class GribParser {
                     var data = [Double](repeating: 0.0, count: size)
                     codes_get_double_array(h, "values", &data, &size)
                     codes_handle_delete(h)
+                    fclose(f)
                     return data
                 }
             }
             codes_handle_delete(h)
             h = codes_handle_new_from_file(p,f,PRODUCT_GRIB,&err)
         }
+        fclose(f)
         return nil
     }
     func getValues(for parameters: [GribParameterData]) -> GribValueData? {
@@ -364,6 +380,11 @@ class GribParser {
         var err: Int32  = 0
         var value = [CChar]()
         value.reserveCapacity(MAX_VAL_LEN)
+        var filePointer : FilePointer?
+        guard let file = fileName else {
+            return nil
+        }
+        filePointer = fopen(file, "r")
         guard let f = filePointer, f != nil else {return nil}
         rewind(f)
         let p : OpaquePointer? = nil
@@ -390,6 +411,7 @@ class GribParser {
             codes_handle_delete(h)
             h = codes_handle_new_from_file(p,f,PRODUCT_GRIB,&err)
         }
+        fclose(f)
         return result
     }
     
@@ -404,6 +426,11 @@ class GribParser {
         var err: Int32  = 0
         var value = [CChar]()
         value.reserveCapacity(MAX_VAL_LEN)
+        var filePointer : FilePointer?
+        guard let file = fileName else {
+            return nil
+        }
+        filePointer = fopen(file, "r")
         guard let f = filePointer, f != nil else {return nil}
         rewind(f)
         let p : OpaquePointer? = nil
@@ -434,6 +461,7 @@ class GribParser {
             codes_handle_delete(h)
             h = codes_handle_new_from_file(p,f,PRODUCT_GRIB,&err)
         }
+        fclose(f)
         return result
     }
 //    //    MARK: - This does not work on rotated grids :-(
