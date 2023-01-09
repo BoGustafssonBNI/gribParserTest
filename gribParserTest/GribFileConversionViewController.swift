@@ -159,7 +159,7 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
             op.canChooseFiles = true
             op.allowsMultipleSelection = false
             op.canCreateDirectories = false
-            op.allowedFileTypes = ["txt","csv"]
+//            op.allowedFileTypes = ["txt","csv"]
             op.begin { (result) -> Void in
                 if result == NSApplication.ModalResponse.OK, let url = op.url {
                     DispatchQueue.main.async {
