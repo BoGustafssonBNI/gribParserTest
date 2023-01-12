@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		13173390296EA6F3009444B1 /* GribFileArray+Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1317338F296EA6F3009444B1 /* GribFileArray+Stats.swift */; };
 		1321773121E1FE2100881586 /* PointExports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1321773021E1FE2000881586 /* PointExports.swift */; };
 		1321773321E2057500881586 /* GribPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1321773221E2057500881586 /* GribPoint.swift */; };
 		1321773521E4BFDF00881586 /* Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1321773421E4BFDF00881586 /* Point.swift */; };
@@ -53,6 +54,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1317338F296EA6F3009444B1 /* GribFileArray+Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GribFileArray+Stats.swift"; sourceTree = "<group>"; };
 		1321773021E1FE2000881586 /* PointExports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointExports.swift; sourceTree = "<group>"; };
 		1321773221E2057500881586 /* GribPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribPoint.swift; sourceTree = "<group>"; };
 		1321773421E4BFDF00881586 /* Point.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Point.swift; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 		138011FD21DD482A00FA65AE /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				1317338F296EA6F3009444B1 /* GribFileArray+Stats.swift */,
 				138011FB21DD467B00FA65AE /* GribFile.swift */,
 			);
 			name = Model;
@@ -337,6 +340,7 @@
 				13AF33D021E881710023D1AB /* SubGridSpecificationViewController.swift in Sources */,
 				1380120321DDF8C400FA65AE /* GribFileInfoTableCellView.swift in Sources */,
 				138011ED21DBD13400FA65AE /* GribGridData.swift in Sources */,
+				13173390296EA6F3009444B1 /* GribFileArray+Stats.swift in Sources */,
 				1380120921DF71FF00FA65AE /* MyDateConverter.swift in Sources */,
 				1380120B21DFF72A00FA65AE /* GribTimeData.swift in Sources */,
 				1321773521E4BFDF00881586 /* Point.swift in Sources */,

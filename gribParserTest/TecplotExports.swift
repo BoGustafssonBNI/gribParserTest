@@ -283,6 +283,7 @@ class TecplotExports {
                     }
                 }
             }
+            
             let ndata = iMax * jMax
             for param in parameters {
                 if let uP = uParameter, uP == param {

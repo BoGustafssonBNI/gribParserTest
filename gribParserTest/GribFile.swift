@@ -8,6 +8,10 @@
 
 import Foundation
 
+enum GribFileErrors: Error {
+    case GribFileAverageError
+}
+
 struct GribFile: Equatable {
     var fileURL : URL
     var parser : GribParser
