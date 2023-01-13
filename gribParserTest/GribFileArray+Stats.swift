@@ -41,18 +41,18 @@ extension Array where Element == GribFile {
             iMax = subGrid.iMax
             jMax = subGrid.jMax
             indices = subGrid.indices
-       } else {
+        } else {
             let subGrid = firstFile.parser.getSubGrid(iStep: iSkip, jStep: jSkip)
             iMax = subGrid.iMax
             jMax = subGrid.jMax
             indices = subGrid.indices
         }
-
+        
         let dimensions = firstFile.parser.gridDimensions
-
-
-
-
+        
+        
+        
+        
         var sumData = GribValueData()
         for file in self {
             guard dimensions == file.parser.gridDimensions, let fileDate = file.parser.dataTime.date, let data = file.parser.getValues(for: parameters) else {
@@ -73,64 +73,42 @@ extension Array where Element == GribFile {
             }
         }
         
-            if firstFile.parser.geographyData.rotated {
-                if let uP = uParameter, let vP = vParameter, let uRot = sumData[uP], let vRot = sumData[vP] {
-                    var u = [Double]()
-                    var v = [Double]()
-                    for i in 0..<uRot.count {
-                        let matrix = gridData.rotationMatrices[i]
-                        let uv = matrix.rotateWind(uRot: uRot[i], vRot: vRot[i])
-                        u.append(uv.u)
-                        v.append(uv.v)
-                    }
-                    sumData[uP] = u
-                    sumData[vP] = v
+        if firstFile.parser.geographyData.rotated {
+            if let uP = uParameter, let vP = vParameter, let uRot = sumData[uP], let vRot = sumData[vP] {
+                var u = [Double]()
+                var v = [Double]()
+                for i in 0..<uRot.count {
+                    let matrix = gridData.rotationMatrices[i]
+                    let uv = matrix.rotateWind(uRot: uRot[i], vRot: vRot[i])
+                    u.append(uv.u)
+                    v.append(uv.v)
                 }
+                sumData[uP] = u
+                sumData[vP] = v
             }
-        for i in indices {
-            let lon = gridData.coordinates[i].lon
         }
-            let ndata = iMax * jMax
-            for param in parameters {
-                if let uP = uParameter, uP == param {
-                    do {
-                        try exportArray(array: u)
-                    } catch {
-                        throw error
-                    }
-                } else if let vP = vParameter, vP == param {
-                    do {
-                        try exportArray(array: v)
-                    } catch {
-                        throw error
-                    }
-                } else {
-                    if let y = data[param] {
-                        var yPoints = [Float]()
-                        for i in indices {
-                            yPoints.append(Float(y[i]))
-                        }
-                        do {
-                            try exportArray(array: yPoints)
-                        } catch {
-                            throw error
-                        }
-                        
-                    } else {
-                        let y = [Float].init(repeating: Float(missingValue), count: ndata)
-                        do {
-                            try exportArray(array: y)
-                        } catch {
-                            throw error
-                        }
+        var outString = ""
+        var index = 0
+        for j in 0..<jMax {
+            for i in 0..<iMax {
+                let lon = gridData.coordinates[indices[index]].lon
+                let lat = gridData.coordinates[indices[index]].lat
+                var variableValues = [Double]()
+                for param in parameters {
+                    if let uP = uParameter, uP == param, let value = sumData[uP]?[indices[index]] {
+                        variableValues.append(value)
+                    } else if let vP = vParameter, vP == param, let value = sumData[vP]?[indices[index]] {
+                        variableValues.append(value)
+                    } else if let value = sumData[param]?[indices[index]] {
+                            variableValues.append(value)
                     }
                 }
+                outString += "\(lon), \(lat)"
+                for value in variableValues {
+                    outString += ", \(value)"
+                }
+                outString += "\n"
             }
-            delegate?.numberWritten = zoneNumber
-            zoneNumber += 1
         }
-        closeTecFile()
-        delegate?.done = true
-
     }
 }
