@@ -11,6 +11,7 @@ import Cocoa
 enum ConversionTypes: String {
     case points = "Point time-series"
     case tecplotFields = "Tecplot fields"
+    case averageFields = "Average fields"
 }
 
 class GribFileConversionViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, ParameterSelection, SubGridSpecificationDelegate {
@@ -82,6 +83,7 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         conversionTypeSelector.removeAllItems()
         conversionTypeSelector.addItem(withTitle: ConversionTypes.points.rawValue)
         conversionTypeSelector.addItem(withTitle: ConversionTypes.tecplotFields.rawValue)
+        conversionTypeSelector.addItem(withTitle: ConversionTypes.averageFields.rawValue)
         conversionTypeSelector.selectItem(withTitle: conversionType.rawValue)
         setSpecificationButtonTitle()
         performConversionButton.isEnabled = false
@@ -97,7 +99,7 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         case .points:
             specificationButton.title = "Set file for point(s)"
             specificationButton.toolTip = "Choose a file that specifices which points to extract. The file should include 3 columns: id, lon and lat. All points with same id will be averaged. File should be ASCII, any separator should work (e.g., space, comma, tab etc.)"
-        case .tecplotFields:
+        case .tecplotFields, .averageFields:
             specificationButton.title = subGridInfoString()
             specificationButton.toolTip = "Specifies/shows sub-grid to extract"
         }
@@ -123,6 +125,8 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
                 conversionType = .points
             case ConversionTypes.tecplotFields.rawValue:
                 conversionType = .tecplotFields
+            case ConversionTypes.averageFields.rawValue:
+                conversionType = .averageFields
             default:
                 break
             }
@@ -167,7 +171,7 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
                     }
                 }
             }
-        case .tecplotFields:
+        case .tecplotFields, .averageFields:
             performSegue(withIdentifier: setSubGridSpecificationSegue, sender: self)
         }
     }

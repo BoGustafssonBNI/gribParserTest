@@ -94,6 +94,12 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
                         print("Tec write error \(error)")
                     }
                 }
+            case .averageFields:
+                var seasonalGribs = [[GribFile]]()
+                for month in 1...12 {
+                    let subGF = gb.filter({Calendar.current.component(.month, from: $0.parser.dataTime.date!) == month})
+                    seasonalGribs.append(subGF)
+                }
             case .points:
                 pointExporter.delegate = self
                 cancelButton?.isHidden = false

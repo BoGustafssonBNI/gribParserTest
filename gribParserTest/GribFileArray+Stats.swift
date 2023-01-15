@@ -108,6 +108,7 @@ extension Array where Element == GribFile {
                     outString += ", \(value)"
                 }
                 outString += "\n"
+                index += 1
             }
         }
     }
