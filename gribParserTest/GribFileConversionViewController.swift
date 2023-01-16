@@ -11,7 +11,6 @@ import Cocoa
 enum ConversionTypes: String {
     case points = "Point time-series"
     case tecplotFields = "Tecplot fields"
-    case averageFields = "Average fields"
 }
 
 class GribFileConversionViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, ParameterSelection, SubGridSpecificationDelegate {
@@ -83,7 +82,9 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         conversionTypeSelector.removeAllItems()
         conversionTypeSelector.addItem(withTitle: ConversionTypes.points.rawValue)
         conversionTypeSelector.addItem(withTitle: ConversionTypes.tecplotFields.rawValue)
-        conversionTypeSelector.addItem(withTitle: ConversionTypes.averageFields.rawValue)
+        for item in GribFileAverageTypes.allCases {
+            conversionTypeSelector.addItem(withTitle: item.rawValue)
+        }
         conversionTypeSelector.selectItem(withTitle: conversionType.rawValue)
         setSpecificationButtonTitle()
         performConversionButton.isEnabled = false
@@ -99,7 +100,7 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         case .points:
             specificationButton.title = "Set file for point(s)"
             specificationButton.toolTip = "Choose a file that specifices which points to extract. The file should include 3 columns: id, lon and lat. All points with same id will be averaged. File should be ASCII, any separator should work (e.g., space, comma, tab etc.)"
-        case .tecplotFields, .averageFields:
+        case .tecplotFields:
             specificationButton.title = subGridInfoString()
             specificationButton.toolTip = "Specifies/shows sub-grid to extract"
         }
@@ -117,16 +118,29 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
     
     
     private var conversionType = ConversionTypes.points
+    private var averagingType : GribFileAverageTypes? = nil
 
     @IBAction func changedConversionType(_ sender: NSPopUpButton) {
         if let item = conversionTypeSelector.titleOfSelectedItem {
             switch item {
             case ConversionTypes.points.rawValue:
                 conversionType = .points
+                averagingType = nil
             case ConversionTypes.tecplotFields.rawValue:
                 conversionType = .tecplotFields
-            case ConversionTypes.averageFields.rawValue:
-                conversionType = .averageFields
+                averagingType = nil
+            case GribFileAverageTypes.Daily.rawValue:
+                conversionType = .tecplotFields
+                averagingType = .Daily
+            case GribFileAverageTypes.Monthly.rawValue:
+                conversionType = .tecplotFields
+                averagingType = .Monthly
+            case GribFileAverageTypes.Average.rawValue:
+                conversionType = .tecplotFields
+                averagingType = .Average
+            case GribFileAverageTypes.Seasonal.rawValue:
+                conversionType = .tecplotFields
+                averagingType = .Seasonal
             default:
                 break
             }
@@ -171,7 +185,7 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
                     }
                 }
             }
-        case .tecplotFields, .averageFields:
+        case .tecplotFields:
             performSegue(withIdentifier: setSubGridSpecificationSegue, sender: self)
         }
     }
@@ -393,6 +407,7 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
             vc.vParameter = vParam
             vc.outputURL = outURL
             vc.conversionType = conversionType
+            vc.averageType = averagingType
             vc.pointsToExport = pointsForExtraction
             vc.swCornerPoint = swCornerPoint
             vc.neCornerPoint = neCornerPoint

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21225"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -169,19 +169,19 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="76" horizontalPageScroll="10" verticalLineScroll="76" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SHu-OY-oQ5">
-                                <rect key="frame" x="443" y="20" width="830" height="531"/>
+                                <rect key="frame" x="458" y="20" width="859" height="481"/>
                                 <clipView key="contentView" id="wK2-aZ-w33">
-                                    <rect key="frame" x="1" y="1" width="828" height="529"/>
+                                    <rect key="frame" x="1" y="1" width="857" height="479"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView toolTip="Grib files to convert" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="74" rowSizeStyle="automatic" headerView="fgw-Ps-9nK" viewBased="YES" id="Yci-Ra-5L9">
-                                            <rect key="frame" x="0.0" y="0.0" width="828" height="504"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="857" height="454"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
-                                                <tableColumn identifier="Grib files" width="816" minWidth="40" maxWidth="1000" id="ofL-7Y-Md7">
+                                                <tableColumn identifier="Grib files" width="787" minWidth="40" maxWidth="1000" id="ofL-7Y-Md7">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Grib files">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -194,11 +194,11 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView identifier="GribFileInfoCell" toolTip="Select to show parameters, Swipe to delete" id="fxf-VP-94U" customClass="GribFileInfoTableCellView" customModule="gribParserTest" customModuleProvider="target">
-                                                            <rect key="frame" x="1" y="1" width="825" height="74"/>
+                                                            <rect key="frame" x="1" y="1" width="796" height="74"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PSN-y0-EaW">
-                                                                    <rect key="frame" x="20" y="5" width="785" height="64"/>
+                                                                    <rect key="frame" x="20" y="5" width="756" height="64"/>
                                                                     <subviews>
                                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lgu-iZ-tSB">
                                                                             <rect key="frame" x="-2" y="48" width="37" height="16"/>
@@ -267,24 +267,24 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <tableHeaderView key="headerView" wantsLayer="YES" id="fgw-Ps-9nK">
-                                    <rect key="frame" x="0.0" y="0.0" width="828" height="25"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="857" height="25"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="26" horizontalPageScroll="10" verticalLineScroll="26" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wbX-qw-4ap">
-                                <rect key="frame" x="20" y="20" width="415" height="395"/>
+                                <rect key="frame" x="20" y="20" width="430" height="349"/>
                                 <clipView key="contentView" id="EAd-Ow-CQC">
-                                    <rect key="frame" x="1" y="1" width="413" height="393"/>
+                                    <rect key="frame" x="1" y="1" width="428" height="347"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="3hS-KO-VVQ" viewBased="YES" id="Q1a-JA-0La">
-                                            <rect key="frame" x="0.0" y="0.0" width="413" height="368"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="428" height="322"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
-                                                <tableColumn identifier="Parameters" width="401" minWidth="40" maxWidth="1000" id="hn3-Y8-tY9">
+                                                <tableColumn identifier="Parameters" width="372" minWidth="40" maxWidth="1000" id="hn3-Y8-tY9">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Parameters">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -297,7 +297,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView identifier="ParameterCell" misplaced="YES" id="31a-Iw-Dn0" customClass="ParameterTableCellView" customModule="gribParserTest" customModuleProvider="target">
-                                                            <rect key="frame" x="1" y="1" width="410" height="24"/>
+                                                            <rect key="frame" x="1" y="1" width="381" height="24"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <button toolTip="Select for output" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Y2V-R7-Fay">
@@ -311,7 +311,7 @@
                                                                     </connections>
                                                                 </button>
                                                                 <segmentedControl toolTip="Type of parameter for rotation of vectors (s = scalar, u = u-component of wind, v = v-component of wind)" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="p8H-ty-U7i">
-                                                                    <rect key="frame" x="332" y="2" width="60" height="21"/>
+                                                                    <rect key="frame" x="303" y="2" width="60" height="21"/>
                                                                     <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="3S9-4J-PvN">
                                                                         <font key="font" usesAppearanceFont="YES"/>
                                                                         <segments>
@@ -353,12 +353,12 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <tableHeaderView key="headerView" wantsLayer="YES" id="3hS-KO-VVQ">
-                                    <rect key="frame" x="0.0" y="0.0" width="413" height="25"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="428" height="25"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
-                            <button horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tRd-FB-JEV">
-                                <rect key="frame" x="13" y="524" width="429" height="32"/>
+                            <button horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tRd-FB-JEV">
+                                <rect key="frame" x="13" y="524" width="444" height="32"/>
                                 <string key="toolTip">Select grib file source(s), multiple selection of files and directories are possible. NB! when directories are selected it performs sub-directory search</string>
                                 <buttonCell key="cell" type="push" title="FileSearchDirectory" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="N2k-0M-e54">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -368,8 +368,8 @@
                                     <action selector="searchForFileURLs:" target="XfG-lQ-9wD" id="tFx-D4-cVY"/>
                                 </connections>
                             </button>
-                            <button toolTip="Specifies output directory" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="fPs-A9-cV6">
-                                <rect key="frame" x="13" y="492" width="429" height="32"/>
+                            <button toolTip="Specifies output directory" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fPs-A9-cV6">
+                                <rect key="frame" x="13" y="492" width="444" height="32"/>
                                 <buttonCell key="cell" type="push" title="OutputDirectory" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingHead" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vfs-Ce-Tx2">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -378,7 +378,7 @@
                                     <action selector="setOutputDirectory:" target="XfG-lQ-9wD" id="eO9-fY-Rj2"/>
                                 </connections>
                             </button>
-                            <popUpButton toolTip="Select output file format" horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ka1-0J-DgY">
+                            <popUpButton toolTip="Select output file format" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ka1-0J-DgY">
                                 <rect key="frame" x="17" y="463" width="39" height="25"/>
                                 <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="Dr4-7X-cHs">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -389,8 +389,8 @@
                                     <action selector="changedConversionType:" target="XfG-lQ-9wD" id="1F8-4H-cW2"/>
                                 </connections>
                             </popUpButton>
-                            <button horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Zk2-ji-5uP">
-                                <rect key="frame" x="53" y="460" width="389" height="32"/>
+                            <button horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zk2-ji-5uP">
+                                <rect key="frame" x="53" y="460" width="404" height="32"/>
                                 <buttonCell key="cell" type="push" title="FileForPointSpecification" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingHead" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="VsD-J8-PSX">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -399,7 +399,7 @@
                                     <action selector="setOutputSpecification:" target="XfG-lQ-9wD" id="UzF-lU-3Pl"/>
                                 </connections>
                             </button>
-                            <button toolTip="Perform conversion" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Pwz-eo-MTm">
+                            <button toolTip="Perform conversion" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pwz-eo-MTm">
                                 <rect key="frame" x="13" y="428" width="82" height="32"/>
                                 <buttonCell key="cell" type="push" title="Convert" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="baz-Ud-jLn">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -409,7 +409,7 @@
                                     <action selector="convert:" target="XfG-lQ-9wD" id="09l-CQ-QZQ"/>
                                 </connections>
                             </button>
-                            <button toolTip="Select all parameters" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ldB-4N-7vK">
+                            <button toolTip="Select all parameters" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ldB-4N-7vK">
                                 <rect key="frame" x="93" y="428" width="90" height="32"/>
                                 <buttonCell key="cell" type="push" title="Select all" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4Qu-Ar-d2i">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -419,8 +419,8 @@
                                     <action selector="selectAllParameters:" target="XfG-lQ-9wD" id="ksc-t0-x8K"/>
                                 </connections>
                             </button>
-                            <button toolTip="Unselect all parameters" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iDB-Ik-w7R">
-                                <rect key="frame" x="181" y="428" width="105" height="32"/>
+                            <button toolTip="Unselect all parameters" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iDB-Ik-w7R">
+                                <rect key="frame" x="181" y="428" width="106" height="32"/>
                                 <buttonCell key="cell" type="push" title="Unselect all" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Lpr-hp-HWg">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -429,8 +429,8 @@
                                     <action selector="selectAllParameters:" target="XfG-lQ-9wD" id="V8r-i5-wZm"/>
                                 </connections>
                             </button>
-                            <button toolTip="Show all parameters in the grib files" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="T5j-VB-B1b">
-                                <rect key="frame" x="284" y="428" width="85" height="32"/>
+                            <button toolTip="Show all parameters in the grib files" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T5j-VB-B1b">
+                                <rect key="frame" x="285" y="428" width="86" height="32"/>
                                 <buttonCell key="cell" type="push" title="Show all" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="YSn-3a-h08">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -440,7 +440,7 @@
                                 </connections>
                             </button>
                             <progressIndicator hidden="YES" wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="3e0-5m-C0j">
-                                <rect key="frame" x="631" y="270" width="32" height="32"/>
+                                <rect key="frame" x="653" y="245" width="32" height="32"/>
                             </progressIndicator>
                         </subviews>
                         <constraints>
@@ -495,7 +495,7 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="278.5" y="925.5"/>
+            <point key="canvasLocation" x="117" y="929"/>
         </scene>
         <!--Exporter View Controller-->
         <scene sceneID="fsb-Bj-BfY">
@@ -677,7 +677,7 @@ Gw
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JJk-xP-m6J">
-                                <rect key="frame" x="13" y="13" width="69" height="32"/>
+                                <rect key="frame" x="13" y="13" width="70" height="32"/>
                                 <buttonCell key="cell" type="push" title="Reset" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JC6-dl-o6S">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>

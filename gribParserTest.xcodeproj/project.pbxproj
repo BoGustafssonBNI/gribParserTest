@@ -34,6 +34,7 @@
 		1380120921DF71FF00FA65AE /* MyDateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1380120821DF71FF00FA65AE /* MyDateConverter.swift */; };
 		1380120B21DFF72A00FA65AE /* GribTimeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1380120A21DFF72A00FA65AE /* GribTimeData.swift */; };
 		1380120D21E08B5D00FA65AE /* GribParameterRotationCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1380120C21E08B5C00FA65AE /* GribParameterRotationCases.swift */; };
+		139C8A602975B4B700884BD8 /* UTCCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139C8A5F2975B4B700884BD8 /* UTCCalendar.swift */; };
 		13AF33D021E881710023D1AB /* SubGridSpecificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AF33CF21E881710023D1AB /* SubGridSpecificationViewController.swift */; };
 		13C1401721E5C5DD0017CA81 /* .gitattributes in Resources */ = {isa = PBXBuildFile; fileRef = 13C1401621E5C5DD0017CA81 /* .gitattributes */; };
 		13C2126A21F20AA20075BA0E /* definitions in Resources */ = {isa = PBXBuildFile; fileRef = 13C2126921F20AA10075BA0E /* definitions */; };
@@ -93,6 +94,7 @@
 		1380120821DF71FF00FA65AE /* MyDateConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyDateConverter.swift; sourceTree = "<group>"; };
 		1380120A21DFF72A00FA65AE /* GribTimeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribTimeData.swift; sourceTree = "<group>"; };
 		1380120C21E08B5C00FA65AE /* GribParameterRotationCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribParameterRotationCases.swift; sourceTree = "<group>"; };
+		139C8A5F2975B4B700884BD8 /* UTCCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTCCalendar.swift; sourceTree = "<group>"; };
 		13AF33CF21E881710023D1AB /* SubGridSpecificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubGridSpecificationViewController.swift; sourceTree = "<group>"; };
 		13BD2BC621EE18BA0052091A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		13C1401621E5C5DD0017CA81 /* .gitattributes */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitattributes; sourceTree = "<group>"; };
@@ -213,6 +215,7 @@
 			isa = PBXGroup;
 			children = (
 				1380120821DF71FF00FA65AE /* MyDateConverter.swift */,
+				139C8A5F2975B4B700884BD8 /* UTCCalendar.swift */,
 				134D348021D67EBC00373B74 /* gribParserTest-Bridging-Header.h */,
 				134D346C21D67DF500373B74 /* AppDelegate.swift */,
 				134D347021D67DF500373B74 /* Assets.xcassets */,
@@ -346,6 +349,7 @@
 				1321773521E4BFDF00881586 /* Point.swift in Sources */,
 				134D346D21D67DF500373B74 /* AppDelegate.swift in Sources */,
 				138011EF21DBD19600FA65AE /* GribGeographyData.swift in Sources */,
+				139C8A602975B4B700884BD8 /* UTCCalendar.swift in Sources */,
 				134D348A21D9294D00373B74 /* GribCoordinate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

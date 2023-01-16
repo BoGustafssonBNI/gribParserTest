@@ -12,6 +12,7 @@ protocol ExportProgressDelegate {
     var progress : Double {get set}
     var numberToWrite : Int {get set}
     var numberWritten : Int {get set}
+    var progressText : String {get set}
     var cancel : Bool {get}
     var done : Bool {get set}
 }
@@ -29,6 +30,7 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
     var iSkip : Int?
     var jSkip : Int?
     var conversionType : ConversionTypes?
+    var averageType : GribFileAverageTypes?
     private let tecFileName = "Tec" + MyDateConverter.shared.string(from: Date()) + ".plt"
     private let tecExporter = TecplotExports()
     private let pointExporter = PointExports()
@@ -41,11 +43,12 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
             
         }
     }
+    var progressText = "written out of"
     var numberToWrite: Int = 0
     var numberWritten: Int = 0 {
         didSet {
             DispatchQueue.main.async {
-                self.progressLabel?.cell?.title = "\(self.numberWritten) written out of \(self.numberToWrite)"
+                self.progressLabel?.cell?.title = "\(self.numberWritten) \(self.progressText) \(self.numberToWrite)"
             }
         }
     }
@@ -77,28 +80,16 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
                 let queue = DispatchQueue.global(qos: .userInitiated)
                 queue.async { [weak weakself = self] in
                     do {
-                        if let iS = weakself?.iSkip, let jS = weakself?.jSkip {
-                            if let swP = weakself?.swCornerPoint, let neP = weakself?.neCornerPoint {
-                                try weakself?.tecExporter.exportGribFiles(gribFiles: gb, for: params, uParameter: weakself?.uParameter, vParameter: weakself?.vParameter, to: file, title: "test", swPoint: swP, nePoint: neP, iSkip: iS, jSkip: jS)
-                            } else {
-                                try weakself?.tecExporter.exportGribFiles(gribFiles: gb, for: params, uParameter: weakself?.uParameter, vParameter: weakself?.vParameter, to: file, title: "test", swPoint: nil, nePoint: nil, iSkip: iS, jSkip: jS)
-                            }
+                        let iS = weakself?.iSkip ?? 1
+                        let jS = weakself?.jSkip ?? 1
+                        if let averageType = weakself?.averageType {
+                            try weakself?.tecExporter.exportGribFiles(gribFiles: gb, of: averageType, for: params, uParameter: weakself?.uParameter, vParameter: weakself?.vParameter, to: file, title: "test", swPoint: weakself?.swCornerPoint, nePoint: weakself?.neCornerPoint, iSkip: iS, jSkip: jS)
                         } else {
-                            if let swP = weakself?.swCornerPoint, let neP = weakself?.neCornerPoint {
-                                try weakself?.tecExporter.exportGribFiles(gribFiles: gb, for: params, uParameter: weakself?.uParameter, vParameter: weakself?.vParameter, to: file, title: "test", swPoint: swP, nePoint: neP, iSkip: 1, jSkip: 1)
-                            } else {
-                                try weakself?.tecExporter.exportGribFiles(gribFiles: gb, for: params, uParameter: weakself?.uParameter, vParameter: weakself?.vParameter, to: file, title: "test")
-                            }
+                            try weakself?.tecExporter.exportGribFiles(gribFiles: gb, for: params, uParameter: weakself?.uParameter, vParameter: weakself?.vParameter, to: file, title: "test", swPoint: weakself?.swCornerPoint, nePoint: weakself?.neCornerPoint, iSkip: iS, jSkip: jS)
                         }
-                    } catch {
+                   } catch {
                         print("Tec write error \(error)")
                     }
-                }
-            case .averageFields:
-                var seasonalGribs = [[GribFile]]()
-                for month in 1...12 {
-                    let subGF = gb.filter({Calendar.current.component(.month, from: $0.parser.dataTime.date!) == month})
-                    seasonalGribs.append(subGF)
                 }
             case .points:
                 pointExporter.delegate = self
