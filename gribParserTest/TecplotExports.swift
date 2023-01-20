@@ -329,33 +329,43 @@ class TecplotExports {
     
     
     
-    func exportGribFiles(gribFiles: [GribFile], of type: GribFileAverageTypes, for parameters: [GribParameterData], uParameter: GribParameterData?, vParameter: GribParameterData?, to url: URL, title: String, swPoint: Point?, nePoint: Point?, iSkip: Int, jSkip: Int) throws {
+    func exportGribFiles(gribFiles: [GribFile], of type: GribFileAverageTypes, for parameters: [GribParameterData], wSpeedParameter: GribParameterData?, uParameter: GribParameterData?, vParameter: GribParameterData?, to url: URL, title: String, swPoint: Point?, nePoint: Point?, iSkip: Int, jSkip: Int) async throws {
         
         let refDate = MyDateConverter.shared.date(from: "189912300000")!
         let gribsToAverage = gribFiles.gribsToAverage(of: type)
         delegate?.progressText = "averaged out of"
         delegate?.numberToWrite = gribsToAverage.count
         var numberComputed = 0
-        var averageData = [(date: Date, gribValueData: GribValueData)]()
-        for gribFileArray in gribsToAverage {
-            if let cancel = delegate?.cancel, cancel {
-                throw TecplotExportErrors.Cancelled
-            }
-            do {
-                delegate?.numberWritten = numberComputed
-                delegate?.progress = Double(numberComputed) / Double(gribsToAverage.count)
-                let average = try gribFileArray.average(for: parameters)
-                averageData.append(average)
-                numberComputed += 1
-            } catch let error {
-                throw error
-            }
+        var averageData = [GribFileAverageResults]()
+        if let wSpeedParameter = wSpeedParameter {
+            print("wSpeedParameter \(wSpeedParameter.name) set in exportGribFiles")
         }
-        /// Common grid is assumed for all fields
-        ///
-        guard let firstFile = gribFiles.first else {
+        
+        guard let averageData = try? await GribFileAverageResults.Average(gribFiles: gribsToAverage, for: parameters, wSpeedParameter: wSpeedParameter, uParameter: uParameter, vParameter: vParameter) else {
             throw TecplotExportErrors.Cancelled
         }
+        
+//        for gribFileArray in gribsToAverage {
+//            if let cancel = delegate?.cancel, cancel {
+//                throw TecplotExportErrors.Cancelled
+//            }
+//            do {
+//                delegate?.numberWritten = numberComputed
+//                delegate?.progress = Double(numberComputed) / Double(gribsToAverage.count)
+//                let average = try gribFileArray.average(for: parameters, using: wSpeedParameter, uParameter: uParameter, vParameter: vParameter)
+//                averageData.append(average)
+//                numberComputed += 1
+//            } catch let error {
+//                throw error
+//            }
+//        }
+
+        /// Common grid is assumed for all fields
+        ///
+        guard let firstFile = gribFiles.first, let keys = averageData.first?.gribValueData.keys  else {
+            throw TecplotExportErrors.Cancelled
+        }
+        let averageParameters = [GribParameterData](keys)
         let geography = firstFile.parser.geographyData
         guard let gridData = try? firstFile.parser.getGridData() else {
             throw TecplotExportErrors.GridDataReadError(firstFile)
@@ -382,14 +392,14 @@ class TecplotExports {
         let ncoord : Int
         if geography.rotated {
             variables = "X Y Lon Lat"
-            nvar = 4 + parameters.count
+            nvar = 4 + averageParameters.count
             ncoord = 4
         } else {
             variables = "Lon Lat"
-            nvar = 2 + parameters.count
+            nvar = 2 + averageParameters.count
             ncoord = 2
        }
-        for p in parameters {
+        for p in averageParameters {
             variables += " " + p.shortName
         }
         let gridReferenceZone = 1
@@ -485,7 +495,7 @@ class TecplotExports {
             }
             
             let ndata = iMax * jMax
-            for param in parameters {
+            for param in averageParameters {
                 if let uP = uParameter, uP == param {
                     do {
                         try exportArray(array: u)

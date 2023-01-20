@@ -25,7 +25,7 @@ class ParameterTableCellView: NSTableCellView {
                     parameterSelectionButton?.state = value ? .on : .off
                 }
                 if let rotationCase = del.rotationCaseForParameter[para] {
-                    rotationCaseSelector.setSelected(true, forSegment: rotationCase.rawValue)
+                    rotationCaseSelector?.setSelected(true, forSegment: rotationCase.rawValue)
                 }
             }
         }
@@ -39,7 +39,7 @@ class ParameterTableCellView: NSTableCellView {
                     delegate?.parameterSelected[para] = false
                 }
                 if let rotationCase = delegate?.rotationCaseForParameter[para] {
-                    rotationCaseSelector.setSelected(true, forSegment: rotationCase.rawValue)
+                    rotationCaseSelector?.setSelected(true, forSegment: rotationCase.rawValue)
                 } else {
                     delegate?.rotationCaseForParameter[para] = selectedCase
                 }
@@ -47,8 +47,31 @@ class ParameterTableCellView: NSTableCellView {
         }
     }
     
-    @IBOutlet weak private var parameterSelectionButton: NSButton?
-    @IBOutlet weak var rotationCaseSelector: NSSegmentedControl!
+    private func initialize() {
+        
+    }
+    @IBOutlet weak private var parameterSelectionButton: NSButton? {
+        didSet {
+            if let para = parameter {
+                if let value = delegate?.parameterSelected[para] {
+                    parameterSelectionButton?.state = value ? .on : .off
+                } else {
+                    delegate?.parameterSelected[para] = parameterSelectionButton!.state == .on
+                }
+            }
+        }
+    }
+    @IBOutlet weak var rotationCaseSelector: NSSegmentedControl? {
+        didSet {
+            if let para = parameter {
+                if let rotationCase = delegate?.rotationCaseForParameter[para] {
+                    rotationCaseSelector?.setSelected(true, forSegment: rotationCase.rawValue)
+                } else {
+                    delegate?.rotationCaseForParameter[para] = selectedCase
+                }
+            }
+        }
+    }
     
     @IBAction private func parameterSelection(_ sender: NSButton) {
         if let state = parameterSelectionButton?.state {
@@ -62,7 +85,7 @@ class ParameterTableCellView: NSTableCellView {
     }
     private var selectedCase : GribParameterRotationCases {
         get {
-            switch rotationCaseSelector.selectedSegment {
+            switch rotationCaseSelector!.selectedSegment {
             case 0:
                 return .none
             case 1:

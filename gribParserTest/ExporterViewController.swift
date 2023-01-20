@@ -23,6 +23,7 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
     var parameters : [GribParameterData]?
     var uParameter : GribParameterData?
     var vParameter : GribParameterData?
+    var wSpeedParameter : GribParameterData?
     var pointsToExport : [Point]?
     var outputURL : URL?
     var swCornerPoint : Point?
@@ -77,20 +78,33 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
                 
                 let file = url.appendingPathComponent(tecFileName)
                 cancelButton?.isHidden = false
-                let queue = DispatchQueue.global(qos: .userInitiated)
-                queue.async { [weak weakself = self] in
-                    do {
-                        let iS = weakself?.iSkip ?? 1
-                        let jS = weakself?.jSkip ?? 1
-                        if let averageType = weakself?.averageType {
-                            try weakself?.tecExporter.exportGribFiles(gribFiles: gb, of: averageType, for: params, uParameter: weakself?.uParameter, vParameter: weakself?.vParameter, to: file, title: "test", swPoint: weakself?.swCornerPoint, nePoint: weakself?.neCornerPoint, iSkip: iS, jSkip: jS)
-                        } else {
-                            try weakself?.tecExporter.exportGribFiles(gribFiles: gb, for: params, uParameter: weakself?.uParameter, vParameter: weakself?.vParameter, to: file, title: "test", swPoint: weakself?.swCornerPoint, nePoint: weakself?.neCornerPoint, iSkip: iS, jSkip: jS)
+                let tecplotTask = Task {
+                         do {
+                            let iS = iSkip ?? 1
+                            let jS = jSkip ?? 1
+                            if let averageType = averageType {
+                                try await tecExporter.exportGribFiles(gribFiles: gb, of: averageType, for: params, wSpeedParameter: wSpeedParameter, uParameter: uParameter, vParameter: vParameter, to: file, title: "test", swPoint: swCornerPoint, nePoint: neCornerPoint, iSkip: iS, jSkip: jS)
+                            } else {
+                                try tecExporter.exportGribFiles(gribFiles: gb, for: params, uParameter: uParameter, vParameter: vParameter, to: file, title: "test", swPoint: swCornerPoint, nePoint: neCornerPoint, iSkip: iS, jSkip: jS)
+                            }
+                        } catch {
+                            print("Tec write error \(error)")
                         }
-                   } catch {
-                        print("Tec write error \(error)")
-                    }
                 }
+//                let queue = DispatchQueue.global(qos: .userInitiated)
+//                queue.async { [weak weakself = self] in
+//                    do {
+//                        let iS = weakself?.iSkip ?? 1
+//                        let jS = weakself?.jSkip ?? 1
+//                        if let averageType = weakself?.averageType {
+//                            try weakself?.tecExporter.exportGribFiles(gribFiles: gb, of: averageType, for: params, wSpeedParameter: weakself?.wSpeedParameter, uParameter: weakself?.uParameter, vParameter: weakself?.vParameter, to: file, title: "test", swPoint: weakself?.swCornerPoint, nePoint: weakself?.neCornerPoint, iSkip: iS, jSkip: jS)
+//                        } else {
+//                            try weakself?.tecExporter.exportGribFiles(gribFiles: gb, for: params, uParameter: weakself?.uParameter, vParameter: weakself?.vParameter, to: file, title: "test", swPoint: weakself?.swCornerPoint, nePoint: weakself?.neCornerPoint, iSkip: iS, jSkip: jS)
+//                        }
+//                   } catch {
+//                        print("Tec write error \(error)")
+//                    }
+//                }
             case .points:
                 pointExporter.delegate = self
                 cancelButton?.isHidden = false

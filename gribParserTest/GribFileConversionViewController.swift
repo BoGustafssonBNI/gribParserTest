@@ -26,6 +26,8 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
     @IBOutlet weak var showAllButton: NSButton!
     
     
+    static let DefaultwSpeedParameter = GribParameterData(centre: "eswi", paramId: 99999032, units: "m/s", name: "wind speed", shortName: "ws")
+    
     var firstDate : Date?
     var lastDate : Date?
     var gribFilesTimeIntervals = [TimeInterval]()
@@ -401,6 +403,10 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
                     }
                     params.append(param)
                 }
+            }
+            if uParam != nil && vParam != nil && !params.contains(GribFileConversionViewController.DefaultwSpeedParameter) {
+                vc.wSpeedParameter = GribFileConversionViewController.DefaultwSpeedParameter
+                print("wSpeedParameter sent to ViewController")
             }
             vc.parameters = params
             vc.uParameter = uParam
