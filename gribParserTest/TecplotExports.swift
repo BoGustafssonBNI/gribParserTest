@@ -194,7 +194,7 @@ class TecplotExports {
             }
             delegate?.progress = Double(zoneNumber) / Double(numberOfExpectedZones)
             let zoneTitle = file.parser.dataTime.dataDate + file.parser.dataTime.dataTime
-            let solutionTime = (file.parser.dataTime.date?.timeIntervalSince(refDate) ?? 0.0) / 86400.0
+            let solutionTime = file.parser.dataTime.date.timeIntervalSince(refDate) / 86400.0
             if first || lastDimension != file.parser.gridDimensions || lastGridData == nil {
                 let nvar : Int
                 if file.parser.geographyData.rotated {
@@ -335,8 +335,6 @@ class TecplotExports {
         let gribsToAverage = gribFiles.gribsToAverage(of: type)
         delegate?.progressText = "averaged out of"
         delegate?.numberToWrite = gribsToAverage.count
-        var numberComputed = 0
-        var averageData = [GribFileAverageResults]()
         if let wSpeedParameter = wSpeedParameter {
             print("wSpeedParameter \(wSpeedParameter.name) set in exportGribFiles")
         }

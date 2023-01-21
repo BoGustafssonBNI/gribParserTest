@@ -25,7 +25,7 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
     @IBOutlet weak var unselectAllButton: NSButton!
     @IBOutlet weak var showAllButton: NSButton!
     
-    
+    static let initEnvironment = GribInitEnvironment()
     static let DefaultwSpeedParameter = GribParameterData(centre: "eswi", paramId: 99999032, units: "m/s", name: "wind speed", shortName: "ws")
     
     var firstDate : Date?
@@ -47,21 +47,21 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
                             tempList.append(param)
                         }
                     }
-                    if let date = file.parser.dataTime.date {
-                        fD = min(date, fD)
-                        lD = max(date, lD)
-                        if let pD = previousDate {
-                            let tDiff = date.timeIntervalSince(pD)
-                            if !gribFilesTimeIntervals.contains(tDiff) {
-                                gribFilesTimeIntervals.append(tDiff)
-                                if gribFilesTimeIntervals.count > 1 {
-                                    print("Previous date \(pD)")
-                                    print("Current data \(date)")
-                                }
+                    let date = file.parser.dataTime.date
+                    fD = min(date, fD)
+                    lD = max(date, lD)
+                    if let pD = previousDate {
+                        let tDiff = date.timeIntervalSince(pD)
+                        if !gribFilesTimeIntervals.contains(tDiff) {
+                            gribFilesTimeIntervals.append(tDiff)
+                            if gribFilesTimeIntervals.count > 1 {
+                                print("Previous date \(pD)")
+                                print("Current data \(date)")
                             }
                         }
-                        previousDate = date
-                     }
+                    }
+                    previousDate = date
+                    
                 }
                 if fD <= lD {
                     firstDate = fD
@@ -261,22 +261,41 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
                 if !newURLs.isEmpty {
                     spinner.isHidden = false
                     spinner.startAnimation(nil)
-                    DispatchQueue.global(qos: .userInitiated).async {[weak weakself = self] in
-                        weakself?.initializeNewGribFiles(urls: newURLs)
+                    _ = Task {
+                        await initializeNewGribFiles(urls: newURLs)
                     }
+                    
                 }
             }
         }
     }
     
-    private func initializeNewGribFiles(urls: [URL]) {
+    private func initializeNewGribFiles(urls: [URL]) async {
         var gribTemp = [GribFile]()
+        print("Initializing GribFiles")
+        let begin = SuspendingClock.Instant.now
+//        await withTaskGroup(of: GribFile?.self){ group in
+//            for i in 0..<urls.count {
+//                group.addTask{
+//                    return GribFile(fileURL: urls[i])
+//                    }
+//            }
+//            for await gribFile in group {
+//                if let gb = gribFile {
+//                    gribTemp.append(gb)
+//                }
+//            }
+//        }
         for url in urls {
-            if let file = GribFile(fileURL: url) {
-                gribTemp.append(file)
+            if let gb = GribFile(fileURL: url) {
+                gribTemp.append(gb)
             }
         }
-        gribTemp.sort(by: {return $0.parser.dataTime.date ?? Date() < $1.parser.dataTime.date ?? Date()})
+        let endInit = SuspendingClock.Instant.now
+        print("Initializinging GribFiles \(endInit - begin)")
+        gribTemp.sort(by: {return $0.parser.dataTime.date < $1.parser.dataTime.date})
+        let endSort = SuspendingClock.Instant.now
+        print("Sorting GribFiles \(endSort - endInit)")
         var gribUnique = [GribFile]()
         var lastFile : GribFile?
         for file in gribTemp {
@@ -289,6 +308,8 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
             }
             lastFile = file
         }
+        let endUnique = SuspendingClock.Instant.now
+        print("Uniquing GribFiles \(endUnique - endSort)")
         if !gribUnique.isEmpty {
             DispatchQueue.main.async {
                 self.gribFiles = gribUnique

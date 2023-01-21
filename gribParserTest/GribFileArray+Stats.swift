@@ -52,7 +52,7 @@ extension Array where Element == GribFile {
             gribsToAverage.append(self)
         case .Seasonal:
             for month in 1...12 {
-                let subGF = self.filter({Calendar.UTCCalendar.component(.month, from: $0.parser.dataTime.date!) == month})
+                let subGF = self.filter({Calendar.UTCCalendar.component(.month, from: $0.parser.dataTime.date) == month})
                 if !subGF.isEmpty {
                     gribsToAverage.append(subGF)
                 }
@@ -60,9 +60,9 @@ extension Array where Element == GribFile {
         case .Monthly:
             if let startDate = self.first?.parser.dataTime.date, let endDate = self.last?.parser.dataTime.date {
                 for year in Calendar.UTCCalendar.component(.year, from: startDate)...Calendar.UTCCalendar.component(.year, from: endDate) {
-                    let subYear = self.filter({Calendar.UTCCalendar.component(.year, from: $0.parser.dataTime.date!) == year})
+                    let subYear = self.filter({Calendar.UTCCalendar.component(.year, from: $0.parser.dataTime.date) == year})
                     for month in 1...12 {
-                        let subGF = subYear.filter({Calendar.UTCCalendar.component(.month, from: $0.parser.dataTime.date!) == month})
+                        let subGF = subYear.filter({Calendar.UTCCalendar.component(.month, from: $0.parser.dataTime.date) == month})
                         if !subGF.isEmpty {
                             gribsToAverage.append(subGF)
                         }
@@ -72,12 +72,12 @@ extension Array where Element == GribFile {
         case .Daily:
             if let startDate = self.first?.parser.dataTime.date, let endDate = self.last?.parser.dataTime.date {
                 for year in Calendar.UTCCalendar.component(.year, from: startDate)...Calendar.UTCCalendar.component(.year, from: endDate) {
-                    let subYear = self.filter({Calendar.UTCCalendar.component(.year, from: $0.parser.dataTime.date!) == year})
+                    let subYear = self.filter({Calendar.UTCCalendar.component(.year, from: $0.parser.dataTime.date) == year})
                     for month in 1...12 {
-                        let subMonth = subYear.filter({Calendar.UTCCalendar.component(.month, from: $0.parser.dataTime.date!) == month})
+                        let subMonth = subYear.filter({Calendar.UTCCalendar.component(.month, from: $0.parser.dataTime.date) == month})
                         if !subMonth.isEmpty, let date = Calendar.UTCCalendar.date(from: DateComponents(year: year, month: month)), let dayRange = Calendar.UTCCalendar.range(of: .day, in: .month, for: date) {
                             for day in dayRange {
-                                let subDay = subMonth.filter({Calendar.UTCCalendar.component(.day, from: $0.parser.dataTime.date!) == day})
+                                let subDay = subMonth.filter({Calendar.UTCCalendar.component(.day, from: $0.parser.dataTime.date) == day})
                                 if !subDay.isEmpty {
                                     gribsToAverage.append(subDay)
                                 }
@@ -91,9 +91,10 @@ extension Array where Element == GribFile {
     }
 
     func average(for parameters: [GribParameterData], using wSpeedParameter: GribParameterData? = nil, uParameter: GribParameterData? = nil, vParameter: GribParameterData? = nil) async throws -> GribFileAverageResults {
-        guard let firstFile = self.first, let firstDate = firstFile.parser.dataTime.date else {
+        guard let firstFile = self.first else {
             throw GribFileErrors.GribFileAverageError
         }
+        let firstDate = firstFile.parser.dataTime.date
         let dimensions = firstFile.parser.gridDimensions
         if let wSpeedParameter = wSpeedParameter {
             print("wSpeedParameter \(wSpeedParameter.name) set in avergage")
@@ -102,9 +103,10 @@ extension Array where Element == GribFile {
         var nData = [GribParameterData: Int]()
         var sumTime = 0.0
         for file in self {
-            guard dimensions == file.parser.gridDimensions, let fileDate = file.parser.dataTime.date, let data = file.parser.getValues(for: parameters) else {
+            guard dimensions == file.parser.gridDimensions, let data = file.parser.getValues(for: parameters) else {
                 throw GribFileErrors.GribFileAverageError
             }
+            let fileDate = file.parser.dataTime.date
             sumTime += fileDate.timeIntervalSince(firstDate) / Double(self.count)
             if let windSpeedParameter = wSpeedParameter, let uParameter = uParameter, let vParameter = vParameter, let u = data[uParameter], let v = data[vParameter] {
                 var speed = [Double]()

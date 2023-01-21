@@ -7,6 +7,8 @@
 //
 
 import Foundation
+
+
 enum GribNameSpaces : String {
     case ls = "ls"
     case parameter = "parameter"
@@ -52,6 +54,7 @@ enum GribErrors: Error {
     case CouldNotOpenFile
     case CouldNotGetFileHandle
     case CouldNotCreateKeysIterator
+    case CouldNotParseDate
 }
 
 class GribParser {
@@ -61,9 +64,7 @@ class GribParser {
     var dataTime = GribTimeData()
     private var fileName : String?
     required init(file: String) throws {
-        if let path = Bundle.main.resourcePath {
-        setenv("ECCODES_DEFINITION_PATH", path + "/definitions",1)
-        }
+        let _ = GribInitEnvironment()
         fileName = file
         var filePointer : FilePointer?
         filePointer = fopen(file, "r")
@@ -122,6 +123,11 @@ class GribParser {
         }
         codes_keys_iterator_delete(kiter)
         codes_handle_delete(h)
+        if !time.dataDate.isEmpty && !time.dataTime.isEmpty, let date = MyDateConverter.shared.date(from: time.dataDate + time.dataTime){
+            time.date = date
+        } else {
+            throw GribErrors.CouldNotParseDate
+        }
         return time
     }
 
