@@ -13,13 +13,16 @@ enum PointExportErrors: Error {
     case DataWriteError
 }
 
-class PointExports {
+struct PointExports {
     let missingValue = -9999.0
     let delimiter = ","
     let encoding = String.Encoding.utf8
     var delegate : ExportProgressDelegate?
+    init(delegate: ExportProgressDelegate? = nil) {
+        self.delegate = delegate
+    }
     
-    func exportPointFiles(gribFiles: [GribFile], for parameters: [GribParameterData], uParameter: GribParameterData?, vParameter: GribParameterData?, at points: [Point], to url: URL) throws {
+    mutating func exportPointFiles(gribFiles: [GribFile], for parameters: [GribParameterData], uParameter: GribParameterData?, vParameter: GribParameterData?, at points: [Point], to url: URL) throws {
         let refDate = MyDateConverter.shared.date(from: "189912300000")!
         var variables = "Time"
         for p in parameters {

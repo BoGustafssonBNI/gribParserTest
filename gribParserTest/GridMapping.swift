@@ -14,7 +14,7 @@
 
 import Foundation
 
-class GridMapping {
+struct GridMapping {
     private var iPoints = [[Int]]()
     private var jPoints = [[Int]]()
     private var weights = [[Double]]()

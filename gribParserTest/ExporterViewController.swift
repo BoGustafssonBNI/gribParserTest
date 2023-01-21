@@ -33,8 +33,6 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
     var conversionType : ConversionTypes?
     var averageType : GribFileAverageTypes?
     private let tecFileName = "Tec" + MyDateConverter.shared.string(from: Date()) + ".plt"
-    private let tecExporter = TecplotExports()
-    private let pointExporter = PointExports()
     
     var progress: Double = 0.0 {
         didSet {
@@ -74,7 +72,7 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
         if let ct = conversionType, let gb = gribFiles, let params = parameters, let url = outputURL {
             switch ct {
             case .tecplotFields:
-                tecExporter.delegate = self
+                var tecExporter = TecplotExports(delegate: self)
                 
                 let file = url.appendingPathComponent(tecFileName)
                 cancelButton?.isHidden = false
@@ -106,13 +104,13 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
 //                    }
 //                }
             case .points:
-                pointExporter.delegate = self
+                var pointExporter = PointExports(delegate: self)
                 cancelButton?.isHidden = false
                 if let points = pointsToExport {
                     let queue = DispatchQueue.global(qos: .userInitiated)
                     queue.async { [weak weakself = self] in
                         do {
-                            try weakself?.pointExporter.exportPointFiles(gribFiles: gb, for: params, uParameter: weakself?.uParameter, vParameter: weakself?.vParameter, at: points, to: url)
+                            try pointExporter.exportPointFiles(gribFiles: gb, for: params, uParameter: weakself?.uParameter, vParameter: weakself?.vParameter, at: points, to: url)
                         } catch {
                             print("Point write error \(error)")
                         }

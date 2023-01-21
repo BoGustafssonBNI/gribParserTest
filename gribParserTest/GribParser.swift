@@ -57,13 +57,13 @@ enum GribErrors: Error {
     case CouldNotParseDate
 }
 
-class GribParser {
+struct GribParser {
     var parameterList = [GribParameterData]()
     var geographyData = GribGeographyData()
     var gridDimensions = GribGridDimensions()
     var dataTime = GribTimeData()
     private var fileName : String?
-    required init(file: String) throws {
+    init(file: String) throws {
         let _ = GribInitEnvironment()
         fileName = file
         var filePointer : FilePointer?

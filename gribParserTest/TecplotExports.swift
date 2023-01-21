@@ -15,155 +15,14 @@ enum TecplotExportErrors: Error {
     case DataWriteError
     case Cancelled
 }
-class TecplotExports {
+struct TecplotExports {
     let missingValue = -9999.9
     var delegate : ExportProgressDelegate?
-    
-//    func exportGribFiles(gribFiles: [GribFile], for parameters: [GribParameterData], uParameter: GribParameterData?, vParameter: GribParameterData?, to url: URL, title: String) throws {
-//        let firstFile = gribFiles.first!
-//        let refDate = MyDateConverter.shared.date(from: "189912300000")!
-//        var variables = ""
-//        if firstFile.parser.geographyData.rotated {
-//            variables = "X Y Lon Lat"
-//        } else {
-//            variables = "Lon Lat"
-//        }
-//        for p in parameters {
-//            variables += " " + p.shortName
-//        }
-//        let fileName = url.path
-//        openTecFile(title: title, fileName: fileName, variables: variables)
-//        var first = true
-//        var lastDimension = GribGridDimensions()
-//        var gridReferenceZone = 1
-//        var lastGridData : GribGridData?
-//        let numberOfExpectedZones = gribFiles.count
-//        delegate?.numberToWrite = numberOfExpectedZones
-//        var zoneNumber = 1
-//        for file in gribFiles {
-//            if let cancel = delegate?.cancel, cancel {
-//                closeTecFile()
-//                throw TecplotExportErrors.Cancelled
-//            }
-//            delegate?.progress = Double(zoneNumber) / Double(numberOfExpectedZones)
-//            let zoneTitle = file.parser.dataTime.dataDate + file.parser.dataTime.dataTime
-//            let solutionTime = (file.parser.dataTime.date?.timeIntervalSince(refDate) ?? 0.0) / 86400.0
-//            if first || lastDimension != file.parser.gridDimensions || lastGridData == nil {
-//                let nvar : Int
-//                if file.parser.geographyData.rotated {
-//                    nvar = 4 + parameters.count
-//                } else {
-//                    nvar = 2 + parameters.count
-//                }
-//                do {
-//                    try header(zoneTitle: zoneTitle, solutionTime: solutionTime, strandID: 1, imax: file.parser.gridDimensions.nI, jmax: file.parser.gridDimensions.nJ, nvar: nvar)
-//                } catch {
-//                    throw error
-//                }
-//                lastGridData = GribGridData.init(from: file.parser)
-//                lastDimension = file.parser.gridDimensions
-//                gridReferenceZone = zoneNumber
-//                first = false
-//                guard let gridData = lastGridData else {throw TecplotExportErrors.GridDataReadError(file)}
-//                if file.parser.geographyData.rotated {
-//                    var x = [Double]()
-//                    var y = [Double]()
-//                    for c in gridData.coordinates {
-//                        x.append(c.lonRot)
-//                        y.append(c.latRot)
-//                    }
-//                    do {
-//                        try exportArray(array: x)
-//                        try exportArray(array: y)
-//                    } catch {
-//                        throw error
-//                    }
-//                }
-//                var lon = [Double]()
-//                var lat = [Double]()
-//                for c in gridData.coordinates {
-//                    lon.append(c.lon)
-//                    lat.append(c.lat)
-//                }
-//                do {
-//                    try exportArray(array: lon)
-//                    try exportArray(array: lat)
-//                } catch {
-//                    throw error
-//                }
-//            } else {
-//                let nvar : Int
-//                let ncoord : Int
-//                if file.parser.geographyData.rotated {
-//                    nvar = 4 + parameters.count
-//                    ncoord = 4
-//                } else {
-//                    nvar = 2 + parameters.count
-//                    ncoord = 2
-//                }
-//                do {
-//                    try header(zoneTitle: zoneTitle, solutionTime: solutionTime, strandID: 1, imax: file.parser.gridDimensions.nI, jmax: file.parser.gridDimensions.nJ, nvar: nvar, zoneForSharedCoordinates: gridReferenceZone, numberOfCoordinates: ncoord)
-//                } catch {
-//                    throw error
-//                }
-//
-//            }
-//
-//            guard let gridData = lastGridData else {throw TecplotExportErrors.GridDataReadError(file)}
-//            guard let data = file.parser.getValues(for: parameters)  else {throw TecplotExportErrors.DataReadError(file)}
-//            var u = [Double]()
-//            var v = [Double]()
-//            if file.parser.geographyData.rotated {
-//                if let uP = uParameter, let vP = vParameter, let uRot = data[uP], let vRot = data[vP] {
-//                    var index = 0
-//                    for matrix in gridData.rotationMatrices {
-//                        let uv = matrix.rotateWind(uRot: uRot[index], vRot: vRot[index])
-//                        u.append(uv.u)
-//                        v.append(uv.v)
-//                        index += 1
-//                    }
-//                }
-//            }
-//            let ndata = file.parser.gridDimensions.nI * file.parser.gridDimensions.nJ
-//            for param in parameters {
-//                if let uP = uParameter, uP == param {
-//                    do {
-//                        try exportArray(array: u)
-//                    } catch {
-//                        throw error
-//                    }
-//                } else if let vP = vParameter, vP == param {
-//                    do {
-//                        try exportArray(array: v)
-//                    } catch {
-//                        throw error
-//                    }
-//                } else {
-//                    if let y = data[param] {
-//                        do {
-//                            try exportArray(array: y)
-//                        } catch {
-//                            throw error
-//                        }
-//
-//                    } else {
-//                        let y = [Double].init(repeating: missingValue, count: ndata)
-//                        do {
-//                            try exportArray(array: y)
-//                        } catch {
-//                            throw error
-//                        }
-//
-//                    }
-//                }
-//            }
-//            delegate?.numberWritten = zoneNumber
-//            zoneNumber += 1
-//        }
-//        closeTecFile()
-//        delegate?.done = true
-//    }
-    func exportGribFiles(gribFiles: [GribFile], for parameters: [GribParameterData], uParameter: GribParameterData?, vParameter: GribParameterData?, to url: URL, title: String, swPoint: Point?, nePoint: Point?, iSkip: Int, jSkip: Int) throws {
+    init(delegate: ExportProgressDelegate? = nil) {
+        self.delegate = delegate
+    }
+
+    mutating func exportGribFiles(gribFiles: [GribFile], for parameters: [GribParameterData], uParameter: GribParameterData?, vParameter: GribParameterData?, to url: URL, title: String, swPoint: Point?, nePoint: Point?, iSkip: Int, jSkip: Int) throws {
         let firstFile = gribFiles.first!
         let refDate = MyDateConverter.shared.date(from: "189912300000")!
         var variables = ""
@@ -329,7 +188,7 @@ class TecplotExports {
     
     
     
-    func exportGribFiles(gribFiles: [GribFile], of type: GribFileAverageTypes, for parameters: [GribParameterData], wSpeedParameter: GribParameterData?, uParameter: GribParameterData?, vParameter: GribParameterData?, to url: URL, title: String, swPoint: Point?, nePoint: Point?, iSkip: Int, jSkip: Int) async throws {
+    mutating func exportGribFiles(gribFiles: [GribFile], of type: GribFileAverageTypes, for parameters: [GribParameterData], wSpeedParameter: GribParameterData?, uParameter: GribParameterData?, vParameter: GribParameterData?, to url: URL, title: String, swPoint: Point?, nePoint: Point?, iSkip: Int, jSkip: Int) async throws {
         
         let refDate = MyDateConverter.shared.date(from: "189912300000")!
         let gribsToAverage = gribFiles.gribsToAverage(of: type)

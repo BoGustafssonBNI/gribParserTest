@@ -261,8 +261,8 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
                 if !newURLs.isEmpty {
                     spinner.isHidden = false
                     spinner.startAnimation(nil)
-                    _ = Task {
-                        await initializeNewGribFiles(urls: newURLs)
+                    DispatchQueue.global(qos: .userInitiated).async { [weak weakself = self] in
+                        weakself?.initializeNewGribFiles(urls: newURLs)
                     }
                     
                 }
@@ -270,7 +270,7 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         }
     }
     
-    private func initializeNewGribFiles(urls: [URL]) async {
+    private func initializeNewGribFiles(urls: [URL]) {
         var gribTemp = [GribFile]()
         print("Initializing GribFiles")
         let begin = SuspendingClock.Instant.now
