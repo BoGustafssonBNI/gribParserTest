@@ -34,6 +34,7 @@ struct PointExports {
         for _ in ids {
             outData.append(variables)
         }
+        var pointInfo = [Int: String]()
         var first = true
         var lastDimension = GribGridDimensions()
         var lastGeographyData = GribGeographyData()
@@ -56,6 +57,8 @@ struct PointExports {
                 gribPoints = []
                 for p in points {
                     if let gp = GribPoint(from: p, geography: lastGeographyData, dimensions: lastDimension) {
+                        let pos = "\(gp.coordinate.lat), \(gp.coordinate.lon)\n"
+                        pointInfo[p.id] = (pointInfo[p.id] ?? "") + pos
                         gribPoints.append(gp)
                     }
                 }
@@ -106,6 +109,9 @@ struct PointExports {
         for id in ids {
             do {
                 try outData[nID].write(toFile: directory + "/PID\(id).csv", atomically: true, encoding: encoding)
+                if let pInfo = pointInfo[id] {
+                    try pInfo.write(toFile: directory + "/PInfo\(id).csv", atomically: true, encoding: encoding)
+                }
             } catch {
                 throw PointExportErrors.DataWriteError
             }
