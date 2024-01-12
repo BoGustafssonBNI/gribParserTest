@@ -19,6 +19,7 @@
 		134D348621D6817C00373B74 /* GribParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D348521D6817C00373B74 /* GribParser.swift */; };
 		134D348821D91FEE00373B74 /* GribRotationMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D348721D91FEE00373B74 /* GribRotationMatrix.swift */; };
 		134D348A21D9294D00373B74 /* GribCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D348921D9294D00373B74 /* GribCoordinate.swift */; };
+		136A00752B51085C00485973 /* libeccodesUniversal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 136A00742B51085C00485973 /* libeccodesUniversal.a */; };
 		138011E521DB64F400FA65AE /* TecplotExports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138011E421DB64F400FA65AE /* TecplotExports.swift */; };
 		138011EB21DBA3AC00FA65AE /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 138011EA21DBA3AB00FA65AE /* libc++.tbd */; };
 		138011ED21DBD13400FA65AE /* GribGridData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138011EC21DBD13400FA65AE /* GribGridData.swift */; };
@@ -39,7 +40,6 @@
 		13C466022B4EE31300B5D197 /* BTmodelExports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C466012B4EE31300B5D197 /* BTmodelExports.swift */; };
 		13C466042B4FC1BB00B5D197 /* BinaryFileStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C466032B4FC1BB00B5D197 /* BinaryFileStream.swift */; };
 		13C466082B50119100B5D197 /* tecioUniversal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 13C466072B50119100B5D197 /* tecioUniversal.a */; };
-		13C4661D2B50E7B500B5D197 /* libeccodesUniversal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 13C4661C2B50E7B500B5D197 /* libeccodesUniversal.a */; };
 		13C6988722056B81005AC8DD /* GridMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C6988622056B81005AC8DD /* GridMapping.swift */; };
 /* End PBXBuildFile section */
 
@@ -73,6 +73,7 @@
 		134D348521D6817C00373B74 /* GribParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribParser.swift; sourceTree = "<group>"; };
 		134D348721D91FEE00373B74 /* GribRotationMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribRotationMatrix.swift; sourceTree = "<group>"; };
 		134D348921D9294D00373B74 /* GribCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribCoordinate.swift; sourceTree = "<group>"; };
+		136A00742B51085C00485973 /* libeccodesUniversal.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libeccodesUniversal.a; sourceTree = "<group>"; };
 		138011E121DB63D900FA65AE /* TECIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TECIO.h; sourceTree = "<group>"; };
 		138011E221DB642D00FA65AE /* StandardIntegralTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StandardIntegralTypes.h; sourceTree = "<group>"; };
 		138011E321DB644A00FA65AE /* tecio_Exports.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tecio_Exports.h; sourceTree = "<group>"; };
@@ -101,7 +102,6 @@
 		13C466192B50E65700B5D197 /* grib_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grib_api.h; sourceTree = "<group>"; };
 		13C4661A2B50E66C00B5D197 /* eccodes_windef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = eccodes_windef.h; sourceTree = "<group>"; };
 		13C4661B2B50E67F00B5D197 /* eccodes_version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = eccodes_version.h; sourceTree = "<group>"; };
-		13C4661C2B50E7B500B5D197 /* libeccodesUniversal.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libeccodesUniversal.a; sourceTree = "<group>"; };
 		13C6988622056B81005AC8DD /* GridMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridMapping.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -110,7 +110,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13C4661D2B50E7B500B5D197 /* libeccodesUniversal.a in Frameworks */,
+				136A00752B51085C00485973 /* libeccodesUniversal.a in Frameworks */,
 				138011EB21DBA3AC00FA65AE /* libc++.tbd in Frameworks */,
 				13C466082B50119100B5D197 /* tecioUniversal.a in Frameworks */,
 			);
@@ -122,7 +122,7 @@
 		1336A72021F1DC0C0031C214 /* eccodesAPI */ = {
 			isa = PBXGroup;
 			children = (
-				13C4661C2B50E7B500B5D197 /* libeccodesUniversal.a */,
+				136A00742B51085C00485973 /* libeccodesUniversal.a */,
 				13C466182B50E61F00B5D197 /* eccodes.h */,
 				13C4661A2B50E66C00B5D197 /* eccodes_windef.h */,
 				13C4661B2B50E67F00B5D197 /* eccodes_version.h */,
