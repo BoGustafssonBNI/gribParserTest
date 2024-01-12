@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,7 +11,6 @@
 		1321773121E1FE2100881586 /* PointExports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1321773021E1FE2000881586 /* PointExports.swift */; };
 		1321773321E2057500881586 /* GribPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1321773221E2057500881586 /* GribPoint.swift */; };
 		1321773521E4BFDF00881586 /* Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1321773421E4BFDF00881586 /* Point.swift */; };
-		1336A71E21F1DBEA0031C214 /* libeccodes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1336A71D21F1DBEA0031C214 /* libeccodes.a */; };
 		13384692297ADEC4008E20D5 /* GribInitEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13384691297ADEC4008E20D5 /* GribInitEnvironment.swift */; };
 		134D346D21D67DF500373B74 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D346C21D67DF500373B74 /* AppDelegate.swift */; };
 		134D346F21D67DF500373B74 /* GribFileConversionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D346E21D67DF500373B74 /* GribFileConversionViewController.swift */; };
@@ -21,7 +20,6 @@
 		134D348821D91FEE00373B74 /* GribRotationMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D348721D91FEE00373B74 /* GribRotationMatrix.swift */; };
 		134D348A21D9294D00373B74 /* GribCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134D348921D9294D00373B74 /* GribCoordinate.swift */; };
 		138011E521DB64F400FA65AE /* TecplotExports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138011E421DB64F400FA65AE /* TecplotExports.swift */; };
-		138011E921DBA19200FA65AE /* tecio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 138011E821DBA19200FA65AE /* tecio.a */; };
 		138011EB21DBA3AC00FA65AE /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 138011EA21DBA3AB00FA65AE /* libc++.tbd */; };
 		138011ED21DBD13400FA65AE /* GribGridData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138011EC21DBD13400FA65AE /* GribGridData.swift */; };
 		138011EF21DBD19600FA65AE /* GribGeographyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138011EE21DBD19600FA65AE /* GribGeographyData.swift */; };
@@ -38,7 +36,10 @@
 		139C8A602975B4B700884BD8 /* UTCCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139C8A5F2975B4B700884BD8 /* UTCCalendar.swift */; };
 		13AF33D021E881710023D1AB /* SubGridSpecificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AF33CF21E881710023D1AB /* SubGridSpecificationViewController.swift */; };
 		13C1401721E5C5DD0017CA81 /* .gitattributes in Resources */ = {isa = PBXBuildFile; fileRef = 13C1401621E5C5DD0017CA81 /* .gitattributes */; };
-		13C2126A21F20AA20075BA0E /* definitions in Resources */ = {isa = PBXBuildFile; fileRef = 13C2126921F20AA10075BA0E /* definitions */; };
+		13C466022B4EE31300B5D197 /* BTmodelExports.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C466012B4EE31300B5D197 /* BTmodelExports.swift */; };
+		13C466042B4FC1BB00B5D197 /* BinaryFileStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C466032B4FC1BB00B5D197 /* BinaryFileStream.swift */; };
+		13C466082B50119100B5D197 /* tecioUniversal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 13C466072B50119100B5D197 /* tecioUniversal.a */; };
+		13C4661D2B50E7B500B5D197 /* libeccodesUniversal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 13C4661C2B50E7B500B5D197 /* libeccodesUniversal.a */; };
 		13C6988722056B81005AC8DD /* GridMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C6988622056B81005AC8DD /* GridMapping.swift */; };
 /* End PBXBuildFile section */
 
@@ -60,11 +61,6 @@
 		1321773021E1FE2000881586 /* PointExports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointExports.swift; sourceTree = "<group>"; };
 		1321773221E2057500881586 /* GribPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribPoint.swift; sourceTree = "<group>"; };
 		1321773421E4BFDF00881586 /* Point.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Point.swift; sourceTree = "<group>"; };
-		1336A71D21F1DBEA0031C214 /* libeccodes.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libeccodes.a; sourceTree = "<group>"; };
-		1336A71F21F1DC020031C214 /* eccodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = eccodes.h; sourceTree = "<group>"; };
-		1336A72321F1E7750031C214 /* grib_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grib_api.h; sourceTree = "<group>"; };
-		1336A72421F1E7920031C214 /* grib_api_windef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grib_api_windef.h; sourceTree = "<group>"; };
-		1336A72521F1E7AE0031C214 /* grib_api_version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grib_api_version.h; sourceTree = "<group>"; };
 		13384691297ADEC4008E20D5 /* GribInitEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribInitEnvironment.swift; sourceTree = "<group>"; };
 		134D346921D67DF500373B74 /* gribParserTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gribParserTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		134D346C21D67DF500373B74 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -73,7 +69,6 @@
 		134D347321D67DF500373B74 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		134D347521D67DF500373B74 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		134D347621D67DF500373B74 /* gribParserTest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = gribParserTest.entitlements; sourceTree = "<group>"; };
-		134D347D21D67E4E00373B74 /* libgrib_api.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libgrib_api.dylib; path = ../../../../../usr/local/lib/libgrib_api.dylib; sourceTree = "<group>"; };
 		134D348021D67EBC00373B74 /* gribParserTest-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "gribParserTest-Bridging-Header.h"; sourceTree = "<group>"; };
 		134D348521D6817C00373B74 /* GribParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribParser.swift; sourceTree = "<group>"; };
 		134D348721D91FEE00373B74 /* GribRotationMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribRotationMatrix.swift; sourceTree = "<group>"; };
@@ -82,7 +77,6 @@
 		138011E221DB642D00FA65AE /* StandardIntegralTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StandardIntegralTypes.h; sourceTree = "<group>"; };
 		138011E321DB644A00FA65AE /* tecio_Exports.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tecio_Exports.h; sourceTree = "<group>"; };
 		138011E421DB64F400FA65AE /* TecplotExports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TecplotExports.swift; sourceTree = "<group>"; };
-		138011E821DBA19200FA65AE /* tecio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = tecio.a; sourceTree = "<group>"; };
 		138011EA21DBA3AB00FA65AE /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		138011EC21DBD13400FA65AE /* GribGridData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribGridData.swift; sourceTree = "<group>"; };
 		138011EE21DBD19600FA65AE /* GribGeographyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribGeographyData.swift; sourceTree = "<group>"; };
@@ -100,7 +94,14 @@
 		13AF33CF21E881710023D1AB /* SubGridSpecificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubGridSpecificationViewController.swift; sourceTree = "<group>"; };
 		13BD2BC621EE18BA0052091A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		13C1401621E5C5DD0017CA81 /* .gitattributes */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitattributes; sourceTree = "<group>"; };
-		13C2126921F20AA10075BA0E /* definitions */ = {isa = PBXFileReference; lastKnownFileType = folder; path = definitions; sourceTree = "<group>"; };
+		13C466012B4EE31300B5D197 /* BTmodelExports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BTmodelExports.swift; sourceTree = "<group>"; };
+		13C466032B4FC1BB00B5D197 /* BinaryFileStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BinaryFileStream.swift; sourceTree = "<group>"; };
+		13C466072B50119100B5D197 /* tecioUniversal.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = tecioUniversal.a; sourceTree = "<group>"; };
+		13C466182B50E61F00B5D197 /* eccodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = eccodes.h; sourceTree = "<group>"; };
+		13C466192B50E65700B5D197 /* grib_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grib_api.h; sourceTree = "<group>"; };
+		13C4661A2B50E66C00B5D197 /* eccodes_windef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = eccodes_windef.h; sourceTree = "<group>"; };
+		13C4661B2B50E67F00B5D197 /* eccodes_version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = eccodes_version.h; sourceTree = "<group>"; };
+		13C4661C2B50E7B500B5D197 /* libeccodesUniversal.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libeccodesUniversal.a; sourceTree = "<group>"; };
 		13C6988622056B81005AC8DD /* GridMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridMapping.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -109,9 +110,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1336A71E21F1DBEA0031C214 /* libeccodes.a in Frameworks */,
+				13C4661D2B50E7B500B5D197 /* libeccodesUniversal.a in Frameworks */,
 				138011EB21DBA3AC00FA65AE /* libc++.tbd in Frameworks */,
-				138011E921DBA19200FA65AE /* tecio.a in Frameworks */,
+				13C466082B50119100B5D197 /* tecioUniversal.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,11 +122,11 @@
 		1336A72021F1DC0C0031C214 /* eccodesAPI */ = {
 			isa = PBXGroup;
 			children = (
-				1336A72321F1E7750031C214 /* grib_api.h */,
-				1336A71F21F1DC020031C214 /* eccodes.h */,
-				1336A72421F1E7920031C214 /* grib_api_windef.h */,
-				1336A72521F1E7AE0031C214 /* grib_api_version.h */,
-				1336A71D21F1DBEA0031C214 /* libeccodes.a */,
+				13C4661C2B50E7B500B5D197 /* libeccodesUniversal.a */,
+				13C466182B50E61F00B5D197 /* eccodes.h */,
+				13C4661A2B50E66C00B5D197 /* eccodes_windef.h */,
+				13C4661B2B50E67F00B5D197 /* eccodes_version.h */,
+				13C466192B50E65700B5D197 /* grib_api.h */,
 			);
 			name = eccodesAPI;
 			sourceTree = "<group>";
@@ -135,7 +136,6 @@
 			children = (
 				13C1401621E5C5DD0017CA81 /* .gitattributes */,
 				13BD2BC621EE18BA0052091A /* README.md */,
-				13C2126921F20AA10075BA0E /* definitions */,
 				134D346B21D67DF500373B74 /* gribParserTest */,
 				134D346A21D67DF500373B74 /* Products */,
 				134D347C21D67E4E00373B74 /* Frameworks */,
@@ -169,7 +169,6 @@
 			isa = PBXGroup;
 			children = (
 				138011EA21DBA3AB00FA65AE /* libc++.tbd */,
-				134D347D21D67E4E00373B74 /* libgrib_api.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -180,7 +179,7 @@
 				138011E321DB644A00FA65AE /* tecio_Exports.h */,
 				138011E221DB642D00FA65AE /* StandardIntegralTypes.h */,
 				138011E121DB63D900FA65AE /* TECIO.h */,
-				138011E821DBA19200FA65AE /* tecio.a */,
+				13C466072B50119100B5D197 /* tecioUniversal.a */,
 			);
 			name = tecioAPI;
 			sourceTree = "<group>";
@@ -208,6 +207,7 @@
 			children = (
 				134D348521D6817C00373B74 /* GribParser.swift */,
 				138011E421DB64F400FA65AE /* TecplotExports.swift */,
+				13C466012B4EE31300B5D197 /* BTmodelExports.swift */,
 				1321773021E1FE2000881586 /* PointExports.swift */,
 				1321773421E4BFDF00881586 /* Point.swift */,
 			);
@@ -219,6 +219,7 @@
 			children = (
 				1380120821DF71FF00FA65AE /* MyDateConverter.swift */,
 				139C8A5F2975B4B700884BD8 /* UTCCalendar.swift */,
+				13C466032B4FC1BB00B5D197 /* BinaryFileStream.swift */,
 				134D348021D67EBC00373B74 /* gribParserTest-Bridging-Header.h */,
 				134D346C21D67DF500373B74 /* AppDelegate.swift */,
 				134D347021D67DF500373B74 /* Assets.xcassets */,
@@ -277,8 +278,9 @@
 		134D346121D67DF500373B74 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1010;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1520;
 				ORGANIZATIONNAME = "Bo Gustafsson";
 				TargetAttributes = {
 					134D346821D67DF500373B74 = {
@@ -318,7 +320,6 @@
 				134D347121D67DF500373B74 /* Assets.xcassets in Resources */,
 				13C1401721E5C5DD0017CA81 /* .gitattributes in Resources */,
 				134D347421D67DF500373B74 /* Main.storyboard in Resources */,
-				13C2126A21F20AA20075BA0E /* definitions in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,6 +335,7 @@
 				13C6988722056B81005AC8DD /* GridMapping.swift in Sources */,
 				138011FC21DD467B00FA65AE /* GribFile.swift in Sources */,
 				134D348821D91FEE00373B74 /* GribRotationMatrix.swift in Sources */,
+				13C466022B4EE31300B5D197 /* BTmodelExports.swift in Sources */,
 				138011F321DBD1F500FA65AE /* GribValueData.swift in Sources */,
 				134D346F21D67DF500373B74 /* GribFileConversionViewController.swift in Sources */,
 				1380120521DE25E300FA65AE /* GribGridDimensions.swift in Sources */,
@@ -346,6 +348,7 @@
 				13AF33D021E881710023D1AB /* SubGridSpecificationViewController.swift in Sources */,
 				1380120321DDF8C400FA65AE /* GribFileInfoTableCellView.swift in Sources */,
 				138011ED21DBD13400FA65AE /* GribGridData.swift in Sources */,
+				13C466042B4FC1BB00B5D197 /* BinaryFileStream.swift in Sources */,
 				13173390296EA6F3009444B1 /* GribFileArray+Stats.swift in Sources */,
 				1380120921DF71FF00FA65AE /* MyDateConverter.swift in Sources */,
 				1380120B21DFF72A00FA65AE /* GribTimeData.swift in Sources */,
@@ -411,6 +414,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -425,7 +429,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -474,6 +478,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -482,7 +487,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -501,7 +506,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = GS9HMMYWL7;
-				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
 				INFOPLIST_FILE = gribParserTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -510,8 +515,9 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/gribParserTest",
+					/opt/homebrew/lib,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.balticnest.gribParserTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -530,7 +536,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = GS9HMMYWL7;
-				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
 				INFOPLIST_FILE = gribParserTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -539,8 +545,9 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/gribParserTest",
+					/opt/homebrew/lib,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.balticnest.gribParserTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";

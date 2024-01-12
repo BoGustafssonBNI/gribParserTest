@@ -23,6 +23,7 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
     var parameters : [GribParameterData]?
     var uParameter : GribParameterData?
     var vParameter : GribParameterData?
+    var pParameter : GribParameterData?
     var wSpeedParameter : GribParameterData?
     var pointsToExport : [Point]?
     var outputURL : URL?
@@ -69,15 +70,33 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         cancelButton?.isHidden = true
-        if let ct = conversionType, let gb = gribFiles, let params = parameters, let url = outputURL {
+        if let ct = conversionType, let gb = gribFiles, let url = outputURL {
             switch ct {
+            case .btForcing:
+                guard let uParameter = uParameter, let vParameter = vParameter, let pParameter = pParameter else {
+                    print("Parameter undefined in BTforcing writing")
+                    
+                    DispatchQueue.main.async {
+                        self.presentingViewController?.dismiss(self)
+                    }
+                    return
+                }
+                cancelButton?.isHidden = false
+                var btExporter = BTmodelExports(delegate: self)
+                Task {
+                    do {
+                        try btExporter.exportGribFiles(gribFiles: gb, uParameter: uParameter, vParameter: vParameter, pParameter: pParameter, to: url)
+                    } catch {
+                        print("Btexport error \(error)")
+                    }
+                }
             case .tecplotFields:
                 var tecExporter = TecplotExports(delegate: self)
-                
-                let file = url.appendingPathComponent(tecFileName)
-                cancelButton?.isHidden = false
-                let tecplotTask = Task {
-                         do {
+                if let params = parameters {
+                    let file = url.appendingPathComponent(tecFileName)
+                    cancelButton?.isHidden = false
+                    Task {
+                        do {
                             let iS = iSkip ?? 1
                             let jS = jSkip ?? 1
                             if let averageType = averageType {
@@ -88,6 +107,7 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
                         } catch {
                             print("Tec write error \(error)")
                         }
+                    }
                 }
 //                let queue = DispatchQueue.global(qos: .userInitiated)
 //                queue.async { [weak weakself = self] in
@@ -106,7 +126,7 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
             case .points:
                 var pointExporter = PointExports(delegate: self)
                 cancelButton?.isHidden = false
-                if let points = pointsToExport {
+                if let points = pointsToExport, let params = parameters {
                     let queue = DispatchQueue.global(qos: .userInitiated)
                     queue.async { [weak weakself = self] in
                         do {

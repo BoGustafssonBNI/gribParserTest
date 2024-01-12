@@ -11,6 +11,7 @@ import Cocoa
 enum ConversionTypes: String {
     case points = "Point time-series"
     case tecplotFields = "Tecplot fields"
+    case btForcing = "Forcing to btmodel"
 }
 
 class GribFileConversionViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, ParameterSelection, SubGridSpecificationDelegate {
@@ -83,6 +84,7 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         super.viewDidLoad()
         conversionTypeSelector.removeAllItems()
         conversionTypeSelector.addItem(withTitle: ConversionTypes.points.rawValue)
+        conversionTypeSelector.addItem(withTitle: ConversionTypes.btForcing.rawValue)
         conversionTypeSelector.addItem(withTitle: ConversionTypes.tecplotFields.rawValue)
         for item in GribFileAverageTypes.allCases {
             conversionTypeSelector.addItem(withTitle: item.rawValue)
@@ -100,9 +102,15 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
     private func setSpecificationButtonTitle() {
         switch conversionType {
         case .points:
+            specificationButton.isEnabled = true
             specificationButton.title = "Set file for point(s)"
             specificationButton.toolTip = "Choose a file that specifices which points to extract. The file should include 3 columns: id, lon and lat. All points with same id will be averaged. File should be ASCII, any separator should work (e.g., space, comma, tab etc.)"
+        case .btForcing:
+            specificationButton.title = "Conversion for bt model"
+            specificationButton.isEnabled = false
+            specificationButton.toolTip = ""
         case .tecplotFields:
+            specificationButton.isEnabled = true
             specificationButton.title = subGridInfoString()
             specificationButton.toolTip = "Specifies/shows sub-grid to extract"
         }
@@ -114,7 +122,7 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
             for (_, selected) in parameterSelected {
                 select = select || selected
             }
-            return result && select
+            return result && (select || conversionType == .btForcing)
         }
     }
     
@@ -127,6 +135,9 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
             switch item {
             case ConversionTypes.points.rawValue:
                 conversionType = .points
+                averagingType = nil
+            case ConversionTypes.btForcing.rawValue:
+                conversionType = .btForcing
                 averagingType = nil
             case ConversionTypes.tecplotFields.rawValue:
                 conversionType = .tecplotFields
@@ -187,6 +198,8 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
                     }
                 }
             }
+        case .btForcing:
+            break
         case .tecplotFields:
             performSegue(withIdentifier: setSubGridSpecificationSegue, sender: self)
         }
@@ -364,6 +377,13 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
     
     var parameterList : [GribParameterData]? {
         didSet {
+            if let parameterList = parameterList {
+                for param in parameterList {
+                    if parameterSelected[param] == nil {
+                      parameterSelected[param] = false
+                    }
+                }
+            }
             parameterSelectionTable.reloadData()
             performConversionButton.isEnabled = canPerformConversion
         }
@@ -406,40 +426,54 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
     
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         if segue.identifier == exportSegueIdentifier, let vc = segue.destinationController as? ExporterViewController, let outURL = outputURL, let files = gribFiles {
-            vc.gribFiles = files
-            var params = [GribParameterData]()
-            var uParam : GribParameterData?
-            var vParam : GribParameterData?
-            for (param, write) in parameterSelected {
-                if write {
-                    if let rotCase = rotationCaseForParameter[param] {
-                        switch rotCase {
-                        case .u:
-                            uParam = param
-                        case .v:
-                            vParam = param
-                        case .none:
-                            break
+            switch conversionType {
+            case .points, .tecplotFields:
+                vc.gribFiles = files
+                var params = [GribParameterData]()
+                var uParam : GribParameterData?
+                var vParam : GribParameterData?
+                for (param, write) in parameterSelected {
+                    if write {
+                        if let rotCase = rotationCaseForParameter[param] {
+                            switch rotCase {
+                            case .u:
+                                uParam = param
+                            case .v:
+                                vParam = param
+                            case .none:
+                                break
+                            }
                         }
+                        params.append(param)
                     }
-                    params.append(param)
+                }
+                if uParam != nil && vParam != nil && !params.contains(GribFileConversionViewController.DefaultwSpeedParameter) {
+                    vc.wSpeedParameter = GribFileConversionViewController.DefaultwSpeedParameter
+                    print("wSpeedParameter sent to ViewController")
+                }
+                vc.parameters = params
+                vc.uParameter = uParam
+                vc.vParameter = vParam
+                vc.outputURL = outURL
+                vc.conversionType = conversionType
+                vc.averageType = averagingType
+                vc.pointsToExport = pointsForExtraction
+                vc.swCornerPoint = swCornerPoint
+                vc.neCornerPoint = neCornerPoint
+                vc.iSkip = iSkip
+                vc.jSkip = jSkip
+
+            case .btForcing:
+                if let uParam = parameterList?.first(where: {$0.shortName == "u"}), let vParam = parameterList?.first(where: {$0.shortName == "v"}), let pParam = parameterList?.first(where: {$0.shortName == "MSL"}) {
+                    vc.gribFiles = files
+                    vc.uParameter = uParam
+                    vc.vParameter = vParam
+                    vc.pParameter = pParam
+                    vc.outputURL = outURL
+                    vc.conversionType = conversionType
+                    vc.averageType = averagingType
                 }
             }
-            if uParam != nil && vParam != nil && !params.contains(GribFileConversionViewController.DefaultwSpeedParameter) {
-                vc.wSpeedParameter = GribFileConversionViewController.DefaultwSpeedParameter
-                print("wSpeedParameter sent to ViewController")
-            }
-            vc.parameters = params
-            vc.uParameter = uParam
-            vc.vParameter = vParam
-            vc.outputURL = outURL
-            vc.conversionType = conversionType
-            vc.averageType = averagingType
-            vc.pointsToExport = pointsForExtraction
-            vc.swCornerPoint = swCornerPoint
-            vc.neCornerPoint = neCornerPoint
-            vc.iSkip = iSkip
-            vc.jSkip = jSkip
         } else if segue.identifier == setSubGridSpecificationSegue, let vc = segue.destinationController as? SubGridSpecificationViewController {
             vc.delegate = self
             vc.swLon = swCornerPoint?.lon
