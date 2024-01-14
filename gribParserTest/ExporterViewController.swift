@@ -83,7 +83,8 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
                 }
                 cancelButton?.isHidden = false
                 var btExporter = BTmodelExports(delegate: self)
-                Task {
+                let queue = DispatchQueue.global(qos: .userInitiated)
+                queue.async { 
                     do {
                         try btExporter.exportGribFiles(gribFiles: gb, uParameter: uParameter, vParameter: vParameter, pParameter: pParameter, to: url)
                     } catch {
@@ -95,19 +96,26 @@ class ExporterViewController: NSViewController, ExportProgressDelegate {
                 if let params = parameters {
                     let file = url.appendingPathComponent(tecFileName)
                     cancelButton?.isHidden = false
-                    Task {
-                        do {
                             let iS = iSkip ?? 1
                             let jS = jSkip ?? 1
                             if let averageType = averageType {
-                                try await tecExporter.exportGribFiles(gribFiles: gb, of: averageType, for: params, wSpeedParameter: wSpeedParameter, uParameter: uParameter, vParameter: vParameter, to: file, title: "test", swPoint: swCornerPoint, nePoint: neCornerPoint, iSkip: iS, jSkip: jS)
-                            } else {
-                                try tecExporter.exportGribFiles(gribFiles: gb, for: params, uParameter: uParameter, vParameter: vParameter, to: file, title: "test", swPoint: swCornerPoint, nePoint: neCornerPoint, iSkip: iS, jSkip: jS)
+                                Task {
+                                    do {
+                                        try await tecExporter.exportGribFiles(gribFiles: gb, of: averageType, for: params, wSpeedParameter: wSpeedParameter, uParameter: uParameter, vParameter: vParameter, to: file, title: "test", swPoint: swCornerPoint, nePoint: neCornerPoint, iSkip: iS, jSkip: jS)
+                                    } catch {
+                                        print("Tec write error \(error)")
+                                    }
+                                }
+                                    } else {
+                                let queue = DispatchQueue.global(qos: .userInitiated)
+                                queue.async { [weak weakself = self] in
+                                    do {
+                                        try tecExporter.exportGribFiles(gribFiles: gb, for: params, uParameter: weakself?.uParameter, vParameter: weakself?.vParameter, to: file, title: "test", swPoint: weakself?.swCornerPoint, nePoint: weakself?.neCornerPoint, iSkip: iS, jSkip: jS)
+                                    } catch {
+                                        print("Tec write error \(error)")
+                                    }
+                                           }
                             }
-                        } catch {
-                            print("Tec write error \(error)")
-                        }
-                    }
                 }
 //                let queue = DispatchQueue.global(qos: .userInitiated)
 //                queue.async { [weak weakself = self] in

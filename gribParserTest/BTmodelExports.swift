@@ -86,6 +86,7 @@ struct BTmodelExports {
             try pStream.write("d", encoding: .ascii)
             try pStream.write(array: pExportArray)
             delegate?.numberWritten = zoneNumber
+            delegate?.progress = Double(zoneNumber) / Double(numberOfExpectedZones)
             zoneNumber += 1
         }
         pStream.close()

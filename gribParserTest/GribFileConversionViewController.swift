@@ -493,7 +493,7 @@ class GribFileConversionViewController: NSViewController, NSTableViewDelegate, N
         didSet {
             gribFileTable.delegate = self
             gribFileTable.dataSource = self
-            gribFileTable.rowHeight = 77
+            gribFileTable.rowHeight = 120
         }
     }
     @IBOutlet weak var parameterSelectionTable: NSTableView! {

@@ -180,6 +180,7 @@ struct TecplotExports {
                 }
             }
             delegate?.numberWritten = zoneNumber
+            delegate?.progress = Double(zoneNumber) / Double(numberOfExpectedZones)
             zoneNumber += 1
         }
         closeTecFile()
