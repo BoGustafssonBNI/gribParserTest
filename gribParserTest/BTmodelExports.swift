@@ -81,7 +81,7 @@ struct BTmodelExports {
             try wStream.write(array: exportArray)
             var pExportArray = [Float]()
             for i in 0..<press.count {
-                pExportArray.append(Float(press[i]))
+                pExportArray.append(Float(press[i] / 100.0))
             }
             try pStream.write("d", encoding: .ascii)
             try pStream.write(array: pExportArray)
