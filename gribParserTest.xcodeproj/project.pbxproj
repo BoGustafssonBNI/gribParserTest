@@ -41,6 +41,8 @@
 		13C466042B4FC1BB00B5D197 /* BinaryFileStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C466032B4FC1BB00B5D197 /* BinaryFileStream.swift */; };
 		13C466082B50119100B5D197 /* tecioUniversal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 13C466072B50119100B5D197 /* tecioUniversal.a */; };
 		13C6988722056B81005AC8DD /* GridMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C6988622056B81005AC8DD /* GridMapping.swift */; };
+		13E0894A2D3BC4E600CA75DA /* GribGeography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E089492D3BC4E600CA75DA /* GribGeography.swift */; };
+		13E0894C2D3CE60B00CA75DA /* GribGridType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E0894B2D3CE5FC00CA75DA /* GribGridType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -103,6 +105,8 @@
 		13C4661A2B50E66C00B5D197 /* eccodes_windef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = eccodes_windef.h; sourceTree = "<group>"; };
 		13C4661B2B50E67F00B5D197 /* eccodes_version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = eccodes_version.h; sourceTree = "<group>"; };
 		13C6988622056B81005AC8DD /* GridMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridMapping.swift; sourceTree = "<group>"; };
+		13E089492D3BC4E600CA75DA /* GribGeography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribGeography.swift; sourceTree = "<group>"; };
+		13E0894B2D3CE5FC00CA75DA /* GribGridType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GribGridType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -198,6 +202,8 @@
 				138011EE21DBD19600FA65AE /* GribGeographyData.swift */,
 				138011EC21DBD13400FA65AE /* GribGridData.swift */,
 				1380120421DE25E300FA65AE /* GribGridDimensions.swift */,
+				13E089492D3BC4E600CA75DA /* GribGeography.swift */,
+				13E0894B2D3CE5FC00CA75DA /* GribGridType.swift */,
 			);
 			name = grabDataTypes;
 			sourceTree = "<group>";
@@ -344,6 +350,7 @@
 				1321773321E2057500881586 /* GribPoint.swift in Sources */,
 				134D348621D6817C00373B74 /* GribParser.swift in Sources */,
 				138011E521DB64F400FA65AE /* TecplotExports.swift in Sources */,
+				13E0894A2D3BC4E600CA75DA /* GribGeography.swift in Sources */,
 				1380120121DDF8A400FA65AE /* ParameterTableCellView.swift in Sources */,
 				13AF33D021E881710023D1AB /* SubGridSpecificationViewController.swift in Sources */,
 				1380120321DDF8C400FA65AE /* GribFileInfoTableCellView.swift in Sources */,
@@ -354,6 +361,7 @@
 				1380120B21DFF72A00FA65AE /* GribTimeData.swift in Sources */,
 				1321773521E4BFDF00881586 /* Point.swift in Sources */,
 				134D346D21D67DF500373B74 /* AppDelegate.swift in Sources */,
+				13E0894C2D3CE60B00CA75DA /* GribGridType.swift in Sources */,
 				138011EF21DBD19600FA65AE /* GribGeographyData.swift in Sources */,
 				13384692297ADEC4008E20D5 /* GribInitEnvironment.swift in Sources */,
 				139C8A602975B4B700884BD8 /* UTCCalendar.swift in Sources */,

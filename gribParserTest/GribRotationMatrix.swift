@@ -14,7 +14,7 @@ struct GribRotationMatrix {
     var d = 1.0
     init() {}
     init(coordinate: GribCoordinate, geography: GribGeographyData) {
-        if geography.rotated {
+        if geography.gridType == .rotatedII {
             self.init(longitudeOfSouthernPoleInDegrees: geography.longitudeOfSouthernPoleInDegrees, latitudeOfSouthernPoleInDegrees: geography.latitudeOfSouthernPoleInDegrees, coordinate: coordinate)
         } else {
             self.init()

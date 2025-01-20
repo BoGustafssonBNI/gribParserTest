@@ -15,16 +15,38 @@ struct GribCoordinate {
     var lonRot = 0.0
     var i = 0
     var j = 0
-    init(i: Int, j: Int, lon: Double, lat: Double, longitudeOfFirstGridPointInDegrees lon0: Double, latitudeOfFirstGridPointInDegrees lat0: Double, iDirectionIncrementInDegrees deltaLon: Double, jDirectionIncrementInDegrees deltaLat: Double) {
+    init(i: Int, j: Int, lon: Double, lat: Double, geography: GribGeographyData) {
         self.i = i
         self.j = j
         self.lon = lon
         self.lat = lat
-        self.lonRot = lon0 + deltaLon * Double(i)
-        self.latRot = lat0 + deltaLat * Double(j)
+        switch geography.gridType {
+        case .regularII, .rotatedII:
+            self.lonRot = geography.longitudeOfFirstGridPointInDegrees + geography.iDirectionIncrementInDegrees * Double(i)
+            self.latRot = geography.latitudeOfFirstGridPointInDegrees + geography.jDirectionIncrementInDegrees * Double(j)
+        case .lambert:
+            let zrad = Double.pi / 180.0
+            let n : Double
+            let f : Double
+            if abs(geography.latin1InDegrees - geography.latin2InDegrees) > 0.01 {
+                let cosLatinRatio = log(cos(zrad * geography.latin1InDegrees) / cos(zrad * geography.latin2InDegrees))
+                let tanLatinRatio = log(tan(Double.pi / 4.0 + zrad * geography.latin2InDegrees / 2.0) / tan(Double.pi / 4.0 + zrad * geography.latin1InDegrees / 2.0))
+                n = cosLatinRatio / tanLatinRatio
+                f = cos(zrad * geography.latin1InDegrees) * pow(tan(Double.pi / 4.0 + zrad * geography.latin1InDegrees / 2.0), n) / n
+            } else {
+                n = sin(zrad * geography.latin1InDegrees)
+                f = cos(zrad * geography.latin1InDegrees) * pow(tan(Double.pi / 4.0 + zrad * geography.latin1InDegrees / 2.0), n) / n
+            }
+            let rho = geography.radiusOfTheEarth * f / pow(tan(Double.pi / 4.0 + zrad * lat / 2.0), n)
+            let rho0 = geography.radiusOfTheEarth * f / pow(tan(Double.pi / 4.0 + zrad * geography.laDInDegrees / 2.0), n)
+            let theta = n * zrad * (lon - geography.loVInDegrees)
+            self.lonRot = rho * sin(theta)
+            self.latRot = rho0 - rho * cos(theta)
+         }
     }
     init(lon: Double, lat: Double, geography: GribGeographyData ) {
-        if geography.rotated {
+        switch geography.gridType {
+        case .rotatedII:
             let zrad = Double.pi / 180.0
             let zradi = 1.0 / zrad
             let zsycen = sin(zrad * (geography.latitudeOfSouthernPoleInDegrees + 90.0))
@@ -47,18 +69,41 @@ struct GribCoordinate {
             if zsxrot < 0.0 {lonRot = -lonRot}
             self.latRot = latRot
             self.lonRot = lonRot
-        } else {
+            self.i = Int((lonRot - geography.longitudeOfFirstGridPointInDegrees) / geography.iDirectionIncrementInDegrees)
+            self.j = Int((latRot - geography.latitudeOfFirstGridPointInDegrees) / geography.jDirectionIncrementInDegrees)
+        case .lambert:
+            let zrad = Double.pi / 180.0
+            let n : Double
+            let f : Double
+            if abs(geography.latin1InDegrees - geography.latin2InDegrees) > 0.01 {
+                let cosLatinRatio = log(cos(zrad * geography.latin1InDegrees) / cos(zrad * geography.latin2InDegrees))
+                let tanLatinRatio = log(tan(Double.pi / 4.0 + zrad * geography.latin2InDegrees / 2.0) / tan(Double.pi / 4.0 + zrad * geography.latin1InDegrees / 2.0))
+                n = cosLatinRatio / tanLatinRatio
+                f = cos(zrad * geography.latin1InDegrees) * pow(tan(Double.pi / 4.0 + zrad * geography.latin1InDegrees / 2.0), n) / n
+            } else {
+                n = sin(zrad * geography.latin1InDegrees)
+                f = cos(zrad * geography.latin1InDegrees) * pow(tan(Double.pi / 4.0 + zrad * geography.latin1InDegrees / 2.0), n) / n
+            }
+            let rho = geography.radiusOfTheEarth * f / pow(tan(Double.pi / 4.0 + zrad * lat / 2.0), n)
+            let rho0 = geography.radiusOfTheEarth * f / pow(tan(Double.pi / 4.0 + zrad * geography.laDInDegrees / 2.0), n)
+            let theta = n * zrad * (lon - geography.loVInDegrees)
+            self.lonRot = rho * sin(theta)
+            self.latRot = rho0 - rho * cos(theta)
+            let firstGridpoint = geography.coordinateOfFirstGridPoint
+            self.i = Int((self.lonRot - firstGridpoint.lonRot) / geography.dxInMetres)
+            self.j = Int((self.latRot - firstGridpoint.latRot) / geography.dyInMetres)
+         case .regularII:
             self.latRot = lat
             self.lonRot = lon
-
+            self.i = Int((lonRot - geography.longitudeOfFirstGridPointInDegrees) / geography.iDirectionIncrementInDegrees)
+            self.j = Int((latRot - geography.latitudeOfFirstGridPointInDegrees) / geography.jDirectionIncrementInDegrees)
         }
         self.lat = lat
         self.lon = lon
-        self.i = Int((lonRot - geography.longitudeOfFirstGridPointInDegrees) / geography.iDirectionIncrementInDegrees)
-        self.j = Int((latRot - geography.latitudeOfFirstGridPointInDegrees) / geography.jDirectionIncrementInDegrees)
     }
     init(lonRot: Double, latRot: Double, geography: GribGeographyData ) {
-        if geography.rotated {
+        switch geography.gridType {
+        case .rotatedII:
             let zrad = Double.pi / 180.0
             let zradi = 1.0 / zrad
             let zsycen = sin(zrad*(geography.latitudeOfSouthernPoleInDegrees+90.0))
@@ -81,15 +126,38 @@ struct GribCoordinate {
             let lon = zxmxc + geography.longitudeOfSouthernPoleInDegrees
             self.lat = lat
             self.lon = lon
-        } else {
+            self.i = Int((lonRot - geography.longitudeOfFirstGridPointInDegrees) / geography.iDirectionIncrementInDegrees)
+            self.j = Int((latRot - geography.latitudeOfFirstGridPointInDegrees) / geography.jDirectionIncrementInDegrees)
+        case .lambert:
+            let zrad = Double.pi / 180.0
+            let n : Double
+            let f : Double
+            if abs(geography.latin1InDegrees - geography.latin2InDegrees) > 0.01 {
+                let cosLatinRatio = log(cos(zrad * geography.latin1InDegrees) / cos(zrad * geography.latin2InDegrees))
+                let tanLatinRatio = log(tan(Double.pi / 4.0 + zrad * geography.latin2InDegrees / 2.0) / tan(Double.pi / 4.0 + zrad * geography.latin1InDegrees / 2.0))
+                n = cosLatinRatio / tanLatinRatio
+                f = cos(zrad * geography.latin1InDegrees) * pow(tan(Double.pi / 4.0 + zrad * geography.latin1InDegrees / 2.0), n) / n
+            } else {
+                n = sin(zrad * geography.latin1InDegrees)
+                f = cos(zrad * geography.latin1InDegrees) * pow(tan(Double.pi / 4.0 + zrad * geography.latin1InDegrees / 2.0), n) / n
+            }
+            let rho0 = geography.radiusOfTheEarth * f / pow(tan(Double.pi / 4.0 + zrad * geography.laDInDegrees / 2.0), n)
+            let rho = (n < 0.0 ? -1.0 : 1.0) * sqrt(lonRot * lonRot + (rho0 - latRot) * (rho0 - latRot))
+            let theta = atan2(lonRot, (rho0 - latRot))
+            self.lat = (2.0 * atan(pow(geography.radiusOfTheEarth * f / rho, 1.0 / n)) - Double.pi / 2.0) / zrad
+            self.lon = theta / n / zrad + geography.loVInDegrees
+            let firstGridpoint = geography.coordinateOfFirstGridPoint
+            self.i = Int((lonRot - firstGridpoint.lonRot) / geography.dxInMetres)
+            self.j = Int((latRot - firstGridpoint.latRot) / geography.dyInMetres)
+        case .regularII:
             self.lat = latRot
             self.lon = lonRot
-            
+            self.i = Int((lonRot - geography.longitudeOfFirstGridPointInDegrees) / geography.iDirectionIncrementInDegrees)
+            self.j = Int((latRot - geography.latitudeOfFirstGridPointInDegrees) / geography.jDirectionIncrementInDegrees)
+
         }
         self.latRot = latRot
         self.lonRot = lonRot
-        self.i = Int((lonRot - geography.longitudeOfFirstGridPointInDegrees) / geography.iDirectionIncrementInDegrees)
-        self.j = Int((latRot - geography.latitudeOfFirstGridPointInDegrees) / geography.jDirectionIncrementInDegrees)
     }
 }
 

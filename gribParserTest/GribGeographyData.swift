@@ -9,6 +9,7 @@
 import Foundation
 
 struct GribGeographyData : Equatable {
+    var radiusOfTheEarth = 6371229.0
     var bitmapPresent = false
     var latitudeOfFirstGridPointInDegrees = 0.0
     var longitudeOfFirstGridPointInDegrees = 0.0
@@ -22,10 +23,18 @@ struct GribGeographyData : Equatable {
     var latitudeOfSouthernPoleInDegrees = 0.0
     var longitudeOfSouthernPoleInDegrees = 0.0
     var angleOfRotationInDegrees = 0.0
-    var gridType = ""
-    var rotated : Bool  {
+    var gridType = GribGridType.regularII
+    var nX = 0
+    var nY = 0
+    var laDInDegrees = 0.0
+    var loVInDegrees = 0.0
+    var dxInMetres = 0.0
+    var dyInMetres = 0.0
+    var latin1InDegrees = 0.0
+    var latin2InDegrees = 0.0
+    var coordinateOfFirstGridPoint : GribCoordinate {
         get {
-            return self.gridType.contains("rotated")
+            return GribCoordinate(lon: longitudeOfFirstGridPointInDegrees, lat: latitudeOfFirstGridPointInDegrees, geography: self)
         }
     }
     static func == (lhs: GribGeographyData, rhs: GribGeographyData) -> Bool {
@@ -42,6 +51,14 @@ struct GribGeographyData : Equatable {
         lhs.latitudeOfSouthernPoleInDegrees == rhs.latitudeOfSouthernPoleInDegrees &&
         lhs.longitudeOfFirstGridPointInDegrees == rhs.longitudeOfFirstGridPointInDegrees &&
         lhs.longitudeOfLastGridPointInDegrees == rhs.longitudeOfLastGridPointInDegrees &&
-        lhs.longitudeOfSouthernPoleInDegrees == rhs.longitudeOfSouthernPoleInDegrees
+        lhs.longitudeOfSouthernPoleInDegrees == rhs.longitudeOfSouthernPoleInDegrees &&
+        lhs.nX == rhs.nX &&
+        lhs.nY == rhs.nY &&
+        lhs.laDInDegrees == rhs.laDInDegrees &&
+        lhs.loVInDegrees == rhs.loVInDegrees &&
+        lhs.dxInMetres == rhs.dxInMetres &&
+        lhs.dyInMetres == rhs.dyInMetres &&
+        lhs.latin1InDegrees == rhs.latin1InDegrees &&
+        lhs.latin2InDegrees == rhs.latin2InDegrees
     }
 }

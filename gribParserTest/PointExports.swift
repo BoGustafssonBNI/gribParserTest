@@ -75,7 +75,7 @@ struct PointExports {
                 if let indices = indicesForID[id] {
                     var u = [Double]()
                     var v = [Double]()
-                    if lastGeographyData.rotated, let uP = uParameter, let vP = vParameter, let uRot = data[uP], let vRot = data[vP], let matrices = matricesForID[id] {
+                    if lastGeographyData.gridType == .rotatedII, let uP = uParameter, let vP = vParameter, let uRot = data[uP], let vRot = data[vP], let matrices = matricesForID[id] {
                         for i in 0..<indices.count {
                             let wind = matrices[i].rotateWind(uRot: uRot[indices[i]], vRot: vRot[indices[i]])
                             u.append(wind.u)

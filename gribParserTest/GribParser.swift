@@ -25,22 +25,6 @@ enum GribParameter : String {
     case name = "name"
     case shortName = "shortName"
 }
-enum GribGeography: String {
-    case bitmapPresent = "bitmapPresent"
-    case latitudeOfFirstGridPointInDegrees = "latitudeOfFirstGridPointInDegrees"
-    case longitudeOfFirstGridPointInDegrees = "longitudeOfFirstGridPointInDegrees"
-    case latitudeOfLastGridPointInDegrees = "latitudeOfLastGridPointInDegrees"
-    case longitudeOfLastGridPointInDegrees = "longitudeOfLastGridPointInDegrees"
-    case iScansNegatively = "iScansNegatively"
-    case jScansPositively = "jScansPositively"
-    case jPointsAreConsecutive = "jPointsAreConsecutive"
-    case jDirectionIncrementInDegrees = "jDirectionIncrementInDegrees"
-    case iDirectionIncrementInDegrees = "iDirectionIncrementInDegrees"
-    case latitudeOfSouthernPoleInDegrees = "latitudeOfSouthernPoleInDegrees"
-    case longitudeOfSouthernPoleInDegrees = "longitudeOfSouthernPoleInDegrees"
-    case angleOfRotationInDegrees = "angleOfRotationInDegrees"
-    case gridType = "gridType"
-}
 enum GribTime: String {
     case dataDate
     case dataTime
@@ -176,6 +160,7 @@ struct GribParser {
                     case GribParameter.units.rawValue:
                         parameter.units = svalue
                     default:
+                        print("Unknown parameter \(string), \(svalue)")
                         break
                     }
                 }
@@ -217,6 +202,7 @@ struct GribParser {
             if let s = String(validatingUTF8: name!), s != "bitmap" {
                 codes_get_string(h,name,&value,&vlen)
                 if let string = String(validatingUTF8: name!), let svalue = String(validatingUTF8: &value) {
+                    print("String: \(string), value: \(svalue)")
                     switch string {
                     case GribGeography.bitmapPresent.rawValue:
                         if let i = Int(svalue) {
@@ -271,8 +257,46 @@ struct GribParser {
                             geography.angleOfRotationInDegrees = x
                         }
                     case GribGeography.gridType.rawValue:
-                        geography.gridType = svalue
-                    default:
+                        if let gridType = GribGridType(rawValue: svalue) {
+                            geography.gridType = gridType
+                        } else {
+                            geography.gridType = .regularII
+                            print("Error: unknown gridType = \(svalue)")
+                        }
+                    case GribGeography.nX.rawValue:
+                        if let x = Int(svalue) {
+                            geography.nX = x
+                        }
+                    case GribGeography.nY.rawValue:
+                        if let x = Int(svalue) {
+                            geography.nY = x
+                        }
+                    case GribGeography.laDInDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.laDInDegrees = x
+                        }
+                    case GribGeography.loVInDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.loVInDegrees = x
+                        }
+                    case GribGeography.dxInMetres.rawValue:
+                        if let x = Double(svalue) {
+                            geography.dxInMetres = x
+                        }
+                    case GribGeography.dyInMetres.rawValue:
+                        if let x = Double(svalue) {
+                            geography.dyInMetres = x
+                        }
+                    case GribGeography.latin1InDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.latin1InDegrees = x
+                        }
+                    case GribGeography.latin2InDegrees.rawValue:
+                        if let x = Double(svalue) {
+                            geography.latin2InDegrees = x
+                        }
+                   default:
+                        print("Not set")
                         break
                     }
                 }
@@ -328,7 +352,7 @@ struct GribParser {
         var coordinates = [GribCoordinate]()
         var rotationMatrices = [GribRotationMatrix]()
         while codes_grib_iterator_next(iterator, &y, &x, &value) == 1 {
-            let coord = GribCoordinate(i: i, j: j, lon: x, lat: y, longitudeOfFirstGridPointInDegrees: geographyData.longitudeOfFirstGridPointInDegrees, latitudeOfFirstGridPointInDegrees: geographyData.latitudeOfFirstGridPointInDegrees, iDirectionIncrementInDegrees: geographyData.iDirectionIncrementInDegrees, jDirectionIncrementInDegrees: geographyData.jDirectionIncrementInDegrees)
+            let coord = GribCoordinate(i: i, j: j, lon: x, lat: y, geography: geographyData)
             let rotationMatrix = GribRotationMatrix(coordinate: coord, geography: geographyData)
             coordinates.append(coord)
             rotationMatrices.append(rotationMatrix)

@@ -26,7 +26,7 @@ struct TecplotExports {
         let firstFile = gribFiles.first!
         let refDate = MyDateConverter.shared.date(from: "189912300000")!
         var variables = ""
-        if firstFile.parser.geographyData.rotated {
+        if firstFile.parser.geographyData.gridType != .regularII {
             variables = "X Y Lon Lat"
         } else {
             variables = "Lon Lat"
@@ -56,7 +56,7 @@ struct TecplotExports {
             let solutionTime = file.parser.dataTime.date.timeIntervalSince(refDate) / 86400.0
             if first || lastDimension != file.parser.gridDimensions || lastGridData == nil {
                 let nvar : Int
-                if file.parser.geographyData.rotated {
+                if file.parser.geographyData.gridType != .regularII {
                     nvar = 4 + parameters.count
                 } else {
                     nvar = 2 + parameters.count
@@ -84,7 +84,7 @@ struct TecplotExports {
                 } catch {
                     throw error
                 }
-                if file.parser.geographyData.rotated {
+                if file.parser.geographyData.gridType != .regularII {
                     var x = [Float]()
                     var y = [Float]()
                     for i in indices {
@@ -113,7 +113,7 @@ struct TecplotExports {
             } else {
                 let nvar : Int
                 let ncoord : Int
-                if file.parser.geographyData.rotated {
+                if file.parser.geographyData.gridType != .regularII {
                     nvar = 4 + parameters.count
                     ncoord = 4
                 } else {
@@ -132,7 +132,7 @@ struct TecplotExports {
             guard let data = file.parser.getValues(for: parameters)  else {throw TecplotExportErrors.DataReadError(file)}
             var u = [Float]()
             var v = [Float]()
-            if file.parser.geographyData.rotated {
+            if file.parser.geographyData.gridType != .regularII {
                 if let uP = uParameter, let vP = vParameter, let uRot = data[uP], let vRot = data[vP] {
                     for i in indices {
                         let matrix = gridData.rotationMatrices[i]
@@ -248,7 +248,7 @@ struct TecplotExports {
         var variables = ""
         let nvar : Int
         let ncoord : Int
-        if geography.rotated {
+        if geography.gridType != .regularII {
             variables = "X Y Lon Lat"
             nvar = 4 + averageParameters.count
             ncoord = 4
@@ -303,7 +303,7 @@ struct TecplotExports {
                 } catch {
                     throw error
                 }
-                if geography.rotated {
+                if geography.gridType != .regularII {
                     var x = [Float]()
                     var y = [Float]()
                     for i in indices {
@@ -341,7 +341,7 @@ struct TecplotExports {
             let data = average.gribValueData
             var u = [Float]()
             var v = [Float]()
-            if geography.rotated {
+            if geography.gridType != .regularII {
                 if let uP = uParameter, let vP = vParameter, let uRot = data[uP], let vRot = data[vP] {
                     for i in indices {
                         let matrix = gridData.rotationMatrices[i]
