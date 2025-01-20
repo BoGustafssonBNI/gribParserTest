@@ -39,6 +39,7 @@ enum GribErrors: Error {
     case CouldNotGetFileHandle
     case CouldNotCreateKeysIterator
     case CouldNotParseDate
+    case CouldNotCreateGeographyData
 }
 
 struct GribParser {
@@ -193,7 +194,7 @@ struct GribParser {
         if (kiter == nil) {
             throw GribErrors.CouldNotCreateKeysIterator
         }
-        var geography = GribGeographyData()
+        var geographyValues = [GribGeography: Any]()
         while(codes_keys_iterator_next(kiter) == 1)
         {
             let name = codes_keys_iterator_get_name(kiter)
@@ -206,94 +207,94 @@ struct GribParser {
                     switch string {
                     case GribGeography.bitmapPresent.rawValue:
                         if let i = Int(svalue) {
-                            geography.bitmapPresent = i == 1 ? true : false
+                            geographyValues[GribGeography.bitmapPresent] = i == 1 ? true : false
                         }
                     case GribGeography.latitudeOfFirstGridPointInDegrees.rawValue:
                         if let x = Double(svalue) {
-                            geography.latitudeOfFirstGridPointInDegrees = x
+                            geographyValues[GribGeography.latitudeOfFirstGridPointInDegrees] = x
                         }
                     case GribGeography.longitudeOfFirstGridPointInDegrees.rawValue:
                         if let x = Double(svalue) {
-                            geography.longitudeOfFirstGridPointInDegrees = x
+                            geographyValues[GribGeography.longitudeOfFirstGridPointInDegrees] = x
                         }
                     case GribGeography.latitudeOfLastGridPointInDegrees.rawValue:
                         if let x = Double(svalue) {
-                            geography.latitudeOfLastGridPointInDegrees = x
+                            geographyValues[GribGeography.latitudeOfLastGridPointInDegrees] = x
                         }
                     case GribGeography.longitudeOfLastGridPointInDegrees.rawValue:
                         if let x = Double(svalue) {
-                            geography.longitudeOfLastGridPointInDegrees = x
+                            geographyValues[GribGeography.longitudeOfLastGridPointInDegrees] = x
                         }
                     case GribGeography.iScansNegatively.rawValue:
                         if let i = Int(svalue) {
-                            geography.iScansNegatively = i == 1 ? true : false
+                            geographyValues[GribGeography.iScansNegatively] = i == 1 ? true : false
                         }
                     case GribGeography.jScansPositively.rawValue:
                         if let i = Int(svalue) {
-                            geography.jScansPositively = i == 1 ? true : false
+                            geographyValues[GribGeography.jScansPositively] = i == 1 ? true : false
                         }
                     case GribGeography.jPointsAreConsecutive.rawValue:
                         if let i = Int(svalue) {
-                            geography.jPointsAreConsecutive = i == 1 ? true : false
+                            geographyValues[GribGeography.jPointsAreConsecutive] = i == 1 ? true : false
                         }
                     case GribGeography.jDirectionIncrementInDegrees.rawValue:
                         if let x = Double(svalue) {
-                            geography.jDirectionIncrementInDegrees = x
+                            geographyValues[GribGeography.jDirectionIncrementInDegrees] = x
                         }
                     case GribGeography.iDirectionIncrementInDegrees.rawValue:
                         if let x = Double(svalue) {
-                            geography.iDirectionIncrementInDegrees = x
+                            geographyValues[GribGeography.iDirectionIncrementInDegrees] = x
                         }
                     case GribGeography.latitudeOfSouthernPoleInDegrees.rawValue:
                         if let x = Double(svalue) {
-                            geography.latitudeOfSouthernPoleInDegrees = x
+                            geographyValues[GribGeography.latitudeOfSouthernPoleInDegrees] = x
                         }
                     case GribGeography.longitudeOfSouthernPoleInDegrees.rawValue:
                         if let x = Double(svalue) {
-                            geography.longitudeOfSouthernPoleInDegrees = x
+                            geographyValues[GribGeography.longitudeOfSouthernPoleInDegrees] = x
                         }
                     case GribGeography.angleOfRotationInDegrees.rawValue:
                         if let x = Double(svalue) {
-                            geography.angleOfRotationInDegrees = x
+                            geographyValues[GribGeography.angleOfRotationInDegrees] = x
                         }
                     case GribGeography.gridType.rawValue:
                         if let gridType = GribGridType(rawValue: svalue) {
-                            geography.gridType = gridType
+                            geographyValues[GribGeography.gridType] = gridType
                         } else {
-                            geography.gridType = .regularII
+                            geographyValues[GribGeography.gridType] = GribGridType.regularII
                             print("Error: unknown gridType = \(svalue)")
                         }
                     case GribGeography.nX.rawValue:
                         if let x = Int(svalue) {
-                            geography.nX = x
+                            geographyValues[GribGeography.nX] = x
                         }
                     case GribGeography.nY.rawValue:
                         if let x = Int(svalue) {
-                            geography.nY = x
+                            geographyValues[GribGeography.nY] = x
                         }
                     case GribGeography.laDInDegrees.rawValue:
                         if let x = Double(svalue) {
-                            geography.laDInDegrees = x
+                            geographyValues[GribGeography.laDInDegrees] = x
                         }
                     case GribGeography.loVInDegrees.rawValue:
                         if let x = Double(svalue) {
-                            geography.loVInDegrees = x
+                            geographyValues[GribGeography.loVInDegrees] = x
                         }
                     case GribGeography.dxInMetres.rawValue:
                         if let x = Double(svalue) {
-                            geography.dxInMetres = x
+                            geographyValues[GribGeography.dxInMetres] = x
                         }
                     case GribGeography.dyInMetres.rawValue:
                         if let x = Double(svalue) {
-                            geography.dyInMetres = x
+                            geographyValues[GribGeography.dyInMetres] = x
                         }
                     case GribGeography.latin1InDegrees.rawValue:
                         if let x = Double(svalue) {
-                            geography.latin1InDegrees = x
+                            geographyValues[GribGeography.latin1InDegrees] = x
                         }
                     case GribGeography.latin2InDegrees.rawValue:
                         if let x = Double(svalue) {
-                            geography.latin2InDegrees = x
+                            geographyValues[GribGeography.latin2InDegrees] = x
                         }
                    default:
                         print("Not set")
@@ -301,6 +302,9 @@ struct GribParser {
                     }
                 }
             }
+        }
+        guard let geography = GribGeographyData(from: geographyValues) else {
+            throw GribErrors.CouldNotCreateGeographyData
         }
         codes_keys_iterator_delete(kiter)
         codes_handle_delete(h)

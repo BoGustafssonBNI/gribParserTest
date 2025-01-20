@@ -7,7 +7,7 @@
 //
 
 
-enum GribGeography: String {
+enum GribGeography: String, CaseIterable {
     case bitmapPresent = "bitmapPresent"
     case latitudeOfFirstGridPointInDegrees = "latitudeOfFirstGridPointInDegrees"
     case longitudeOfFirstGridPointInDegrees = "longitudeOfFirstGridPointInDegrees"

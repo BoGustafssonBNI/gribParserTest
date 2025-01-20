@@ -18,7 +18,7 @@ struct GribCoordinate {
     init(i: Int, j: Int, lon: Double, lat: Double, geography: GribGeographyData) {
         self.i = i
         self.j = j
-        self.lon = lon
+        self.lon = lon < 180.0 ? lon : lon - 360.0
         self.lat = lat
         switch geography.gridType {
         case .regularII, .rotatedII:
@@ -37,25 +37,27 @@ struct GribCoordinate {
                 n = sin(zrad * geography.latin1InDegrees)
                 f = cos(zrad * geography.latin1InDegrees) * pow(tan(Double.pi / 4.0 + zrad * geography.latin1InDegrees / 2.0), n) / n
             }
-            let rho = geography.radiusOfTheEarth * f / pow(tan(Double.pi / 4.0 + zrad * lat / 2.0), n)
+            let rho = geography.radiusOfTheEarth * f / pow(tan(Double.pi / 4.0 + zrad * self.lat / 2.0), n)
             let rho0 = geography.radiusOfTheEarth * f / pow(tan(Double.pi / 4.0 + zrad * geography.laDInDegrees / 2.0), n)
-            let theta = n * zrad * (lon - geography.loVInDegrees)
+            let theta = n * zrad * (self.lon - geography.loVInDegrees)
             self.lonRot = rho * sin(theta)
             self.latRot = rho0 - rho * cos(theta)
          }
     }
     init(lon: Double, lat: Double, geography: GribGeographyData ) {
+        self.lat = lat
+        self.lon = lon < 180.0 ? lon : lon - 360.0
         switch geography.gridType {
         case .rotatedII:
             let zrad = Double.pi / 180.0
             let zradi = 1.0 / zrad
             let zsycen = sin(zrad * (geography.latitudeOfSouthernPoleInDegrees + 90.0))
             let zcycen = cos(zrad * (geography.latitudeOfSouthernPoleInDegrees + 90.0))
-            let zxmxc = zrad * (lon - geography.longitudeOfSouthernPoleInDegrees)
+            let zxmxc = zrad * (self.lon - geography.longitudeOfSouthernPoleInDegrees)
             let zsxmxc = sin(zxmxc)
             let zcxmxc = cos(zxmxc)
-            let zsyreg = sin(zrad * lat)
-            let zcyreg = cos(zrad * lat)
+            let zsyreg = sin(zrad * self.lat)
+            let zcyreg = cos(zrad * self.lat)
             var zsyrot = zcycen * zsyreg - zsycen * zcyreg * zcxmxc
             zsyrot = max(zsyrot, -1.0)
             zsyrot = min(zsyrot, 1.0)
@@ -84,22 +86,20 @@ struct GribCoordinate {
                 n = sin(zrad * geography.latin1InDegrees)
                 f = cos(zrad * geography.latin1InDegrees) * pow(tan(Double.pi / 4.0 + zrad * geography.latin1InDegrees / 2.0), n) / n
             }
-            let rho = geography.radiusOfTheEarth * f / pow(tan(Double.pi / 4.0 + zrad * lat / 2.0), n)
+            let rho = geography.radiusOfTheEarth * f / pow(tan(Double.pi / 4.0 + zrad * self.lat / 2.0), n)
             let rho0 = geography.radiusOfTheEarth * f / pow(tan(Double.pi / 4.0 + zrad * geography.laDInDegrees / 2.0), n)
-            let theta = n * zrad * (lon - geography.loVInDegrees)
+            let theta = n * zrad * (self.lon - geography.loVInDegrees)
             self.lonRot = rho * sin(theta)
             self.latRot = rho0 - rho * cos(theta)
             let firstGridpoint = geography.coordinateOfFirstGridPoint
-            self.i = Int((self.lonRot - firstGridpoint.lonRot) / geography.dxInMetres)
-            self.j = Int((self.latRot - firstGridpoint.latRot) / geography.dyInMetres)
+            self.i = Int((self.lonRot - firstGridpoint.x) / geography.dxInMetres)
+            self.j = Int((self.latRot - firstGridpoint.y) / geography.dyInMetres)
          case .regularII:
-            self.latRot = lat
-            self.lonRot = lon
+            self.latRot = self.lat
+            self.lonRot = self.lon
             self.i = Int((lonRot - geography.longitudeOfFirstGridPointInDegrees) / geography.iDirectionIncrementInDegrees)
             self.j = Int((latRot - geography.latitudeOfFirstGridPointInDegrees) / geography.jDirectionIncrementInDegrees)
         }
-        self.lat = lat
-        self.lon = lon
     }
     init(lonRot: Double, latRot: Double, geography: GribGeographyData ) {
         switch geography.gridType {
@@ -147,8 +147,8 @@ struct GribCoordinate {
             self.lat = (2.0 * atan(pow(geography.radiusOfTheEarth * f / rho, 1.0 / n)) - Double.pi / 2.0) / zrad
             self.lon = theta / n / zrad + geography.loVInDegrees
             let firstGridpoint = geography.coordinateOfFirstGridPoint
-            self.i = Int((lonRot - firstGridpoint.lonRot) / geography.dxInMetres)
-            self.j = Int((latRot - firstGridpoint.latRot) / geography.dyInMetres)
+            self.i = Int((lonRot - firstGridpoint.x) / geography.dxInMetres)
+            self.j = Int((latRot - firstGridpoint.y) / geography.dyInMetres)
         case .regularII:
             self.lat = latRot
             self.lon = lonRot

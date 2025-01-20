@@ -32,9 +32,65 @@ struct GribGeographyData : Equatable {
     var dyInMetres = 0.0
     var latin1InDegrees = 0.0
     var latin2InDegrees = 0.0
-    var coordinateOfFirstGridPoint : GribCoordinate {
-        get {
-            return GribCoordinate(lon: longitudeOfFirstGridPointInDegrees, lat: latitudeOfFirstGridPointInDegrees, geography: self)
+    var coordinateOfFirstGridPoint = (x: 0.0, y: 0.0)
+    var coordinateOfLastGridPoint = (x: 0.0, y: 0.0)
+    init() {}
+    init?(from geographyValues: [GribGeography: Any]) {
+        guard geographyValues[.gridType] is GribGridType else { return nil }
+        for (key, value) in geographyValues {
+            switch key {
+            case .bitmapPresent: bitmapPresent = value as! Bool
+            case .latitudeOfFirstGridPointInDegrees: latitudeOfFirstGridPointInDegrees = value as! Double
+            case .longitudeOfFirstGridPointInDegrees: longitudeOfFirstGridPointInDegrees = value as! Double
+            case .latitudeOfLastGridPointInDegrees: latitudeOfLastGridPointInDegrees = value as! Double
+            case .longitudeOfLastGridPointInDegrees: longitudeOfLastGridPointInDegrees = value as! Double
+            case .iScansNegatively: iScansNegatively = value as! Bool
+                case .jScansPositively: jScansPositively = value as! Bool
+            case .jPointsAreConsecutive: jPointsAreConsecutive = value as! Bool
+            case .gridType: self.gridType = value as! GribGridType
+            case .iDirectionIncrementInDegrees: iDirectionIncrementInDegrees = value as! Double
+            case .jDirectionIncrementInDegrees: jDirectionIncrementInDegrees = value as! Double
+            case .latitudeOfSouthernPoleInDegrees: latitudeOfSouthernPoleInDegrees = value as! Double
+            case .longitudeOfSouthernPoleInDegrees: longitudeOfSouthernPoleInDegrees = value as! Double
+            case .angleOfRotationInDegrees: angleOfRotationInDegrees = value as! Double
+            case .nX: nX = value as! Int
+            case .nY: nY = value as! Int
+            case .laDInDegrees: laDInDegrees = value as! Double
+            case .loVInDegrees: loVInDegrees = value as! Double
+            case .dxInMetres: dxInMetres = value as! Double
+            case .dyInMetres: dyInMetres = value as! Double
+            case .latin1InDegrees: latin1InDegrees = value as! Double
+            case .latin2InDegrees: latin2InDegrees = value as! Double
+            }
+        }
+        switch self.gridType {
+        case .regularII:
+            self.coordinateOfFirstGridPoint = (x: self.longitudeOfFirstGridPointInDegrees, y: self.latitudeOfFirstGridPointInDegrees)
+            self.coordinateOfLastGridPoint = (x: self.longitudeOfLastGridPointInDegrees, y: self.latitudeOfLastGridPointInDegrees)
+        case .rotatedII:
+            self.coordinateOfFirstGridPoint = (x: self.latitudeOfFirstGridPointInDegrees, y: self.longitudeOfFirstGridPointInDegrees)
+            self.coordinateOfLastGridPoint = (x: self.longitudeOfLastGridPointInDegrees, y: self.latitudeOfLastGridPointInDegrees)
+        case .lambert:
+            let zrad = Double.pi / 180.0
+            let n : Double
+            let f : Double
+            if abs(self.latin1InDegrees - self.latin2InDegrees) > 0.01 {
+                let cosLatinRatio = log(cos(zrad * self.latin1InDegrees) / cos(zrad * self.latin2InDegrees))
+                let tanLatinRatio = log(tan(Double.pi / 4.0 + zrad * self.latin2InDegrees / 2.0) / tan(Double.pi / 4.0 + zrad * self.latin1InDegrees / 2.0))
+                n = cosLatinRatio / tanLatinRatio
+                f = cos(zrad * self.latin1InDegrees) * pow(tan(Double.pi / 4.0 + zrad * self.latin1InDegrees / 2.0), n) / n
+            } else {
+                n = sin(zrad * self.latin1InDegrees)
+                f = cos(zrad * self.latin1InDegrees) * pow(tan(Double.pi / 4.0 + zrad * self.latin1InDegrees / 2.0), n) / n
+            }
+            let rho0 = self.radiusOfTheEarth * f / pow(tan(Double.pi / 4.0 + zrad * self.laDInDegrees / 2.0), n)
+            let rho1 = self.radiusOfTheEarth * f / pow(tan(Double.pi / 4.0 + zrad * self.latitudeOfFirstGridPointInDegrees / 2.0), n)
+            let theta1 = n * zrad * (self.longitudeOfFirstGridPointInDegrees - self.loVInDegrees)
+            self.coordinateOfFirstGridPoint = (x: rho1 * sin(theta1), y: rho0 - rho1 * cos(theta1))
+            let rho2 = self.radiusOfTheEarth * f / pow(tan(Double.pi / 4.0 + zrad * self.latitudeOfLastGridPointInDegrees / 2.0), n)
+            let theta2 = n * zrad * (self.longitudeOfLastGridPointInDegrees - self.loVInDegrees)
+            self.coordinateOfLastGridPoint = (x: rho2 * sin(theta2), y: rho0 - rho2 * cos(theta2))
+
         }
     }
     static func == (lhs: GribGeographyData, rhs: GribGeographyData) -> Bool {
