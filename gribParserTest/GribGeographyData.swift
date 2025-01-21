@@ -87,10 +87,7 @@ struct GribGeographyData : Equatable {
             let rho1 = self.radiusOfTheEarth * f / pow(tan(Double.pi / 4.0 + zrad * self.latitudeOfFirstGridPointInDegrees / 2.0), n)
             let theta1 = n * zrad * (self.longitudeOfFirstGridPointInDegrees - self.loVInDegrees)
             self.coordinateOfFirstGridPoint = (x: rho1 * sin(theta1), y: rho0 - rho1 * cos(theta1))
-            let rho2 = self.radiusOfTheEarth * f / pow(tan(Double.pi / 4.0 + zrad * self.latitudeOfLastGridPointInDegrees / 2.0), n)
-            let theta2 = n * zrad * (self.longitudeOfLastGridPointInDegrees - self.loVInDegrees)
-            self.coordinateOfLastGridPoint = (x: rho2 * sin(theta2), y: rho0 - rho2 * cos(theta2))
-
+            self.coordinateOfLastGridPoint = (x: rho1 * sin(theta1) + dxInMetres * Double(nX - 1), y: rho0 - rho1 * cos(theta1) + dyInMetres * Double(nY - 1))
         }
     }
     static func == (lhs: GribGeographyData, rhs: GribGeographyData) -> Bool {
