@@ -24,7 +24,7 @@ struct PointExports {
     
     mutating func exportPointFiles(gribFiles: [GribFile], for parameters: [GribParameterData], uParameter: GribParameterData?, vParameter: GribParameterData?, at points: [Point], to url: URL) throws {
         let refDate = MyDateConverter.shared.date(from: "189912300000")!
-        var variables = "Time"
+        var variables = "Date\(delimiter)Time"
         for p in parameters {
             variables += delimiter + p.name
         }
@@ -50,6 +50,7 @@ struct PointExports {
             }
             delegate?.progress = Double(fileNo) / Double(numberOfGribFiles)
             let solutionTime = file.parser.dataTime.date.timeIntervalSince(refDate) / 86400.0
+            let dateString = file.parser.dataTime.date.ISO8601Format()
             if first || lastDimension != file.parser.gridDimensions || lastGeographyData != file.parser.geographyData {
                 lastGeographyData = file.parser.geographyData
                 lastDimension = file.parser.gridDimensions
@@ -82,7 +83,7 @@ struct PointExports {
                             v.append(wind.v)
                         }
                     }
-                    var line = String(solutionTime)
+                    var line = "\(dateString)\(delimiter)\(solutionTime)"
                     for param in parameters {
                         if let uP = uParameter, uP == param {
                             line += delimiter + String(u.average)
